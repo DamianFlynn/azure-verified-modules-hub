@@ -71,7 +71,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 module acr 'br/public:avm/res/container-registry/registry:0.1.1' = {
   scope: resourceGroup
-  name: '${toLower(uniqueString(deployment().name, location))}-landindzone'
+  name: '${toLower(uniqueString(deployment().name, location))}-landingzone'
   params: {
     name: take(replace(replace(replace('${resourceGroup.name}', '-', ''), '.', ''), '_', ''), 50)
     location: location

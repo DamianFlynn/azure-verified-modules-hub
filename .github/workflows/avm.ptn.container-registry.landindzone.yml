@@ -1,4 +1,4 @@
-name: "avm.ptn.container-registry.landindzone"
+name: "avm.ptn.container-registry.landingzone"
 
 on:
   schedule:
@@ -30,15 +30,15 @@ on:
     paths:
       - ".github/actions/templates/avm-**"
       - ".github/workflows/avm.template.module.yml"
-      - ".github/workflows/avm.ptn.container-registry.landindzone.yml"
-      - "avm/ptn/container-registry/landindzone/**"
+      - ".github/workflows/avm.ptn.container-registry.landingzone.yml"
+      - "avm/ptn/container-registry/landingzone/**"
       - "avm/utilities/pipelines/**"
       - "!avm/utilities/pipelines/platform/**"
       - "!*/**/README.md"
 
 env:
-  modulePath: "avm/ptn/container-registry/landindzone"
-  workflowPath: ".github/workflows/avm.ptn.container-registry.landindzone.yml"
+  modulePath: "avm/ptn/container-registry/landingzone"
+  workflowPath: ".github/workflows/avm.ptn.container-registry.landingzone.yml"
 
 concurrency:
   group: ${{ github.workflow }}
