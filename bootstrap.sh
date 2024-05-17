@@ -13,6 +13,10 @@ ARM_CLIENT_ID="15d7dc3d-727a-4ec6-91bd-12c30f4eee02"
 ARM_CLIENT_SECRET="..."
 TOKEN_NAMEPREFIX="pipe"
 
+PUBLISH_CLIENT_ID="9cb5b2ff-407d-491f-8d16-0de22e06bd06"
+PUBLISH_SUBSCRIPTION_ID="a98f99db-f636-409a-b8d2-2025338ecce1"
+PUBLISH_REGISTRY_SERVER="pwe1iacregistry.azurecr.io"
+
 gh repo create $REPO --public --confirm -d "Azure Verified Modules Hub"
 git remote add origin git@github.com:DamianFlynn/azure-verified-modules-hub.git
 git push -u origin main
@@ -52,8 +56,9 @@ echo " - Subscription $ARM_SUBSCRIPTION_ID is a subordinate of the Management Gr
 echo " - Azure Principal $ARM_CLIENT_ID, has at least 'Contributor' privilates to the Management Group $ARM_MGMTGROUP_ID"
 
 # Secrets for the Github Actions responsible for publishing the Bicep modules
-gh secret set PUBLISH_TENANT_ID -b"<your-secret-value>"
-gh secret set PUBLISH_SUBSCRIPTION_ID -b"<your-secret-value>"
-gh secret set PUBLISH_CLIENT_ID -b"<your-secret-value>"
-gh secret set PUBLISH_REGISTRY_SERVER -b"<your-secret-value>"
+# This will be the ACR where the modules will be published
+gh secret set PUBLISH_TENANT_ID -b"$ARM_TENANT_ID"
+gh secret set PUBLISH_SUBSCRIPTION_ID -b"$PUBLISH_SUBSCRIPTION_ID"
+gh secret set PUBLISH_CLIENT_ID -b"$PUBLISH_CLIENT_ID"
+gh secret set PUBLISH_REGISTRY_SERVER -b"$PUBLISH_REGISTRY_SERVER"
 
