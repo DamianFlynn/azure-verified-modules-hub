@@ -113,13 +113,13 @@ resource grafana 'Microsoft.Dashboard/grafana@2023-09-01' = {
     //     user: 'string'
     //   }
     // }
-    grafanaIntegrations: {
-      azureMonitorWorkspaceIntegrations: [
-        {
-          azureMonitorWorkspaceResourceId: 'string'
-        }
-      ]
-    }
+    // grafanaIntegrations: {
+    //   azureMonitorWorkspaceIntegrations: [
+    //     {
+    //       azureMonitorWorkspaceResourceId: 'string'
+    //     }
+    //   ]
+    // }
     // grafanaMajorVersion: 'string'
     // grafanaPlugins: {
     //   {customized property}: {}
