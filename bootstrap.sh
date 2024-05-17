@@ -33,7 +33,7 @@ gh api -X PUT \
     -F "allow_deletions=true" \
     -F "block_creations=true" \
     -F "required_conversation_resolution=true" \
-    -F "lock_branch=true"\
+    -F "lock_branch=false"\
     -F "allow_fork_syncing=true" \
     -F "restrictions=null" \
     -F "require_last_push_approval=true"

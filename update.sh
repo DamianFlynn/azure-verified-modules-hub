@@ -16,7 +16,7 @@ rsync -av "$src" "$dest"
 
 # Copy the .vscode folder from the bicep-registry-modules repo to the current repo
 src="bicep-registry-modules/avm/utilities"
-dest="avm/utilities"
+dest="avm"
 mkdir -p "$dest"
 rsync -av  "$src" "$dest"
 mkdir -p avm/res
