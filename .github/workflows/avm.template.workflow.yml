@@ -1,4 +1,4 @@
-name: "avm.res.dashboard.grafana"
+name: "avm.res.app.job"
 
 on:
   schedule:
@@ -30,15 +30,15 @@ on:
     paths:
       - ".github/actions/templates/avm-**"
       - ".github/workflows/avm.template.module.yml"
-      - ".github/workflows/avm.res.dashboard.grafana.yml"
-      - "avm/res/dashboard/grafana/**"
+      - ".github/workflows/avm.res.app.job.yml"
+      - "avm/res/app/job/**"
       - "avm/utilities/pipelines/**"
       - "!avm/utilities/pipelines/platform/**"
       - "!*/**/README.md"
 
 env:
-  modulePath: "avm/res/dashboard/grafana"
-  workflowPath: ".github/workflows/avm.res.dashboard.grafana.yml"
+  modulePath: "avm/res/app/job"
+  workflowPath: ".github/workflows/avm.res.app.job.yml"
 
 concurrency:
   group: ${{ github.workflow }}
