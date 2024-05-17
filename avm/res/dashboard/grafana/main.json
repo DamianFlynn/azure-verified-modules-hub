@@ -6,7 +6,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "9332652210174248423"
+      "templateHash": "2898209003008065260"
     },
     "name": "Azure Grafana Dashboard",
     "description": "This module deploys an Azure Grafana Dashboard.",
@@ -130,13 +130,6 @@
       "properties": {
         "apiKey": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('apiKey'), null())]",
         "deterministicOutboundIP": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('deterministicOutboundIP'), null())]",
-        "grafanaIntegrations": {
-          "azureMonitorWorkspaceIntegrations": [
-            {
-              "azureMonitorWorkspaceResourceId": "string"
-            }
-          ]
-        },
         "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), null())]",
         "zoneRedundancy": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('zoneRedundancy'), null())]"
       }
