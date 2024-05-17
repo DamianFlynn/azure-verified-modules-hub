@@ -8,19 +8,19 @@ The AVMH is positioned as an extension of the Azure Bicep Registry, providing a 
 
 ## Key Features
 
-* Hosting and management of Azure Verified Modules for downstream organizations
-* Customization and extension of the published public Azure Verified Modules
-* Governance and management of modules through codeowners and version files
-* Integration with Azure Lighthouse and Azure Policy for compliance and security
-* Publishing to Azure Container Registry and Azure Template Specs
-* Integration with Azure Deployment Environments for streamlined deployment
+- Hosting and management of Azure Verified Modules for downstream organizations
+- Customization and extension of the published public Azure Verified Modules
+- Governance and management of modules through codeowners and version files
+- Integration with Azure Lighthouse and Azure Policy for compliance and security
+- Publishing to Azure Container Registry and Azure Template Specs
+- Integration with Azure Deployment Environments for streamlined deployment
 
 ## Benefits
 
-* Provides a centralized repository for customizing and extending the published Bicep Azure Verified Modules
-* Allows downstream organizations to leverage the benefits of Azure Verified Modules while maintaining control over their infrastructure as code
-* Ensures compliance and security through integration with Azure Lighthouse and Azure Policy
-* Streamlines deployment through integration with Azure Deployment Environments
+- Provides a centralized repository for customizing and extending the published Bicep Azure Verified Modules
+- Allows downstream organizations to leverage the benefits of Azure Verified Modules while maintaining control over their infrastructure as code
+- Ensures compliance and security through integration with Azure Lighthouse and Azure Policy
+- Streamlines deployment through integration with Azure Deployment Environments
 
 ## Getting Started
 
@@ -28,6 +28,6 @@ To get started with the AVMH, please follow these steps:
 
 1. Clone the AVMH repository
 1. Configure the repository with your organization's settings
-1.  Publish your custom modules to the AVMH
+1. Publish your custom modules to the AVMH
 1. Integrate the AVMH with your Azure environment
 1. Start customizing and extending Azure Verified Modules for your organization
