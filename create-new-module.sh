@@ -10,6 +10,8 @@ fi
 # Define the module name
 module_name=$1
 
+git checkout -b "feature/$module_name"
+
 # Define the template and output file paths
 template_path="./.github/workflows/avm.template.workflow.yml"
 output_path="./.github/workflows/avm.${module_name}.yml"

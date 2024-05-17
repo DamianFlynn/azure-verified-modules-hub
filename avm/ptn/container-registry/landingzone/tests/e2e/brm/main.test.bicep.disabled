@@ -1,0 +1,45 @@
+targetScope = 'subscription'
+
+metadata name = 'Azure Bicep Registry Modules Container (BCR)'
+metadata description = 'This module deploys an Azure Continer Registry using minimal parameters.'
+
+// ========== //
+// Parameters //
+// ========== //
+
+@sys.description('Optional. The location to deploy resources to.')
+param resourceLocation string = deployment().location
+
+@sys.description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
+param serviceShort string = 'we1iac-registry'
+
+@sys.description('Optional. The environment to deploy to.')
+@allowed(['dev', 'test', 'prod'])
+param environment string = 'dev'
+
+// ============ //
+// Dependencies //
+// ============ //
+
+// General resources
+// =================
+
+// ============== //
+// Test Execution //
+// ============== //
+
+@batchSize(1)
+module testDeployment '../../../main.bicep' = [
+  for iteration in ['init', 'idem']: {
+    name: '${uniqueString(deployment().name, resourceLocation)}-min-${environment}-${serviceShort}-${iteration}'
+    params: {
+      // You parameters go here
+      name: '${serviceShort}'
+      location: resourceLocation
+      tags: {
+        'hidden-title': 'Bicep Container Registry'
+        environment: environment
+      }
+    }
+  }
+]
