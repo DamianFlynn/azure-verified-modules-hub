@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "2453463008353692272"
+      "templateHash": "6672366174903745905"
     },
     "name": "Azure Container Registry",
     "description": "This Instance deploys an Azure Container Registry.",
