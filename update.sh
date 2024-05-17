@@ -24,3 +24,8 @@ mkdir -p avm/ptn
 
 rm -rf bicep-registry-modules
 
+# Update the .github/workflows/avm.template.module.yml file
+file_path="./.github/workflows/avm.template.module.yml"
+# Remove the lines containing 'github.repository == 'Azure/bicep-registry-modules''
+sed -i '/github\.repository\s*==\s*'\'Azure\/bicep-registry-modules\''\s*&&/d' $file_path
+
