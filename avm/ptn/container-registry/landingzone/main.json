@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "2453463008353692272"
+      "templateHash": "6672366174903745905"
     },
     "name": "Azure Container Registry",
     "description": "This Instance deploys an Azure Container Registry.",
@@ -86,7 +86,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('{0}-landindzone', toLower(uniqueString(deployment().name, parameters('location'))))]",
+      "name": "[format('{0}-landingzone', toLower(uniqueString(deployment().name, parameters('location'))))]",
       "resourceGroup": "[format('{0}-{1}', toLower(take(parameters('environment'), 1)), parameters('name'))]",
       "properties": {
         "expressionEvaluationOptions": {
