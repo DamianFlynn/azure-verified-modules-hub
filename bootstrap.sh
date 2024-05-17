@@ -11,7 +11,7 @@ ARM_MGMTGROUP_ID="brightminds"
 ARM_SUBSCRIPTION_ID="7d443596-7c4e-477b-8213-12ef64c1858f"
 ARM_CLIENT_ID="15d7dc3d-727a-4ec6-91bd-12c30f4eee02"
 ARM_CLIENT_SECRET="..."
-TOKEN_NAMEPREFIX="test"
+TOKEN_NAMEPREFIX="pipe"
 
 gh repo create $REPO --public --confirm -d "Azure Verified Modules Hub"
 git remote add origin git@github.com:DamianFlynn/azure-verified-modules-hub.git
@@ -46,6 +46,10 @@ gh secret set ARM_SUBSCRIPTION_ID -b"$ARM_SUBSCRIPTION_ID"
 AZURE_CREDENTIALS="{\"clientId\": \"$ARM_CLIENT_ID\", \"clientSecret\": \"$ARM_CLIENT_SECRET\", \"subscriptionId\": \"$ARM_SUBSCRIPTION_ID\", \"tenantId\": \"$ARM_TENANT_ID\" }"
 gh secret set AZURE_CREDENTIALS -b"$AZURE_CREDENTIALS"
 gh secret set TOKEN_NAMEPREFIX -b"$TOKEN_NAMEPREFIX"
+
+echo "Please Ensure"
+echo " - Subscription $ARM_SUBSCRIPTION_ID is a subordinate of the Management Group $ARM_MGMTGROUP_ID"
+echo " - Azure Principal $ARM_CLIENT_ID, has at least 'Contributor' privilates to the Management Group $ARM_MGMTGROUP_ID"
 
 # Secrets for the Github Actions responsible for publishing the Bicep modules
 gh secret set PUBLISH_TENANT_ID -b"<your-secret-value>"
