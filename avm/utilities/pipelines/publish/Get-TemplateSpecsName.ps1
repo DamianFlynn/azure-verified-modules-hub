@@ -29,7 +29,7 @@ function Get-TemplateSpecsName {
         [bool] $UseApiSpecsAlignedName = $false
     )
 
-    $moduleIdentifier = (Split-Path $TemplateFilePath -Parent).Replace('\', '/').Split('/modules/')[1]
+    $moduleIdentifier = (Split-Path $TemplateFilePath -Parent).Replace('\', '/').Split('/avm/')[1]
 
     if ($UseApiSpecsAlignedName) {
         # Load helper script
