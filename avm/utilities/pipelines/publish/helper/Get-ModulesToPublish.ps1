@@ -153,7 +153,12 @@ function Find-TemplateFile {
     return $null
   }
 
-  $TemplateFilePath = Join-Path $FolderPath 'main.json'
+  #Prioritizing the bicep file
+  $TemplateFilePath = Join-Path $FolderPath 'main.bicep'
+  if (-not (Test-Path $TemplateFilePath)) {
+    $TemplateFilePath = Join-Path $FolderPath 'main.json'
+  }
+
 
   if (-not (Test-Path $TemplateFilePath)) {
     return Find-TemplateFile -Path $FolderPath

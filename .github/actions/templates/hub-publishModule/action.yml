@@ -125,7 +125,7 @@ runs:
           ################################
           $functionInput = @{
             TemplateFilePath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
           Write-Verbose "Invoke task with" -Verbose
@@ -216,7 +216,7 @@ runs:
           ################################
           $functionInput = @{
             TemplateFilePath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
           Write-Verbose "Invoke task with" -Verbose
