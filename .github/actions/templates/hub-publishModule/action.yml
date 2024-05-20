@@ -139,8 +139,9 @@ runs:
           #############################
 
           # Add all modules that don't exist in the target location
+              # TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
           $missingInputObject = @{
-              TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+              TemplateFilePath    = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
               TemplateSpecsRGName = '${{ inputs.templateSpecsRgName }}'
               PublishLatest       = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
