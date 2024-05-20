@@ -86,7 +86,7 @@ function Publish-ModuleToPrivateBicepRegistry {
         if (-not (Get-AzContainerRegistry -ResourceGroupName $BicepRegistryRgName -Name $BicepRegistryName -ErrorAction 'SilentlyContinue')) {
             Write-Verbose ('Container Registry [{0}] to resource group [{1}]' -f $BicepRegistryName, $BicepRegistryRgName)
             if ($PSCmdlet.ShouldProcess("Container Registry [$BicepRegistryName] to resource group [$BicepRegistryRgName]", 'Deploy')) {
-                New-AzContainerRegistry -ResourceGroupName $BicepRegistryRgName -Name $BicepRegistryName -Sku 'Basic'
+                New-AzContainerRegistry -ResourceGroupName $BicepRegistryRgName -Name $BicepRegistryName -Sku 'Basic' -Location $BicepRegistryRgLocation
             }
         }
 
