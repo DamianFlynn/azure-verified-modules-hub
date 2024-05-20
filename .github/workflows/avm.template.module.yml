@@ -155,9 +155,20 @@ jobs:
       - name: Set environment
         uses: ./.github/actions/templates/avm-setEnvironment
       - name: "Publishing"
-        uses: ./.github/actions/templates/avm-publishModule
+        uses: ./.github/actions/templates/hub-publishModule
         with:
           templateFilePath: "${{ inputs.modulePath }}/main.bicep"
+          subscriptionId: "${{ secrets.PUBLISH_SUBSCRIPTION_ID }}"
+          templateSpecsRGName: "p-we1iac-registry"
+          templateSpecsRGLocation: "westeurope"
+          templateSpecsDescription: "${{ env.templateSpecsDescription }}"
+          templateSpecsDoPublish: "true"
+          bicepRegistryName: "${{ secrets.PUBLISH_REGISTRY_SERVER }}"
+          bicepRegistryRGName: "p-we1iac-registry"
+          bicepRegistryRgLocation: "westeurope"
+          bicepRegistryDoPublish: "true"
+          publishLatest: "true"
+          useApiSpecsAlignedName: "false"
         env:
           PUBLISH_REGISTRY_SERVER: "${{ secrets.PUBLISH_REGISTRY_SERVER }}"
           PUBLISH_CLIENT_ID: "${{ secrets.PUBLISH_CLIENT_ID }}"
