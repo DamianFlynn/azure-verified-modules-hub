@@ -111,11 +111,8 @@ runs:
           }
 
           # Load used functions
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesToPublish.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Publish-ModuleToTemplateSpecsRG.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToTemplateSpecsRG.ps1')
 
           $modulesToPublish = @()
@@ -139,7 +136,6 @@ runs:
           #############################
 
           # Add all modules that don't exist in the target location
-              # TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
           $missingInputObject = @{
               TemplateFilePath    = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
               TemplateSpecsRGName = '${{ inputs.templateSpecsRgName }}'
@@ -203,11 +199,8 @@ runs:
           }
 
           # Load used functions
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesToPublish.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
-          # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
 
           $modulesToPublish = @()
