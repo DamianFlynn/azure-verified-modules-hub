@@ -33,9 +33,11 @@ function Confirm-ModuleIsPublished {
         [string] $GitTagName
     )
 
-    $baseUrl = 'https://mcr.microsoft.com/v2'
+    # $baseUrl = 'https://mcr.microsoft.com/v2'
+    $baseUrl = 'https://pwe1iacregistry.azurecr.io/v2'
     $catalogUrl = "$baseUrl/_catalog"
-    $moduleVersionsUrl = "$baseUrl/bicep/$PublishedModuleName/tags/list"
+    # $moduleVersionsUrl = "$baseUrl/bicep/$PublishedModuleName/tags/list"
+    $moduleVersionsUrl = "$baseUrl/$PublishedModuleName/tags/list"
 
     $time_limit_seconds = 3600 # 1h
     $end_time = (Get-Date).AddSeconds($time_limit_seconds)
@@ -60,6 +62,12 @@ function Confirm-ModuleIsPublished {
         $index++
 
         try {
+            # $registryUser = 'pwe1iacregistry'
+
+            # $secpasswd = ConvertTo-SecureString $registryPassword -AsPlainText -Force
+            # $registryCreds = New-Object System.Management.Automation.PSCredential ($registryUser, $secpasswd)
+
+            # $catalogContentRaw = (Invoke-WebRequest -Uri $catalogUrl -UseBasicParsing -Credential $registryCreds).Content
             $catalogContentRaw = (Invoke-WebRequest -Uri $catalogUrl -UseBasicParsing).Content
             $bicepCatalogContent = ($catalogContentRaw | ConvertFrom-Json).repositories | Select-String 'bicep/'
         } catch {
