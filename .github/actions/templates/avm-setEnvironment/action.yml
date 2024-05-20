@@ -74,3 +74,30 @@ runs:
         Set-EnvironmentOnAgent -PSModules $modules
 
         Write-Output '::endgroup::'
+
+
+    # [Set environment] task(s)
+    # ---------------
+    - name: 'Set environment variables'
+      id: set-env-variables
+      shell: pwsh
+      run: |
+        # Grouping task logs
+        Write-Output '::group::Set environment variables'
+
+        # Load used functions
+        . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines' 'sharedScripts' 'Add-YamlListToFile.ps1')
+
+        $functionInput = @{
+          InputFilePath   = '${{ inputs.variablesPath }}'
+          ListName        = 'variables'
+          OutputFilePath  =  $Env:GITHUB_ENV
+        }
+
+        Write-Verbose "Invoke task with" -Verbose
+        Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+
+        # Convert YAML Variable File to Environment Variables
+        Add-YamlListToFile @functionInput
+
+        Write-Output '::endgroup::'
