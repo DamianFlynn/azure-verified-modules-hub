@@ -124,7 +124,7 @@ runs:
           ##   Get modules to publish   ##
           ################################
           $functionInput = @{
-            ModuleFolderPath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
             # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
@@ -215,7 +215,7 @@ runs:
           ##   Get modules to publish   ##
           ################################
           $functionInput = @{
-            ModuleFolderPath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
             # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
