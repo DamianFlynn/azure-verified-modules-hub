@@ -30,7 +30,7 @@ on:
     paths:
       - ".github/actions/templates/avm-**"
       - ".github/workflows/avm.template.module.yml"
-      - ".github/workflows/avm.res.dashboard.grafana.yml"
+      - ".github/workflows/avm.res.dashboard.grafana.testing.yml"
       - "avm/res/dashboard/grafana/**"
       - "avm/utilities/pipelines/**"
       - "!avm/utilities/pipelines/platform/**"
@@ -38,7 +38,7 @@ on:
 
 env:
   modulePath: "avm/res/dashboard/grafana"
-  workflowPath: ".github/workflows/avm.res.dashboard.grafana.yml"
+  workflowPath: ".github/workflows/avm.res.dashboard.grafana.testing.yml"
 
 concurrency:
   group: ${{ github.workflow }}
