@@ -3,6 +3,7 @@
 #########################################################
 ##
 ## This composite action contains the logic to install any required asset on the runner.
+##
 #########################################################
 ##
 ##-------------------------------------------##
@@ -13,6 +14,7 @@
 ##   | Parameter          | Required | Default | Description                                                                              | Example                     |
 ##   |--------------------|----------|---------|------------------------------------------------------------------------------------------|-----------------------------|
 ##   | removeDeployment   | true     | ''      | Set "true" to setup runner with PowerShell modules needed for custom resource removal    | 'truel'                     |
+##   | variablesPath      | true     | ''      | The path to the YAML file that contains the key value pairs for environment variables    | './settings.yml'    |
 ##   |==================================================================================================================================================================|
 ##
 ##---------------------------------------------##
@@ -76,3 +78,6 @@ runs:
         Set-EnvironmentOnAgent -PSModules $modules
 
         Write-Output '::endgroup::'
+
+
+ 

@@ -25,6 +25,7 @@ env:
   ARM_MGMTGROUP_ID: "${{ secrets.ARM_MGMTGROUP_ID }}"
   ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
   TOKEN_NAMEPREFIX: "${{ secrets.TOKEN_NAMEPREFIX }}"
+  variablesPath: "settings.yml"
 
 jobs:
   #########################
@@ -154,6 +155,8 @@ jobs:
           fetch-depth: 0
       - name: Set environment
         uses: ./.github/actions/templates/avm-setEnvironment
+        with:
+          variablesPath: ${{ env.variablesPath }}
       - name: "Publishing"
         uses: ./.github/actions/templates/hub-publishModule
         with:
