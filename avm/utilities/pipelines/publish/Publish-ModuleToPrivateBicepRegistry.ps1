@@ -59,7 +59,7 @@ function Publish-ModuleToPrivateBicepRegistry {
     )
 
     begin {
-        Write-Debug ('{0} entered' -f $MyInvocation.MyCommand)
+        Write-Verbose ('{0} entered' -f $MyInvocation.MyCommand)
 
         # Load used functions
         . (Join-Path $PSScriptRoot 'Get-PrivateRegistryRepositoryName.ps1')
@@ -69,12 +69,14 @@ function Publish-ModuleToPrivateBicepRegistry {
         #############################
         ##    EVALUATE RESOURCES   ##
         #############################
+        Write-Verbose ('Publish-ModuleToPrivateBicepRegistry: $TemplateFilePath =  {0}' -f $TemplateFilePath)
         if ((Split-Path $TemplateFilePath -Extension) -ne '.bicep') {
             throw "The template in path [$TemplateFilePath] is no bicep template."
         }
 
         # Resource Group
         if (-not (Get-AzResourceGroup -Name $BicepRegistryRgName -ErrorAction 'SilentlyContinue')) {
+            Write-Verbose ('Publish-ModuleToPrivateBicepRegistry: Resource group [{0}] to location [{1}]' -f $BicepRegistryRgName, $BicepRegistryRgLocation)
             if ($PSCmdlet.ShouldProcess("Resource group [$BicepRegistryRgName] to location [$BicepRegistryRgLocation]", 'Deploy')) {
                 New-AzResourceGroup -Name $BicepRegistryRgName -Location $BicepRegistryRgLocation
             }
@@ -82,18 +84,21 @@ function Publish-ModuleToPrivateBicepRegistry {
 
         # Registry
         if (-not (Get-AzContainerRegistry -ResourceGroupName $BicepRegistryRgName -Name $BicepRegistryName -ErrorAction 'SilentlyContinue')) {
+            Write-Verbose ('Container Registry [{0}] to resource group [{1}]' -f $BicepRegistryName, $BicepRegistryRgName)
             if ($PSCmdlet.ShouldProcess("Container Registry [$BicepRegistryName] to resource group [$BicepRegistryRgName]", 'Deploy')) {
                 New-AzContainerRegistry -ResourceGroupName $BicepRegistryRgName -Name $BicepRegistryName -Sku 'Basic'
             }
         }
 
         # Get a valid Container Registry name
+        Write-Verbose ('Get Private Reg Repo Name - [{0}]' -f $TemplateFilePath)
         $moduleRegistryIdentifier = Get-PrivateRegistryRepositoryName -TemplateFilePath $TemplateFilePath -UseApiSpecsAlignedName $UseApiSpecsAlignedName
 
         #############################################
         ##    Publish to private bicep registry    ##
         #############################################
         $publishingTarget = 'br:{0}.azurecr.io/{1}:{2}' -f $BicepRegistryName, $moduleRegistryIdentifier, $ModuleVersion
+        Write-Verbose ('Private bicep registry entry [{0}] version [{1}] to registry [{2}]' -f $moduleRegistryIdentifier, $ModuleVersion, $BicepRegistryName)
         if ($PSCmdlet.ShouldProcess("Private bicep registry entry [$moduleRegistryIdentifier] version [$ModuleVersion] to registry [$BicepRegistryName]", 'Publish')) {
             bicep publish $TemplateFilePath --target $publishingTarget --force
         }
@@ -101,6 +106,6 @@ function Publish-ModuleToPrivateBicepRegistry {
     }
 
     end {
-        Write-Debug ('{0} exited' -f $MyInvocation.MyCommand)
+        Write-Verbose ('{0} exited' -f $MyInvocation.MyCommand)
     }
 }
