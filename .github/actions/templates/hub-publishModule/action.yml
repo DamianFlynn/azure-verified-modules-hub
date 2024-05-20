@@ -112,7 +112,7 @@ runs:
 
           # Load used functions
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesToPublish.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesToPublish.ps1')
+          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Publish-ModuleToTemplateSpecsRG.ps1')
@@ -124,8 +124,8 @@ runs:
           ##   Get modules to publish   ##
           ################################
           $functionInput = @{
-            TemplateFilePath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
+            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
           Write-Verbose "Invoke task with" -Verbose
@@ -203,7 +203,7 @@ runs:
 
           # Load used functions
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesToPublish.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesToPublish.ps1')
+          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
           # . (Join-Path $env:GITHUB_WORKSPACE 'utilities' 'pipelines' 'resourcePublish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
@@ -215,8 +215,8 @@ runs:
           ##   Get modules to publish   ##
           ################################
           $functionInput = @{
-            TemplateFilePath = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
+            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
           }
 
           Write-Verbose "Invoke task with" -Verbose

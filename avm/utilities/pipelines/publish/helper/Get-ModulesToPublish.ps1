@@ -153,7 +153,12 @@ function Find-TemplateFile {
     return $null
   }
 
-  $TemplateFilePath = Join-Path $FolderPath 'main.json'
+  #Prioritizing the bicep file
+  $TemplateFilePath = Join-Path $FolderPath 'main.bicep'
+  if (-not (Test-Path $TemplateFilePath)) {
+    $TemplateFilePath = Join-Path $FolderPath 'main.json'
+  }
+
 
   if (-not (Test-Path $TemplateFilePath)) {
     return Find-TemplateFile -Path $FolderPath
@@ -161,6 +166,116 @@ function Find-TemplateFile {
 
   return ($TemplateFilePath | Get-Item).FullName
 }
+#endregion
+
+
+<#
+.SYNOPSIS
+Gets the parent main.bicep/json file(s) to the changed files in the module folder structure.
+
+.DESCRIPTION
+Gets the parent main.bicep/json file(s) to the changed files in the module folder structure.
+
+.PARAMETER TemplateFilePath
+Mandatory. Path to a main.bicep/json file.
+
+.PARAMETER Recurse
+Optional. If true, the function will recurse up the folder structure to find the closest main.bicep/json file.
+
+.EXAMPLE
+Get-ParentModuleTemplateFile -TemplateFilePath 'C:\Repos\Azure\ResourceModules\modules\storage\storage-account\table-service\table\main.bicep' -Recurse
+
+    Directory: C:\Repos\Azure\ResourceModules\modules\storage\storage-account\table-service
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+la---          05.12.2021    22:45           1427 main.bicep
+
+    Directory: C:\Repos\Azure\ResourceModules\modules\storage\storage-account
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+la---          02.12.2021    13:19          10768 main.bicep
+
+Gets the parent main.bicep/json file(s) to the changed files in the module folder structure.
+
+#>
+function Get-ParentModuleTemplateFile {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string] $TemplateFilePath,
+
+    [Parameter(Mandatory = $false)]
+    [switch] $Recurse
+  )
+
+  $ModuleFolderPath = Split-Path $TemplateFilePath -Parent
+  $ParentFolderPath = Split-Path $ModuleFolderPath -Parent
+
+  #Prioritizing the bicep file
+  $ParentTemplateFilePath = Join-Path $ParentFolderPath 'main.bicep'
+  if (-not (Test-Path $TemplateFilePath)) {
+    $ParentTemplateFilePath = Join-Path $ParentFolderPath 'main.json'
+  }
+
+  if (-not (Test-Path -Path $ParentTemplateFilePath)) {
+    return
+  }
+
+  $ParentTemplateFilesToPublish = [System.Collections.ArrayList]@()
+  $ParentTemplateFilesToPublish += $ParentTemplateFilePath | Get-Item
+
+  if ($Recurse) {
+    $ParentTemplateFilesToPublish += Get-ParentModuleTemplateFile $ParentTemplateFilePath -Recurse
+  }
+
+  return $ParentTemplateFilesToPublish
+}
+
+# end region
+
+<#
+.SYNOPSIS
+Generates a new version for the specified module.
+
+.DESCRIPTION
+Generates a new version for the specified module, based on version.json file and git commit count.
+Major and minor version numbers are gathered from the version.json file.
+Patch version number is calculated based on the git commit count on the branch.
+
+.PARAMETER TemplateFilePath
+Mandatory. Path to a main.bicep/json file.
+
+.EXAMPLE
+Get-NewModuleVersion -TemplateFilePath 'C:\Repos\Azure\ResourceModules\modules\storage\storage-account\table-service\table\main.bicep'
+
+0.3.630
+
+Generates a new version for the table module.
+
+#>
+function Get-NewModuleVersion {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string] $TemplateFilePath
+  )
+
+  $Version = Get-ModuleVersionFromFile -TemplateFilePath $TemplateFilePath
+  $Patch = Get-GitDistance
+  $NewVersion = "$Version.$Patch"
+
+  $BranchName = Get-GitBranchName -Verbose
+
+  if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
+    $NewVersion = "$NewVersion-prerelease".ToLower()
+  }
+
+  return $NewVersion
+}
+
 #endregion
 
 <#
@@ -195,7 +310,89 @@ function Get-ModulesToPublish {
   $PathsToInclude = $versionFile.PathFilters
 
   # Check as per a `diff` with head^-1 if there was a change in any file that would justify a publish
-  $TemplateFilesToPublish = Get-TemplateFileToPublish -ModuleFolderPath $ModuleFolderPath -PathsToInclude $PathsToInclude
+  $TemplateFilesToPublish = Get-TemplateFileToPublish -ModuleFolderPath $ModuleFolderPath -PathsToInclude $PathsToInclude | Sort-Object FullName -Descending
+
+  $modulesToPublish = [System.Collections.ArrayList]@()
+  foreach ($TemplateFileToPublish in $TemplateFilesToPublish) {
+    $ModuleVersion = Get-NewModuleVersion -TemplateFilePath $TemplateFileToPublish.FullName -Verbose
+
+    $modulesToPublish += @{
+      Version          = $ModuleVersion
+      TemplateFilePath = $TemplateFileToPublish.FullName
+    }
+
+    if ($ModuleVersion -notmatch 'prerelease') {
+
+      # Latest Major,Minor
+      $modulesToPublish += @{
+        Version          = ($ModuleVersion.Split('.')[0..1] -join '.')
+        TemplateFilePath = $TemplateFileToPublish.FullName
+      }
+
+      # Latest Major
+      $modulesToPublish += @{
+        Version          = ($ModuleVersion.Split('.')[0])
+        TemplateFilePath = $TemplateFileToPublish.FullName
+      }
+
+      if ($PublishLatest) {
+        # Absolute latest
+        $modulesToPublish += @{
+          Version          = 'latest'
+          TemplateFilePath = $TemplateFileToPublish.FullName
+        }
+      }
+    }
+
+    $ParentTemplateFilesToPublish = Get-ParentModuleTemplateFile -TemplateFilePath $TemplateFileToPublish.FullName -Recurse
+    foreach ($ParentTemplateFileToPublish in $ParentTemplateFilesToPublish) {
+      $ParentModuleVersion = Get-NewModuleVersion -TemplateFilePath $ParentTemplateFileToPublish.FullName
+
+      $modulesToPublish += @{
+        Version          = $ParentModuleVersion
+        TemplateFilePath = $ParentTemplateFileToPublish.FullName
+      }
+
+      if ($ModuleVersion -notmatch 'prerelease') {
+
+        # Latest Major,Minor
+        $modulesToPublish += @{
+          Version          = ($ParentModuleVersion.Split('.')[0..1] -join '.')
+          TemplateFilePath = $ParentTemplateFileToPublish.FullName
+        }
+
+        # Latest Major
+        $modulesToPublish += @{
+          Version          = ($ParentModuleVersion.Split('.')[0])
+          TemplateFilePath = $ParentTemplateFileToPublish.FullName
+        }
+
+        if ($PublishLatest) {
+          # Absolute latest
+          $modulesToPublish += @{
+            Version          = 'latest'
+            TemplateFilePath = $ParentTemplateFileToPublish.FullName
+          }
+        }
+      }
+    }
+  }
+
+  $modulesToPublish = $modulesToPublish | Sort-Object TemplateFilePath, Version -Descending -Unique
+
+  if ($modulesToPublish.count -gt 0) {
+    Write-Verbose 'Publish the following modules:'-Verbose
+    $modulesToPublish | ForEach-Object {
+      $RelPath = ($_.TemplateFilePath).Split('/modules/')[-1]
+      $RelPath = $RelPath.Split('/main.')[0]
+      Write-Verbose (' - [{0}] [{1}] ' -f $RelPath, $_.Version) -Verbose
+    }
+  } else {
+    Write-Verbose 'No modules with changes found to publish.'-Verbose
+  }
+
+
+
 
   # Filter out any children (as they're currently not considered for publishing)
   # $TemplateFilesToPublish = $TemplateFilesToPublish | Where-Object {
