@@ -95,10 +95,10 @@ function Get-ModulesMissingFromPrivateBicepRegistry {
             # Test all children against ACR
             $missingTemplatePaths = @()
             foreach ($templatePath in $availableModuleTemplatePaths) {
-
+                Write-Verbose ('Invoking: Get-PrivateRegistryRepositoryName -TemplateFilePath {0} -UseApiSpecsAlignedName {1}' -f $templatePath, $UseApiSpecsAlignedName) -Verbose
                 # Get a valid Container Registry name
                 $moduleRegistryIdentifier = Get-PrivateRegistryRepositoryName -TemplateFilePath $templatePath -UseApiSpecsAlignedName $UseApiSpecsAlignedName
-
+                Write-Verbose ('Invoking: Get-AzContainerRegistryTag -RepositoryName {0} -RegistryName {1}' -f $moduleRegistryIdentifier, $BicepRegistryName) -Verbose
                 $null = Get-AzContainerRegistryTag -RepositoryName $moduleRegistryIdentifier -RegistryName $BicepRegistryName -ErrorAction 'SilentlyContinue' -ErrorVariable 'result'
 
                 if ($result.Exception.Response.StatusCode -eq 'NotFound' -or $result.Exception.Status -eq '404') {
