@@ -185,105 +185,136 @@ runs:
 
           Write-Output '::endgroup::'
 
-    - name: 'Publish module to private bicep registry'
-      if: ${{ inputs.bicepRegistryDoPublish == 'true' }}
-      uses: azure/powershell@v1
+    - name: "Publish module to bicep registry"
+      id: publish_step
+      uses: azure/powershell@v2
       with:
-        azPSVersion: 'latest'
+        azPSVersion: "latest"
         inlineScript: |
           # Grouping task logs
-          Write-Output '::group::Publish module to private bicep registry'
-
-          if (-not [String]::IsNullOrEmpty('${{ inputs.subscriptionId }}')) {
-            Write-Verbose ('Setting context to subscription [{0}]' -f '${{ inputs.subscriptionId }}') -Verbose
-            $null = Set-AzContext -Subscription '${{ inputs.subscriptionId }}'
-          }
+          Write-Output '::group::Publish module to bicep registry'
 
           # Load used functions
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
-          # . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
 
-
-          $modulesToPublish = @()
-
-          ################################
-          ##   Get modules to publish   ##
-          ################################
           $functionInput = @{
-            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
-            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+            TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+            PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
+            RepoRoot             = $env:GITHUB_WORKSPACE
           }
 
-          Write-Verbose "Invoke task with" -Verbose
+          Write-Verbose "Invoke function with" -Verbose
           Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
-          # Get the modified child resources
-          $modulesToPublish += Get-ModulesToPublish @functionInput -Verbose
-
-          #############################
-          ##   Get missing modules   ##
-          #############################
-          # Add all modules that don't exist in the target location
-          $missingInputObject = @{
-              TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-              BicepRegistryName   = '${{ inputs.bicepRegistryName }}'
-              BicepRegistryRgName = '${{ inputs.bicepRegistryRgName }}'
-              PublishLatest       = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
-          }
-
-          Write-Verbose "Invoke Get-ModulesMissingFromPrivateBicepRegistry with" -Verbose
-          Write-Verbose ($missingInputObject | ConvertTo-Json | Out-String) -Verbose
-
-          $missingModules = Get-ModulesMissingFromPrivateBicepRegistry @missingInputObject
-
-          foreach($missingModule in $missingModules) {
-            if($modulesToPublish.TemplateFilePath -notcontains $missingModule.TemplateFilePath) {
-              $modulesToPublish += $missingModule
-            }
-          }
-
-          # Filter modules to publish 'prerelease' only if branch is not main/master
-          $BranchName = "$env:GITHUB_REF_NAME"
-          if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
-            Write-Verbose "Filtering modules to only publish a [prerelease] version as the current branch [$BranchName] is not [main/master]." -Verbose
-            $modulesToPublish = $modulesToPublish | Where-Object -Property version -like '*-prerelease'
-          }
-
-          #################
-          ##   Publish   ##
-          #################
-          foreach ($moduleToPublish in $modulesToPublish) {
-            $RelPath = (($moduleToPublish.TemplateFilePath).Split('/modules/')[-1]).Split('/main.')[0]
-            Write-Output "::group::$(' - [{0}] [{1}]' -f $RelPath, $moduleToPublish.Version)"
-
-            # $functionInput = @{
-            #   TemplateFilePath        = $moduleToPublish.TemplateFilePath
-            #   BicepRegistryName       = '${{ inputs.bicepRegistryName }}'
-            #   BicepRegistryRgName     = '${{ inputs.bicepRegistryRgName }}'
-            #   BicepRegistryRgLocation = '${{ inputs.bicepRegistryRgLocation }}'
-            #   ModuleVersion           = $moduleToPublish.Version
-            #   UseApiSpecsAlignedName  = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
-            # }
-
-            $functionInput = @{
-              # TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-              TemplateFilePath     = $moduleToPublish.TemplateFilePath
-              PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
-              RepoRoot             = $env:GITHUB_WORKSPACE
-            }
-
-            Write-Verbose "Invoke task with" -Verbose
-            Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
-
-            # Publish-ModuleToPrivateBicepRegistry @functionInput -Verbose
-            if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
-              $publishOutputs.Keys | Foreach-Object {
-                Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
-                Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
-              }
+          if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
+            $publishOutputs.Keys | Foreach-Object {
+              Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
+              Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
             }
           }
 
           Write-Output '::endgroup::'
+
+
+    # - name: 'Publish module to private bicep registry'
+    #   if: ${{ inputs.bicepRegistryDoPublish == 'true' }}
+    #   uses: azure/powershell@v1
+    #   with:
+    #     azPSVersion: 'latest'
+    #     inlineScript: |
+    #       # Grouping task logs
+    #       Write-Output '::group::Publish module to private bicep registry'
+
+    #       if (-not [String]::IsNullOrEmpty('${{ inputs.subscriptionId }}')) {
+    #         Write-Verbose ('Setting context to subscription [{0}]' -f '${{ inputs.subscriptionId }}') -Verbose
+    #         $null = Set-AzContext -Subscription '${{ inputs.subscriptionId }}'
+    #       }
+
+    #       # Load used functions
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
+    #       # . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
+
+
+    #       $modulesToPublish = @()
+
+    #       ################################
+    #       ##   Get modules to publish   ##
+    #       ################################
+    #       $functionInput = @{
+    #         ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
+    #         # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+    #       }
+
+    #       Write-Verbose "Invoke task with" -Verbose
+    #       Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+
+    #       # Get the modified child resources
+    #       $modulesToPublish += Get-ModulesToPublish @functionInput -Verbose
+
+    #       #############################
+    #       ##   Get missing modules   ##
+    #       #############################
+    #       # Add all modules that don't exist in the target location
+    #       $missingInputObject = @{
+    #           TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+    #           BicepRegistryName   = '${{ inputs.bicepRegistryName }}'
+    #           BicepRegistryRgName = '${{ inputs.bicepRegistryRgName }}'
+    #           PublishLatest       = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+    #       }
+
+    #       Write-Verbose "Invoke Get-ModulesMissingFromPrivateBicepRegistry with" -Verbose
+    #       Write-Verbose ($missingInputObject | ConvertTo-Json | Out-String) -Verbose
+
+    #       $missingModules = Get-ModulesMissingFromPrivateBicepRegistry @missingInputObject
+
+    #       foreach($missingModule in $missingModules) {
+    #         if($modulesToPublish.TemplateFilePath -notcontains $missingModule.TemplateFilePath) {
+    #           $modulesToPublish += $missingModule
+    #         }
+    #       }
+
+    #       # Filter modules to publish 'prerelease' only if branch is not main/master
+    #       $BranchName = "$env:GITHUB_REF_NAME"
+    #       if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
+    #         Write-Verbose "Filtering modules to only publish a [prerelease] version as the current branch [$BranchName] is not [main/master]." -Verbose
+    #         $modulesToPublish = $modulesToPublish | Where-Object -Property version -like '*-prerelease'
+    #       }
+
+    #       #################
+    #       ##   Publish   ##
+    #       #################
+    #       foreach ($moduleToPublish in $modulesToPublish) {
+    #         $RelPath = (($moduleToPublish.TemplateFilePath).Split('/modules/')[-1]).Split('/main.')[0]
+    #         Write-Output "::group::$(' - [{0}] [{1}]' -f $RelPath, $moduleToPublish.Version)"
+
+    #         # $functionInput = @{
+    #         #   TemplateFilePath        = $moduleToPublish.TemplateFilePath
+    #         #   BicepRegistryName       = '${{ inputs.bicepRegistryName }}'
+    #         #   BicepRegistryRgName     = '${{ inputs.bicepRegistryRgName }}'
+    #         #   BicepRegistryRgLocation = '${{ inputs.bicepRegistryRgLocation }}'
+    #         #   ModuleVersion           = $moduleToPublish.Version
+    #         #   UseApiSpecsAlignedName  = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
+    #         # }
+
+    #         $functionInput = @{
+    #           # TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+    #           TemplateFilePath     = $moduleToPublish.TemplateFilePath
+    #           PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
+    #           RepoRoot             = $env:GITHUB_WORKSPACE
+    #         }
+
+    #         Write-Verbose "Invoke task with" -Verbose
+    #         Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+
+    #         # Publish-ModuleToPrivateBicepRegistry @functionInput -Verbose
+    #         if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
+    #           $publishOutputs.Keys | Foreach-Object {
+    #             Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
+    #             Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
+    #           }
+    #         }
+    #       }
+
+    #       Write-Output '::endgroup::'

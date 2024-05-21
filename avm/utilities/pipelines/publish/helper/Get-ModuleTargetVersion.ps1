@@ -56,6 +56,13 @@ function Get-ModuleTargetVersion {
     $patch = Get-ModuleTargetPatchVersion -ModuleFolderPath $ModuleFolderPath -MajMinVersion "$major.$minor"
   }
 
+  # Filter modules to publish 'prerelease' only if branch is not main/master
+  $BranchName = "$env:GITHUB_REF_NAME"
+  if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
+    Write-Verbose "Publish a [prerelease] version as the current branch [$BranchName] is not [main/master]." -Verbose
+    $patch = "$patch-prerelease"
+  }
+
   # 4. Get full Semver as MAJOR.MINOR.PATCH
   $targetModuleVersion = '{0}.{1}.{2}' -f $major, $minor, $patch
   Write-Verbose "Target version is [$targetModuleVersion]." -Verbose
