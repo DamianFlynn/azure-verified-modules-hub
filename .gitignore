@@ -1,0 +1,10 @@
+node_modules
+.netrc
+moduleIndex.json
+last-moduleIndex.json
+generated-moduleIndex.json
+.DS_Store
+avm/res/security-insights/alert-rules/configuration/rules/**/*.json
+!avm/res/security-insights/alert-rules/configuration/rules/scheduled/Account added and removed from privileged groups.json
+!avm/res/security-insights/alert-rules/configuration/rules/scheduled/User Added to Admin Role.json
+!avm/res/security-insights/alert-rules/configuration/rules/scheduled/User impersonation by Identity Protection alerts.json

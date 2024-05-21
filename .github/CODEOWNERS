@@ -5,4 +5,5 @@
 /avm/utilities/ @Azure/avm-core-team-technical-bicep
 /avm/ptn/container-registry/landingzone @Azure/avm-ptn-containerregistry-landingzone-module-owners-bicep @Azure/avm-core-team-technical-bice
 /avm/res/dashboard/grafana/ @Azure/avm-res-dashboard-grafana-module-owners-bicep @Azure/avm-core-team-technical-bicep
+/avm/res/security-insights/alert-rules/ @Azure/avm-res-securityinsights-alertrules-module-owners-bicep @Azure/avm-core-team-technical-bicep
 *avm.core.team.tests.ps1 @Azure/avm-core-team-technical-bicep

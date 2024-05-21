@@ -1,0 +1,93 @@
+{
+  "name": "2a09f8cb-deb7-4c40-b08b-9137667f1c0b",
+  "type": "Microsoft.SecurityInsights/AlertRuleTemplates",
+  "kind": "Scheduled",
+  "properties": {
+    "queryFrequency": "P1D",
+    "queryPeriod": "P1D",
+    "triggerOperator": "GreaterThan",
+    "triggerThreshold": 0,
+    "severity": "Low",
+    "query": "AuditLogs\n  | where OperationName in (\"Add eligible member (permanent)\", \"Add eligible member (eligible)\", \"Add member to role\")\n  | mv-apply TargetResource = TargetResources on \n  (\n      where TargetResource.type =~ \"User\"\n      | extend Target = tostring(TargetResource.userPrincipalName),\n               props = TargetResource.modifiedProperties\n  )\n  | mv-apply Property = props on \n  (\n      where Property.displayName =~ \"Role.DisplayName\"\n      | extend RoleName = trim('\"',tostring(Property.newValue))\n  )\n  | where RoleName contains \"admin\"\n  | extend InitiatingAppName = tostring(InitiatedBy.app.displayName)\n  | extend InitiatingAppServicePrincipalId = tostring(InitiatedBy.app.servicePrincipalId)\n  | extend InitiatingUserPrincipalName = tostring(InitiatedBy.user.userPrincipalName)\n  | extend InitiatingAadUserId = tostring(InitiatedBy.user.id)\n  | extend InitiatingIPAddress = tostring(InitiatedBy.user.ipAddress)\n  | extend InitiatedBy = iif(isnotempty(InitiatingAppName), InitiatingAppName, InitiatingUserPrincipalName)\n  | extend TargetUserPrincipalName = iff(OperationName==\"Add member to role\",tostring(TargetResources[0].userPrincipalName),tostring(TargetResources[2].userPrincipalName))\n  | extend TargetAadUserId = iff(OperationName==\"Add member to role\", tostring(TargetResources[0].id), tostring(TargetResources[2].id))\n  | extend AddedUser = TargetUserPrincipalName\n  | extend TargetAccountName = tostring(split(TargetUserPrincipalName, \"@\")[0]), TargetAccountUPNSuffix = tostring(split(TargetUserPrincipalName, \"@\")[1])\n  | extend InitiatingAccountName = tostring(split(InitiatingUserPrincipalName, \"@\")[0]), InitiatingAccountUPNSuffix = tostring(split(InitiatingUserPrincipalName, \"@\")[1])\n  | project-reorder TimeGenerated, AddedUser, RoleName, InitiatedBy",
+    "entityMappings": [
+      {
+        "entityType": "Account",
+        "fieldMappings": [
+          {
+            "identifier": "FullName",
+            "columnName": "TargetUserPrincipalName"
+          },
+          {
+            "identifier": "Name",
+            "columnName": "TargetAccountName"
+          },
+          {
+            "identifier": "UPNSuffix",
+            "columnName": "TargetAccountUPNSuffix"
+          }
+        ]
+      },
+      {
+        "entityType": "Account",
+        "fieldMappings": [
+          {
+            "identifier": "AadUserId",
+            "columnName": "TargetAadUserId"
+          }
+        ]
+      },
+      {
+        "entityType": "Account",
+        "fieldMappings": [
+          {
+            "identifier": "FullName",
+            "columnName": "InitiatingUserPrincipalName"
+          },
+          {
+            "identifier": "Name",
+            "columnName": "InitiatingAccountName"
+          },
+          {
+            "identifier": "UPNSuffix",
+            "columnName": "InitiatingAccountUPNSuffix"
+          }
+        ]
+      },
+      {
+        "entityType": "Account",
+        "fieldMappings": [
+          {
+            "identifier": "AadUserId",
+            "columnName": "InitiatingAadUserId"
+          }
+        ]
+      }
+    ],
+    "version": "1.0.4",
+    "tactics": [
+      "PrivilegeEscalation"
+    ],
+    "techniques": [
+      "T1078"
+    ],
+    "displayName": "User Added to Admin Role",
+    "description": "Detects a user being added to a new privileged role. Monitor these additions to ensure the users are made eligible for these roles are intended to have these levels of access.\n  Ref: https://docs.microsoft.com/azure/active-directory/fundamentals/security-operations-privileged-accounts#changes-to-privileged-accounts",
+    "lastUpdatedDateUTC": "2024-03-27T00:00:00Z",
+    "createdDateUTC": "2022-07-08T00:00:00Z",
+    "status": "Available",
+    "requiredDataConnectors": [
+      {
+        "connectorId": "AzureActiveDirectory",
+        "dataTypes": [
+          "AuditLogs"
+        ]
+      }
+    ],
+    "alertRulesCreatedByTemplateCount": 0,
+    "suppressionDuration": "PT5H",
+    "suppressionEnabled": false,
+    "enabled": true,
+    "alertRuleTemplateName": "2a09f8cb-deb7-4c40-b08b-9137667f1c0b",
+    "templateVersion": "1.0.4"
+  }
+}
