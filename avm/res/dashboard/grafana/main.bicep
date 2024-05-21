@@ -44,6 +44,9 @@ param publicNetworkAccess string?
 @description('Optional. Whether a Grafana instance uses deterministic outbound IPs for this instancey.')
 param deterministicOutboundIP string = 'Disabled'
 
+@description('Optional. The lock settings of the service.')
+param lock lockType
+
 @description('Optional. Tags of the resource.')
 param tags object?
 
@@ -79,6 +82,17 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableT
 //
 // Add your resources here
 //
+
+resource grafana_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
+  name: lock.?name ?? 'lock-${name}'
+  properties: {
+    level: lock.?kind ?? ''
+    notes: lock.?kind == 'CanNotDelete'
+      ? 'Cannot delete resource or child resources.'
+      : 'Cannot delete or modify the resource or child resources.'
+  }
+  scope: grafana
+}
 
 resource grafana 'Microsoft.Dashboard/grafana@2023-09-01' = {
   name: name
@@ -159,3 +173,11 @@ output location string = grafana.location
 //
 // Add your User-defined-types here, if any
 //
+
+type lockType = {
+  @description('Optional. Specify the name of lock.')
+  name: string?
+
+  @description('Optional. Specify the type of lock.')
+  kind: ('CanNotDelete' | 'ReadOnly' | 'None')?
+}?
