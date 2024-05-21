@@ -62,17 +62,14 @@ function Get-ModulesMissingFromPrivateBicepRegistry {
         [string] $BicepRegistryRgName,
 
         [Parameter(Mandatory = $false)]
-        [bool] $PublishLatest = $true,
-
-        [Parameter(Mandatory = $false)]
-        [bool] $UseApiSpecsAlignedName = $false
+        [bool] $PublishLatest = $true
     )
 
     begin {
         Write-Debug ('{0} entered' -f $MyInvocation.MyCommand)
 
         # Load used functions
-        . (Join-Path $PSScriptRoot 'Get-PrivateRegistryRepositoryName.ps1')
+        . (Join-Path (Get-Item -Path $PSScriptRoot).Parent.Parent 'pipelines' 'sharedScripts' 'Get-BRMRepositoryName.ps1')
     }
 
     process {
@@ -95,9 +92,9 @@ function Get-ModulesMissingFromPrivateBicepRegistry {
             # Test all children against ACR
             $missingTemplatePaths = @()
             foreach ($templatePath in $availableModuleTemplatePaths) {
-                Write-Verbose ('Invoking: Get-PrivateRegistryRepositoryName -TemplateFilePath {0} -UseApiSpecsAlignedName {1}' -f $templatePath, $UseApiSpecsAlignedName) -Verbose
+                Write-Verbose ('Invoking: Get-BRMRepositoryName -TemplateFilePath {0} -UseApiSpecsAlignedName {1}' -f $templatePath) -Verbose
                 # Get a valid Container Registry name
-                $moduleRegistryIdentifier = Get-PrivateRegistryRepositoryName -TemplateFilePath $templatePath -UseApiSpecsAlignedName $UseApiSpecsAlignedName
+                $moduleRegistryIdentifier = Get-BRMRepositoryName -TemplateFilePath $templatePath
                 Write-Verbose ('Invoking: Get-AzContainerRegistryTag -RepositoryName {0} -RegistryName {1}' -f $moduleRegistryIdentifier, $BicepRegistryName) -Verbose
                 $null = Get-AzContainerRegistryTag -RepositoryName $moduleRegistryIdentifier -RegistryName $BicepRegistryName -ErrorAction 'SilentlyContinue' -ErrorVariable 'result'
 
