@@ -1,4 +1,4 @@
-# Azure Container Registry `[Microsoft.ContainerRegistry/landingzone]`
+# Azure Container Registry `[Microsoft.lz/containerregistry]`
 
 This Instance deploys an Azure Container Registry.
 
@@ -32,7 +32,7 @@ The following section provides usage examples for the module, which were used to
 
 >**Note**: Each example lists all the required parameters first, followed by the rest - each in alphabetical order.
 
->**Note**: To reference the module, please use the following syntax `br/public:avm/ptn/container-registry/landingzone:<version>`.
+>**Note**: To reference the module, please use the following syntax `br/public:avm/ptn/lz/container-registry:<version>`.
 
 - [Azure Container Registry (Landing Zone Submodule Minimal)](#example-1-azure-container-registry-landing-zone-submodule-minimal)
 - [Azure Container Registry (Landing Zone Submodule WAF)](#example-2-azure-container-registry-landing-zone-submodule-waf)
@@ -47,8 +47,8 @@ This module deploys an Azure Continer Registry using minimal parameters.
 <summary>via Bicep module</summary>
 
 ```bicep
-module landingzone 'br/public:avm/ptn/container-registry/landingzone:<version>' = {
-  name: 'landingzoneDeployment'
+module containerRegistry 'br/public:avm/ptn/lz/container-registry:<version>' = {
+  name: 'containerRegistryDeployment'
   params: {
     // Required parameters
     name: 'acrsubmin001'
@@ -95,8 +95,8 @@ This module deploys an Azure Continer Registry using Well Architected Framework 
 <summary>via Bicep module</summary>
 
 ```bicep
-module landingzone 'br/public:avm/ptn/container-registry/landingzone:<version>' = {
-  name: 'landingzoneDeployment'
+module containerRegistry 'br/public:avm/ptn/lz/container-registry:<version>' = {
+  name: 'containerRegistryDeployment'
   params: {
     // Required parameters
     name: 'acrwafmin001'
