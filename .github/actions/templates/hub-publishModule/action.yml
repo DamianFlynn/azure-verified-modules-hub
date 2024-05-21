@@ -202,7 +202,9 @@ runs:
           # Load used functions
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromPrivateBicepRegistry.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
+          # . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToPrivateBicepRegistry.ps1')
+          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
+
 
           $modulesToPublish = @()
 
@@ -256,19 +258,32 @@ runs:
             $RelPath = (($moduleToPublish.TemplateFilePath).Split('/modules/')[-1]).Split('/main.')[0]
             Write-Output "::group::$(' - [{0}] [{1}]' -f $RelPath, $moduleToPublish.Version)"
 
+            # $functionInput = @{
+            #   TemplateFilePath        = $moduleToPublish.TemplateFilePath
+            #   BicepRegistryName       = '${{ inputs.bicepRegistryName }}'
+            #   BicepRegistryRgName     = '${{ inputs.bicepRegistryRgName }}'
+            #   BicepRegistryRgLocation = '${{ inputs.bicepRegistryRgLocation }}'
+            #   ModuleVersion           = $moduleToPublish.Version
+            #   UseApiSpecsAlignedName  = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
+            # }
+
             $functionInput = @{
-              TemplateFilePath        = $moduleToPublish.TemplateFilePath
-              BicepRegistryName       = '${{ inputs.bicepRegistryName }}'
-              BicepRegistryRgName     = '${{ inputs.bicepRegistryRgName }}'
-              BicepRegistryRgLocation = '${{ inputs.bicepRegistryRgLocation }}'
-              ModuleVersion           = $moduleToPublish.Version
-              UseApiSpecsAlignedName  = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
+              # TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+              TemplateFilePath     = $moduleToPublish.TemplateFilePath
+              PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
+              RepoRoot             = $env:GITHUB_WORKSPACE
             }
 
             Write-Verbose "Invoke task with" -Verbose
             Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
-            Publish-ModuleToPrivateBicepRegistry @functionInput -Verbose
+            # Publish-ModuleToPrivateBicepRegistry @functionInput -Verbose
+            if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
+              $publishOutputs.Keys | Foreach-Object {
+                Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
+                Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
+              }
+            }
           }
 
           Write-Output '::endgroup::'

@@ -62,7 +62,7 @@ function Publish-ModuleToPrivateBicepRegistry {
         Write-Verbose ('{0} entered' -f $MyInvocation.MyCommand)
 
         # Load used functions
-        . (Join-Path $PSScriptRoot 'Get-PrivateRegistryRepositoryName.ps1')
+        . (Join-Path (Get-Item -Path $PSScriptRoot).Parent.Parent 'pipelines' 'sharedScripts' 'Get-BRMRepositoryName.ps1')
     }
 
     process {
@@ -92,7 +92,7 @@ function Publish-ModuleToPrivateBicepRegistry {
 
         # Get a valid Container Registry name
         Write-Verbose ('Get Private Reg Repo Name - [{0}]' -f $TemplateFilePath)
-        $moduleRegistryIdentifier = Get-PrivateRegistryRepositoryName -TemplateFilePath $TemplateFilePath -UseApiSpecsAlignedName $UseApiSpecsAlignedName
+        $moduleRegistryIdentifier = Get-BRMRepositoryName -TemplateFilePath $TemplateFilePath
 
         #############################################
         ##    Publish to private bicep registry    ##
