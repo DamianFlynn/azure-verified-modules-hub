@@ -96,9 +96,38 @@ runs:
         sudo mv ./bicep /usr/local/bin/bicep
         bicep --version
 
+    - name: "Publish module to bicep registry"
+      id: publish_step
+      uses: azure/powershell@v2
+      with:
+        azPSVersion: "latest"
+        inlineScript: |
+          # Grouping task logs
+          Write-Output '::group::Publish module to bicep registry'
+
+          # Load used functions
+          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
+
+          $functionInput = @{
+            TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+            PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
+            RepoRoot             = $env:GITHUB_WORKSPACE
+          }
+
+          Write-Verbose "Invoke function with" -Verbose
+          Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+
+          if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
+            $publishOutputs.Keys | Foreach-Object {
+              Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
+              Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
+            }
+          }
+
+          Write-Output '::endgroup::'
+
     - name: 'Publish module to template specs'
-      if: ${{ inputs.templateSpecsDoPublish == 'true' }}
-      uses: azure/powershell@v1
+      uses: azure/powershell@v2
       with:
         azPSVersion: 'latest'
         inlineScript: |
@@ -181,36 +210,6 @@ runs:
             Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
             Publish-ModuleToTemplateSpecsRG @functionInput -Verbose
-          }
-
-          Write-Output '::endgroup::'
-
-    - name: "Publish module to bicep registry"
-      id: publish_step
-      uses: azure/powershell@v2
-      with:
-        azPSVersion: "latest"
-        inlineScript: |
-          # Grouping task logs
-          Write-Output '::group::Publish module to bicep registry'
-
-          # Load used functions
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
-
-          $functionInput = @{
-            TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
-            RepoRoot             = $env:GITHUB_WORKSPACE
-          }
-
-          Write-Verbose "Invoke function with" -Verbose
-          Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
-
-          if($publishOutputs = Publish-ModuleFromPathToPBR @functionInput -Verbose) {
-            $publishOutputs.Keys | Foreach-Object {
-              Write-Verbose ('Passing pipeline variable [{0}] with value [{1}]' -f $_, $publishOutputs.$_) -Verbose
-              Write-Output ('{0}={1}' -f $_, $publishOutputs.$_) >> $env:GITHUB_OUTPUT
-            }
           }
 
           Write-Output '::endgroup::'
