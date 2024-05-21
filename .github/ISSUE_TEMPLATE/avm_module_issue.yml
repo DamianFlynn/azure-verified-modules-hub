@@ -38,7 +38,7 @@ body:
       description: Which existing AVM module is this issue related to?
       options:
         - ""
-        - "avm/ptn/container-registry/landingzone"
+        - "avm/ptn/lz/container-registry"
         - "avm/res/dashboard/grafana"
     validations:
       required: true
