@@ -41,7 +41,7 @@ function Get-ModuleTargetPatchVersion {
   $ModuleRelativeFolderPath = ('avm/{0}' -f ($ModuleFolderPath -split '[\/|\\]avm[\/|\\]')[-1]) -replace '\\', '/'
 
   # Get all released module tags (using upstream specifically to work in forks)
-  $existingTagList = git ls-remote --tag 'https://github.com/Azure/bicep-registry-modules.git' "$ModuleRelativeFolderPath/$MajMinVersion*"
+  $existingTagList = git ls-remote --tag 'https://github.com/DamianFlynn/azure-verified-modules-hub.git' "$ModuleRelativeFolderPath/$MajMinVersion*"
   if ( $existingTagList.count -eq 0 ) {
     # If first module tag, reset patch
     Write-Verbose "No existing tag for module [$ModuleRelativeFolderPath] starting with version [$MajMinVersion]" -Verbose
@@ -49,7 +49,7 @@ function Get-ModuleTargetPatchVersion {
     $patch = 0
   } else {
     # Otherwise get latest patch
-    $patchList = $existingTagList | ForEach-Object { [int](($_ -split '\.')[-1]) }
+    $patchList = $existingTagList | ForEach-Object { [int]((($_ -split '\.')[-1]) -split '-')[0] } # Second split is to handle pre-release versions
     $latestPatch = ($patchList | Measure-Object -Maximum).Maximum
     Write-Verbose "Latest tag is [$ModuleRelativeFolderPath/$MajMinVersion.$latestPatch]. Bumping patch." -Verbose
     # Increase patch count

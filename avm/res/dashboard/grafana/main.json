@@ -9,8 +9,35 @@
       "templateHash": "16717220061795749278"
     },
     "name": "Azure Grafana Dashboard",
-    "description": "This module deploys an Azure Grafana Dashboard.",
-    "owner": "InnofactorOrg/module-maintainers"
+    "description": "This module deploys Azure Grafana Dashboard with support for Azure Locks.",
+    "owner": "InnofactorOrg/azure-solution-module-maintainers"
+  },
+  "definitions": {
+    "lockType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Specify the name of lock."
+          }
+        },
+        "kind": {
+          "type": "string",
+          "allowedValues": [
+            "CanNotDelete",
+            "None",
+            "ReadOnly"
+          ],
+          "nullable": true,
+          "metadata": {
+            "description": "Optional. Specify the type of lock."
+          }
+        }
+      },
+      "nullable": true
+    }
   },
   "definitions": {
     "lockType": {
@@ -135,7 +162,7 @@
       "condition": "[parameters('enableTelemetry')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2023-07-01",
-      "name": "[format('46d3xbcp.res.dashboard-grafana.{0}.{1}', replace('-..--..-', '.', '-'), substring(uniqueString(deployment().name, parameters('location')), 0, 4))]",
+      "name": "[format('46d3xbcp.res.dashboard-grafana.{0}.{1}', replace('0.1.1-prerelease', '.', '-'), substring(uniqueString(deployment().name, parameters('location')), 0, 4))]",
       "properties": {
         "mode": "Incremental",
         "template": {

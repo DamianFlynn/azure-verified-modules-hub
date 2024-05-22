@@ -1,6 +1,6 @@
 metadata name = 'Azure Grafana Dashboard'
-metadata description = 'This module deploys an Azure Grafana Dashboard.'
-metadata owner = 'InnofactorOrg/module-maintainers'
+metadata description = 'This module deploys Azure Grafana Dashboard with support for Azure Locks.'
+metadata owner = 'InnofactorOrg/azure-solution-module-maintainers'
 
 @description('Required. Name of your Azure Grafana Dashboard.')
 @minLength(5)
@@ -62,7 +62,7 @@ param enableTelemetry bool = true
 // ============== //
 
 resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableTelemetry) {
-  name: '46d3xbcp.res.dashboard-grafana.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
+  name: '46d3xbcp.res.dashboard-grafana.${replace('0.1.1-prerelease', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
   properties: {
     mode: 'Incremental'
     template: {
@@ -82,6 +82,8 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableT
 //
 // Add your resources here
 //
+
+// Resource Locks
 
 resource grafana_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
   name: lock.?name ?? 'lock-${name}'
