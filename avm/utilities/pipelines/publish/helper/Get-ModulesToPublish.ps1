@@ -17,10 +17,10 @@ Get modified files between previous and current commit depending on if you are r
 #>
 function Get-ModifiedFileList {
 
-  if ((Get-GitBranchName) -eq 'main') {
-    Write-Verbose 'Gathering modified files from the previous head' -Verbose
-    $Diff = git diff --name-only --diff-filter=AM HEAD^ HEAD
-  }
+  # if ((Get-GitBranchName) -eq 'main') {
+  Write-Verbose 'Gathering modified files from the previous head' -Verbose
+  $Diff = git diff --name-only --diff-filter=AM HEAD^ HEAD
+  # }
   $ModifiedFiles = $Diff ? ($Diff | Get-Item -Force) : @()
 
   return $ModifiedFiles
@@ -238,6 +238,74 @@ function Get-ParentModuleTemplateFile {
 
 <#
 .SYNOPSIS
+Get the number of commits following the specified commit.
+
+.PARAMETER Commit
+Optional. A specified git reference to get commit counts on.
+
+.EXAMPLE
+Get-GitDistance -Commit origin/main.
+
+620
+
+There are currently 620 commits on origin/main. When run as a push on main, this will be the current commit number on the main branch.
+#>
+function Get-GitDistance {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory = $false)]
+    [string] $Commit = 'HEAD'
+
+  )
+
+  return [int](git rev-list --count $Commit) + 1
+}
+
+# end region
+
+<#
+.SYNOPSIS
+Gets the version from the version file from the corresponding main.bicep/json file.
+
+.DESCRIPTION
+Gets the version file from the corresponding main.bicep/json file.
+The file needs to be in the same folder as the template file itself.
+
+.PARAMETER TemplateFilePath
+Mandatory. Path to a main.bicep/json file.
+
+.EXAMPLE
+Get-ModuleVersionFromFile -TemplateFilePath 'C:\Repos\Azure\ResourceModules\modules\storage\storage-account\table-service\table\main.bicep'
+
+0.3
+
+Get the version file from the specified main.bicep file.
+#>
+function Get-ModuleVersionFromFile {
+
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory)]
+    [string] $TemplateFilePath
+  )
+
+  $ModuleFolder = Split-Path -Path $TemplateFilePath -Parent
+  $VersionFilePath = Join-Path $ModuleFolder 'version.json'
+
+  if (-not (Test-Path -Path $VersionFilePath)) {
+    throw "No version file found at: [$VersionFilePath]"
+  }
+
+  $VersionFileContent = Get-Content $VersionFilePath | ConvertFrom-Json
+
+  return $VersionFileContent.version
+}
+
+#end region
+
+<#
+.SYNOPSIS
 Generates a new version for the specified module.
 
 .DESCRIPTION
@@ -314,11 +382,11 @@ function Get-ModulesToPublish {
 
   $modulesToPublish = [System.Collections.ArrayList]@()
   foreach ($TemplateFileToPublish in $TemplateFilesToPublish) {
-    $ModuleVersion = Get-NewModuleVersion -TemplateFilePath $TemplateFileToPublish.FullName -Verbose
+    $ModuleVersion = Get-NewModuleVersion -TemplateFilePath $TemplateFileToPublish -Verbose
 
     $modulesToPublish += @{
       Version          = $ModuleVersion
-      TemplateFilePath = $TemplateFileToPublish.FullName
+      TemplateFilePath = $TemplateFileToPublish
     }
 
     if ($ModuleVersion -notmatch 'prerelease') {
@@ -326,31 +394,31 @@ function Get-ModulesToPublish {
       # Latest Major,Minor
       $modulesToPublish += @{
         Version          = ($ModuleVersion.Split('.')[0..1] -join '.')
-        TemplateFilePath = $TemplateFileToPublish.FullName
+        TemplateFilePath = $TemplateFileToPublish
       }
 
       # Latest Major
       $modulesToPublish += @{
         Version          = ($ModuleVersion.Split('.')[0])
-        TemplateFilePath = $TemplateFileToPublish.FullName
+        TemplateFilePath = $TemplateFileToPublish
       }
 
       if ($PublishLatest) {
         # Absolute latest
         $modulesToPublish += @{
           Version          = 'latest'
-          TemplateFilePath = $TemplateFileToPublish.FullName
+          TemplateFilePath = $TemplateFileToPublish
         }
       }
     }
 
-    $ParentTemplateFilesToPublish = Get-ParentModuleTemplateFile -TemplateFilePath $TemplateFileToPublish.FullName -Recurse
+    $ParentTemplateFilesToPublish = Get-ParentModuleTemplateFile -TemplateFilePath $TemplateFileToPublish -Recurse
     foreach ($ParentTemplateFileToPublish in $ParentTemplateFilesToPublish) {
       $ParentModuleVersion = Get-NewModuleVersion -TemplateFilePath $ParentTemplateFileToPublish.FullName
 
       $modulesToPublish += @{
         Version          = $ParentModuleVersion
-        TemplateFilePath = $ParentTemplateFileToPublish.FullName
+        TemplateFilePath = $ParentTemplateFileToPublish
       }
 
       if ($ModuleVersion -notmatch 'prerelease') {
@@ -358,20 +426,20 @@ function Get-ModulesToPublish {
         # Latest Major,Minor
         $modulesToPublish += @{
           Version          = ($ParentModuleVersion.Split('.')[0..1] -join '.')
-          TemplateFilePath = $ParentTemplateFileToPublish.FullName
+          TemplateFilePath = $ParentTemplateFileToPublish
         }
 
         # Latest Major
         $modulesToPublish += @{
           Version          = ($ParentModuleVersion.Split('.')[0])
-          TemplateFilePath = $ParentTemplateFileToPublish.FullName
+          TemplateFilePath = $ParentTemplateFileToPublish
         }
 
         if ($PublishLatest) {
           # Absolute latest
           $modulesToPublish += @{
             Version          = 'latest'
-            TemplateFilePath = $ParentTemplateFileToPublish.FullName
+            TemplateFilePath = $ParentTemplateFileToPublish
           }
         }
       }
@@ -383,7 +451,7 @@ function Get-ModulesToPublish {
   if ($modulesToPublish.count -gt 0) {
     Write-Verbose 'Publish the following modules:'-Verbose
     $modulesToPublish | ForEach-Object {
-      $RelPath = ($_.TemplateFilePath).Split('/modules/')[-1]
+      $RelPath = ($_.TemplateFilePath).Split('/avm/')[-1]
       $RelPath = $RelPath.Split('/main.')[0]
       Write-Verbose (' - [{0}] [{1}] ' -f $RelPath, $_.Version) -Verbose
     }
