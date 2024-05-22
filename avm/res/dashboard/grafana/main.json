@@ -6,10 +6,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "3639592984715918081"
+      "templateHash": "18357109356553206021"
     },
     "name": "Azure Grafana Dashboard",
-    "description": "This module deploys Azure Grafana Dashboard.",
+    "description": "This module deploys Azure Grafana Dashboard with support for Azure Locks.",
     "owner": "InnofactorOrg/azure-solution-module-maintainers"
   },
   "definitions": {
@@ -135,7 +135,7 @@
       "condition": "[parameters('enableTelemetry')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2023-07-01",
-      "name": "[format('46d3xbcp.res.dashboard-grafana.{0}.{1}', replace('-..--..-', '.', '-'), substring(uniqueString(deployment().name, parameters('location')), 0, 4))]",
+      "name": "[format('46d3xbcp.res.dashboard-grafana.{0}.{1}', replace('0.1.1-prerelease', '.', '-'), substring(uniqueString(deployment().name, parameters('location')), 0, 4))]",
       "properties": {
         "mode": "Incremental",
         "template": {

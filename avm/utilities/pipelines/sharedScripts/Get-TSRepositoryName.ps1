@@ -15,14 +15,14 @@ Convert 'C:\avm\res\key-vault\vault\main.bicep' to e.g. 'avm.res.key-vault.vault
 #>
 function Get-TSRepositoryName {
 
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $TemplateFilePath
-    )
+   [CmdletBinding()]
+   param (
+      [Parameter(Mandatory = $true)]
+      [string] $TemplateFilePath
+   )
 
-    $moduleIdentifier = (Split-Path $TemplateFilePath -Parent) -split '[\/|\\]avm[\/|\\](res|ptn)[\/|\\]'
-    return ('avm.{0}.{1}' -f $moduleIdentifier[1], $moduleIdentifier[2]) -replace '\\', '.'
+   $moduleIdentifier = (Split-Path $TemplateFilePath -Parent) -split '[\/|\\]avm[\/|\\](res|ptn)[\/|\\]'
+   return (('avm.{0}.{1}' -f $moduleIdentifier[1], $moduleIdentifier[2]) -replace '\\', '.') -replace '/', '.'
 }
 
 # end region
@@ -51,24 +51,24 @@ function Get-TSRepositoryName {
    The Bicep file must contain metadata fields 'name', 'description', and 'owner' for this function to work correctly.
 #>
 function Get-BicepFileMetadata {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory = $true)]
-        [string] $TemplateFilePath
-    )
+   [CmdletBinding()]
+   param (
+      [Parameter(Mandatory = $true)]
+      [string] $TemplateFilePath
+   )
 
-    $content = Get-Content -Path $TemplateFilePath -Raw
-    $name = $content | Select-String -Pattern "metadata name = '([^']*)'"
-    $description = $content | Select-String -Pattern "metadata description = '([^']*)'"
-    $owner = $content | Select-String -Pattern "metadata owner = '([^']*)'"
+   $content = Get-Content -Path $TemplateFilePath -Raw
+   $name = $content | Select-String -Pattern "metadata name = '([^']*)'"
+   $description = $content | Select-String -Pattern "metadata description = '([^']*)'"
+   $owner = $content | Select-String -Pattern "metadata owner = '([^']*)'"
 
-    $metadataObject = @{
-        name        = $name.Matches.Groups[1].Value
-        description = $description.Matches.Groups[1].Value
-        owner       = $owner.Matches.Groups[1].Value
-    }
+   $metadataObject = @{
+      name        = $name.Matches.Groups[1].Value
+      description = $description.Matches.Groups[1].Value
+      owner       = $owner.Matches.Groups[1].Value
+   }
 
-    return $metadataObject
+   return $metadataObject
 }
 
 # end region
