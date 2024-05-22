@@ -137,7 +137,7 @@ function Publish-ModuleFromPathToPBR {
     Description        = $metadata.description
 
     Version            = $targetVersion
-    VersionDescription = git log -1 --pretty=%B
+    VersionDescription = (git log -1 --pretty=%B) -join "`n"
     ResourceGroupName  = $TemplateSpecsRgName
     Location           = $TemplateSpecsRgLocation
   }
