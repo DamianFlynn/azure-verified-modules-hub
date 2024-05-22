@@ -1,6 +1,6 @@
 # Azure Grafana Dashboard `[Microsoft.Dashboard/grafana]`
 
-This module deploys an Azure Grafana Dashboard.
+This module deploys an Azure Grafana Dashboard,.
 
 ## Navigation
 
