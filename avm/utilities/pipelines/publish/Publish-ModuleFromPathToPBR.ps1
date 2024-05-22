@@ -124,7 +124,7 @@ function Publish-ModuleFromPathToPBR {
   # TODO move to its own task to show that as skipped if no file qualifies for new version
   Write-Verbose "Publish Bicep Registry Input:`n $($publishInput | ConvertTo-Json -Depth 10)" -Verbose
 
-  bicep publish @publishInput
+  # bicep publish @publishInput
 
   ##########################
   ## 8.  Template Specs   ##
@@ -149,7 +149,8 @@ function Publish-ModuleFromPathToPBR {
     Write-Verbose ('Setting context to subscription [{0}]' -f $plainSubscriptionId) -Verbose
     $null = Set-AzContext -Subscription $plainSubscriptionId
   }
-  New-AzTemplateSpec @templateSpecInputObject -Force
+  $tsPubResult = New-AzTemplateSpec @templateSpecInputObject -Force
+  Write-Verbose "Publish TemplateSpec Output:`n $($tsPubResult | ConvertTo-Json -Depth 1)" -Verbose
 
   return @{
     version             = $targetVersion
