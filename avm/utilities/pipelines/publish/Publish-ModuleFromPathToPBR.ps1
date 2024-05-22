@@ -42,12 +42,6 @@ function Publish-ModuleFromPathToPBR {
     [Parameter(Mandatory = $true)]
     [secureString] $PublicRegistryServer,
 
-    [Parameter(Mandatory = $true)]
-    [string] $TemplateSpecsRgName,
-
-    [Parameter(Mandatory = $true)]
-    [string] $TemplateSpecsRgLocation,
-
     [Parameter(Mandatory = $false)]
     [string] $TemplateSpecsSubscriptionId,
 
