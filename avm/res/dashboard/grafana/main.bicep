@@ -83,6 +83,8 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableT
 // Add your resources here
 //
 
+// Resource Locks
+
 resource grafana_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
   name: lock.?name ?? 'lock-${name}'
   properties: {
