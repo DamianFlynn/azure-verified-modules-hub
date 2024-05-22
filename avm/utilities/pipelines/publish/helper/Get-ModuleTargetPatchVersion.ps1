@@ -49,7 +49,7 @@ function Get-ModuleTargetPatchVersion {
     $patch = 0
   } else {
     # Otherwise get latest patch
-    $patchList = $existingTagList | ForEach-Object { [int](($_ -split '\.')[-1]) }
+    $patchList = $existingTagList | ForEach-Object { [int]((($_ -split '\.')[-1]) -split '-')[0] } // Second split is to handle pre-release versions
     $latestPatch = ($patchList | Measure-Object -Maximum).Maximum
     Write-Verbose "Latest tag is [$ModuleRelativeFolderPath/$MajMinVersion.$latestPatch]. Bumping patch." -Verbose
     # Increase patch count
