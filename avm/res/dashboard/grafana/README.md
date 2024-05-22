@@ -1,6 +1,6 @@
 # Azure Grafana Dashboard `[Microsoft.Dashboard/grafana]`
 
-This Module deploys a Grafana instance on Azure and applies a lock to the resource. The Grafana instance provides powerful visualization and analytics capabilities for your data. The Azure lock ensures the Grafana resource cannot be accidentally deleted or modified.
+This Module deploys a Grafana instance on Azure and applies a lock to the resource. The Grafana instance provides powerful visualization and analytics capabilities for your data and applications.
 
 ## Navigation
 

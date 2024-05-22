@@ -6,10 +6,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "15128867952238885683"
+      "templateHash": "14160298566075279423"
     },
     "name": "Azure Grafana Dashboard",
-    "description": "This Module deploys a Grafana instance on Azure and applies a lock to the resource. The Grafana instance provides powerful visualization and analytics capabilities for your data. The Azure lock ensures the Grafana resource cannot be accidentally deleted or modified.",
+    "description": "This Module deploys a Grafana instance on Azure and applies a lock to the resource. The Grafana instance provides powerful visualization and analytics capabilities for your data and applications.",
     "owner": "InnofactorOrg/azure-solution-module-maintainers"
   },
   "definitions": {
