@@ -13,7 +13,7 @@ module_name=$1
 git checkout -b "feature/$module_name"
 
 # Define the template and output file paths
-template_path="./.github/workflows/avm.template.workflow.yml"
+template_path="./.github/workflows/avm.template.workflow.yml.starter"
 output_path="./.github/workflows/avm.${module_name}.yml"
 
 # Copy the template to the new file
@@ -23,4 +23,5 @@ cp $template_path $output_path
 escaped_module_name=$(echo $module_name | sed 's/\./\\./g')
 sed -i '' "s/avm\\.res\\.app\\.job/avm\\.$escaped_module_name/g" $output_path
 sed -i '' "s/avm\\/res\\/app\\/job/avm\\/"$(echo $module_name | tr '.' '/' | sed 's/\//\\\//g')"/g" $output_path
+
 
