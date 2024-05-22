@@ -30,7 +30,7 @@ function Get-ModuleReadmeLink {
     [string] $TagName,
 
     [Parameter(Mandatory = $false)]
-    [string] $RegistryBaseUri = 'https://github.com/Azure/bicep-registry-modules/tree'
+    [string] $RegistryBaseUri = 'https://github.com/DamianFlynn/azure-verified-modules-hub/tree'
   )
 
   $ModuleRelativeFolderPath = ('avm/{0}' -f ($ModuleFolderPath -split '[\/|\\]avm[\/|\\]')[-1]) -replace '\\', '/'

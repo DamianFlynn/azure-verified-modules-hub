@@ -37,43 +37,43 @@ inputs:
   templateFilePath:
     description: 'The path to the template file to publish'
     required: true
-  subscriptionId:
-    description: 'The ID of the subscription to publish to'
-    required: false
+  # subscriptionId:
+  #   description: 'The ID of the subscription to publish to'
+  #   required: false
   templateSpecsRgName:
     description: 'Required to publish to template spec. ResourceGroup of the template spec to publish to'
     required: false
   templateSpecsRgLocation:
     description: 'Required to publish to template spec. Location of the template spec resource group'
     required: false
-  templateSpecsDescription:
-    description: 'Required to publish to template spec. Description of the template spec to publish to'
-    required: false
-  templateSpecsDoPublish:
-    description: 'Flag to indicate whether or not to publish to template specs'
-    default: 'false'
-    required: false
-  bicepRegistryName:
-    description: 'Required to publish to private bicep registry. Name of the container registry to publish to'
-    required: false
-  bicepRegistryRgName:
-    description: 'Required to publish to private bicep registry. Name of the container registry resource group'
-    required: false
-  bicepRegistryRgLocation:
-    description: 'Required to publish to private bicep registry. Location of the container registry resource group'
-    required: false
-  bicepRegistryDoPublish:
-    description: 'Flag to indicate whether or not to publish to the private bicep registry'
-    default: 'false'
-    required: false
-  publishLatest:
-    description: 'Flag to indicate whether or not to publish a "latest" version'
-    default: 'true'
-    required: false
-  useApiSpecsAlignedName:
-    description: 'Flag to indicate whether or not to publish module using their REST API, or their folder path name'
-    default: 'false'
-    required: false
+  # templateSpecsDescription:
+  #   description: 'Required to publish to template spec. Description of the template spec to publish to'
+  #   required: false
+  # templateSpecsDoPublish:
+  #   description: 'Flag to indicate whether or not to publish to template specs'
+  #   default: 'false'
+  #   required: false
+  # bicepRegistryName:
+  #   description: 'Required to publish to private bicep registry. Name of the container registry to publish to'
+  #   required: false
+  # bicepRegistryRgName:
+  #   description: 'Required to publish to private bicep registry. Name of the container registry resource group'
+  #   required: false
+  # bicepRegistryRgLocation:
+  #   description: 'Required to publish to private bicep registry. Location of the container registry resource group'
+  #   required: false
+  # bicepRegistryDoPublish:
+  #   description: 'Flag to indicate whether or not to publish to the private bicep registry'
+  #   default: 'false'
+  #   required: false
+  # publishLatest:
+  #   description: 'Flag to indicate whether or not to publish a "latest" version'
+  #   default: 'true'
+  #   required: false
+  # useApiSpecsAlignedName:
+  #   description: 'Flag to indicate whether or not to publish module using their REST API, or their folder path name'
+  #   default: 'false'
+  #   required: false
 
 runs:
   using: 'composite'
@@ -109,9 +109,12 @@ runs:
           . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleFromPathToPBR.ps1')
 
           $functionInput = @{
-            TemplateFilePath     = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-            PublicRegistryServer = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
-            RepoRoot             = $env:GITHUB_WORKSPACE
+            TemplateFilePath        = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+            PublicRegistryServer    = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
+            RepoRoot                = $env:GITHUB_WORKSPACE
+            TemplateSpecsSubscriptionId = ConvertTo-SecureString '${{ env.PUBLISH_SUBSCRIPTION_ID }}' -AsPlainText -Force
+            TemplateSpecsRgName     = '${{ inputs.templateSpecsRgName }}'
+            TemplateSpecsRgLocation = '${{ inputs.templateSpecsRgLocation }}'
           }
 
           Write-Verbose "Invoke function with" -Verbose
@@ -126,93 +129,93 @@ runs:
 
           Write-Output '::endgroup::'
 
-    - name: 'Publish module to template specs'
-      uses: azure/powershell@v2
-      with:
-        azPSVersion: 'latest'
-        inlineScript: |
-          # Grouping task logs
-          Write-Output '::group::Publish module to template specs'
+    # - name: 'Publish module to template specs'
+    #   uses: azure/powershell@v2
+    #   with:
+    #     azPSVersion: 'latest'
+    #     inlineScript: |
+    #       # Grouping task logs
+    #       Write-Output '::group::Publish module to template specs'
 
-          if (-not [String]::IsNullOrEmpty('${{ inputs.subscriptionId }}')) {
-            Write-Verbose ('Setting context to subscription [{0}]' -f '${{ inputs.subscriptionId }}') -Verbose
-            $null = Set-AzContext -Subscription '${{ inputs.subscriptionId }}'
-          }
+    #       if (-not [String]::IsNullOrEmpty('${{ inputs.subscriptionId }}')) {
+    #         Write-Verbose ('Setting context to subscription [{0}]' -f '${{ inputs.subscriptionId }}') -Verbose
+    #         $null = Set-AzContext -Subscription '${{ inputs.subscriptionId }}'
+    #       }
 
-          # Load used functions
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
-          . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToTemplateSpecsRG.ps1')
+    #       # Load used functions
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'helper' 'Get-ModulesToPublish.ps1')
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Get-ModulesMissingFromTemplateSpecsRG.ps1')
+    #       . (Join-Path $env:GITHUB_WORKSPACE 'avm' 'utilities' 'pipelines'  'publish' 'Publish-ModuleToTemplateSpecsRG.ps1')
 
-          $modulesToPublish = @()
+    #       $modulesToPublish = @()
 
-          ################################
-          ##   Get modules to publish   ##
-          ################################
-          $functionInput = @{
-            ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
-            # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
-          }
+    #       ################################
+    #       ##   Get modules to publish   ##
+    #       ################################
+    #       $functionInput = @{
+    #         ModuleFolderPath = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
+    #         # PublishLatest    = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+    #       }
 
-          Write-Verbose "Invoke task with" -Verbose
-          Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+    #       Write-Verbose "Invoke task with" -Verbose
+    #       Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
-          # Get the modified child resources
-          $modulesToPublish += Get-ModulesToPublish @functionInput -Verbose
+    #       # Get the modified child resources
+    #       $modulesToPublish += Get-ModulesToPublish @functionInput -Verbose
 
-          #############################
-          ##   Get missing modules   ##
-          #############################
+    #       #############################
+    #       ##   Get missing modules   ##
+    #       #############################
 
-          # Add all modules that don't exist in the target location
-              # TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
-          $missingInputObject = @{
-              TemplateFilePath    = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
-              TemplateSpecsRGName = '${{ inputs.templateSpecsRgName }}'
-              PublishLatest       = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
-          }
+    #       # Add all modules that don't exist in the target location
+    #           # TemplateFilePath    = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
+    #       $missingInputObject = @{
+    #           TemplateFilePath    = Split-Path (Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}") -Parent
+    #           TemplateSpecsRGName = '${{ inputs.templateSpecsRgName }}'
+    #           PublishLatest       = [System.Convert]::ToBoolean("${{ inputs.publishLatest }}")
+    #       }
 
-          Write-Verbose "Invoke Get-ModulesMissingFromTemplateSpecsRG with" -Verbose
-          Write-Verbose ($missingInputObject | ConvertTo-Json | Out-String) -Verbose
+    #       Write-Verbose "Invoke Get-ModulesMissingFromTemplateSpecsRG with" -Verbose
+    #       Write-Verbose ($missingInputObject | ConvertTo-Json | Out-String) -Verbose
 
-          $missingModules = Get-ModulesMissingFromTemplateSpecsRG @missingInputObject
+    #       $missingModules = Get-ModulesMissingFromTemplateSpecsRG @missingInputObject
 
-          foreach($missingModule in $missingModules) {
-            if($modulesToPublish.TemplateFilePath -notcontains $missingModule.TemplateFilePath) {
-              $modulesToPublish += $missingModule
-            }
-          }
+    #       foreach($missingModule in $missingModules) {
+    #         if($modulesToPublish.TemplateFilePath -notcontains $missingModule.TemplateFilePath) {
+    #           $modulesToPublish += $missingModule
+    #         }
+    #       }
 
-          # Filter modules to publish 'prerelease' only if branch is not main/master
-          $BranchName = "$env:GITHUB_REF_NAME"
-          if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
-            Write-Verbose "Filtering modules to only publish a [prerelease] version as the current branch [$BranchName] is not [main/master]." -Verbose
-            $modulesToPublish = $modulesToPublish | Where-Object -Property version -like '*-prerelease'
-          }
+    #       # Filter modules to publish 'prerelease' only if branch is not main/master
+    #       $BranchName = "$env:GITHUB_REF_NAME"
+    #       if ($BranchName -ne 'main' -and $BranchName -ne 'master') {
+    #         Write-Verbose "Filtering modules to only publish a [prerelease] version as the current branch [$BranchName] is not [main/master]." -Verbose
+    #         $modulesToPublish = $modulesToPublish | Where-Object -Property version -like '*-prerelease'
+    #       }
 
-          #################
-          ##   Publish   ##
-          #################
-          foreach ($moduleToPublish in $modulesToPublish) {
-            $RelPath = (($moduleToPublish.TemplateFilePath).Split('/modules/')[-1]).Split('/main.')[0]
-            Write-Output "::group::$(' - [{0}] [{1}]' -f $RelPath, $moduleToPublish.Version)"
+    #       #################
+    #       ##   Publish   ##
+    #       #################
+    #       foreach ($moduleToPublish in $modulesToPublish) {
+    #         $RelPath = (($moduleToPublish.TemplateFilePath).Split('/modules/')[-1]).Split('/main.')[0]
+    #         Write-Output "::group::$(' - [{0}] [{1}]' -f $RelPath, $moduleToPublish.Version)"
 
-            $functionInput = @{
-              TemplateFilePath         = $moduleToPublish.TemplateFilePath
-              TemplateSpecsRgName      = '${{ inputs.templateSpecsRgName }}'
-              TemplateSpecsRgLocation  = '${{ inputs.templateSpecsRgLocation }}'
-              TemplateSpecsDescription = '${{ inputs.templateSpecsDescription }}'
-              ModuleVersion            = $moduleToPublish.Version
-              UseApiSpecsAlignedName   = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
-            }
+    #         $functionInput = @{
+    #           TemplateFilePath         = $moduleToPublish.TemplateFilePath
+    #           TemplateSpecsRgName      = '${{ inputs.templateSpecsRgName }}'
+    #           TemplateSpecsRgLocation  = '${{ inputs.templateSpecsRgLocation }}'
+    #           TemplateSpecsDescription = '${{ inputs.templateSpecsDescription }}'
+    #           ModuleVersion            = $moduleToPublish.Version
+    #           UseApiSpecsAlignedName   = [System.Convert]::ToBoolean('${{ inputs.useApiSpecsAlignedName }}')
+    #         }
 
-            Write-Verbose "Invoke task with" -Verbose
-            Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
+    #         Write-Verbose "Invoke task with" -Verbose
+    #         Write-Verbose ($functionInput | ConvertTo-Json | Out-String) -Verbose
 
-            Publish-ModuleToTemplateSpecsRG @functionInput -Verbose
-          }
+    #         Publish-ModuleToTemplateSpecsRG @functionInput -Verbose
+    #       }
 
-          Write-Output '::endgroup::'
+    #       Write-Output '::endgroup::'
 
 
     # - name: 'Publish module to private bicep registry'

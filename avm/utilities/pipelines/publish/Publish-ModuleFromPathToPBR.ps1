@@ -15,6 +15,15 @@ Mandatory. The path to the deployment file
 .PARAMETER PublicRegistryServer
 Mandatory. The public registry server.
 
+.PARAMETER TemplateSpecsSubscriptionId
+Mandatory. The subscription id of the template spec to publish to.
+
+.PARAMETER TemplateSpecsRgName
+Mandatory. The resource group of the template spec to publish to.
+
+.PARAMETER TemplateSpecsRgLocation
+Mandatory. The location of the template spec resource group.
+
 .PARAMETER RepoRoot
 Optional. Path to the root of the repository.
 
@@ -34,6 +43,15 @@ function Publish-ModuleFromPathToPBR {
     [secureString] $PublicRegistryServer,
 
     [Parameter(Mandatory = $false)]
+    [secureString] $TemplateSpecsSubscriptionId,
+
+    [Parameter(Mandatory = $true)]
+    [string] $TemplateSpecsRgName,
+
+    [Parameter(Mandatory = $true)]
+    [string] $TemplateSpecsRgLocation,
+
+    [Parameter(Mandatory = $false)]
     [string] $RepoRoot = (Get-Item -Path $PSScriptRoot).parent.parent.parent.parent.FullName
   )
 
@@ -43,6 +61,7 @@ function Publish-ModuleFromPathToPBR {
   . (Join-Path $RepoRoot 'avm' 'utilities' 'pipelines' 'publish' 'helper' 'New-ModuleReleaseTag.ps1')
   . (Join-Path $RepoRoot 'avm' 'utilities' 'pipelines' 'publish' 'helper' 'Get-ModuleReadmeLink.ps1')
   . (Join-Path $RepoRoot 'avm' 'utilities' 'pipelines' 'sharedScripts' 'Get-BRMRepositoryName.ps1')
+  . (Join-Path $RepoRoot 'avm' 'utilities' 'pipelines' 'sharedScripts' 'Get-TSRepositoryName.ps1')
   . (Join-Path $RepoRoot 'avm' 'utilities' 'pipelines' 'sharedScripts' 'tokenReplacement' 'Convert-TokensInFileList.ps1')
 
   $moduleFolderPath = Split-Path $TemplateFilePath -Parent
@@ -59,12 +78,14 @@ function Publish-ModuleFromPathToPBR {
 
   # 3. Get Target Published Module Name
   $publishedModuleName = Get-BRMRepositoryName -TemplateFilePath $TemplateFilePath
+  $templateSpecModuleName = Get-TSRepositoryName -TemplateFilePath $TemplateFilePath
 
   # 4.Create release tag
   $gitTagName = New-ModuleReleaseTag -ModuleFolderPath $moduleFolderPath -TargetVersion $targetVersion
 
   # 5. Get the documentation link
   $documentationUri = Get-ModuleReadmeLink -TagName $gitTagName -ModuleFolderPath $moduleFolderPath
+  $metadata = Get-BicepFileMetadata -TemplateFilePath $moduleBicepFilePath
 
   # 6. Replace telemetry version value (in Bicep)
   $tokenConfiguration = @{
@@ -101,13 +122,39 @@ function Publish-ModuleFromPathToPBR {
     '--force'
   )
   # TODO move to its own task to show that as skipped if no file qualifies for new version
-  Write-Verbose "Publish Input:`n $($publishInput | ConvertTo-Json -Depth 10)" -Verbose
+  Write-Verbose "Publish Bicep Registry Input:`n $($publishInput | ConvertTo-Json -Depth 10)" -Verbose
 
   bicep publish @publishInput
+
+  ##########################
+  ## 8.  Template Specs   ##
+  ##########################
+
+  $templateSpecInputObject = @{
+    Name               = $templateSpecModuleName
+    TemplateFile       = $moduleBicepFilePath
+    DisplayName        = $metadata.name
+    Description        = $metadata.description
+
+    Version            = $targetVersion
+    VersionDescription = git log -1 --pretty=%B
+    ResourceGroupName  = $TemplateSpecsRgName
+    Location           = $TemplateSpecsRgLocation
+  }
+
+  Write-Verbose "Publish Template Spec Input:`n $($templateSpecInputObject | ConvertTo-Json -Depth 10)" -Verbose
+
+  $plainSubscriptionId = ConvertFrom-SecureString $TemplateSpecsSubscriptionId -AsPlainText
+  if (-not [String]::IsNullOrEmpty($plainSubscriptionId)) {
+    Write-Verbose ('Setting context to subscription [{0}]' -f $plainSubscriptionId) -Verbose
+    $null = Set-AzContext -Subscription $plainSubscriptionId
+  }
+  New-AzTemplateSpec @templateSpecInputObject -Force
 
   return @{
     version             = $targetVersion
     publishedModuleName = $publishedModuleName
     gitTagName          = $gitTagName
+    templateSpecName    = $templateSpecModuleName
   }
 }
