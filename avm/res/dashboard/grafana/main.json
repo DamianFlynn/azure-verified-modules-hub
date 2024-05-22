@@ -6,10 +6,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "10987481592960387428"
+      "templateHash": "4482408450179541612"
     },
     "name": "Azure Grafana Dashboard",
-    "description": "This module deploys an Azure Grafana Dashboard,.",
+    "description": "This module deploys an Azure Grafana Dashboard.",
     "owner": "InnofactorOrg/azure-solution-module-maintainers"
   },
   "definitions": {

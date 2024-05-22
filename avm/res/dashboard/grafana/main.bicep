@@ -1,5 +1,5 @@
 metadata name = 'Azure Grafana Dashboard'
-metadata description = 'This module deploys an Azure Grafana Dashboard,.'
+metadata description = 'This module deploys an Azure Grafana Dashboard.'
 metadata owner = 'InnofactorOrg/azure-solution-module-maintainers'
 
 @description('Required. Name of your Azure Grafana Dashboard.')
