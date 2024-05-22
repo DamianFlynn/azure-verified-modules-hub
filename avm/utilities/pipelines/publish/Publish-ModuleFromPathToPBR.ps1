@@ -43,7 +43,7 @@ function Publish-ModuleFromPathToPBR {
     [secureString] $PublicRegistryServer,
 
     [Parameter(Mandatory = $false)]
-    [string] $TemplateSpecsSubscriptionId,
+    [secureString] $TemplateSpecsSubscriptionId,
 
     [Parameter(Mandatory = $true)]
     [string] $TemplateSpecsRgName,
@@ -142,11 +142,12 @@ function Publish-ModuleFromPathToPBR {
     Location           = $TemplateSpecsRgLocation
   }
 
-  Write-Verbose "Publish Template Spec Input:`n $($publishTSInput | ConvertTo-Json -Depth 10)" -Verbose
+  Write-Verbose "Publish Template Spec Input:`n $($templateSpecInputObject | ConvertTo-Json -Depth 10)" -Verbose
 
-  if (-not [String]::IsNullOrEmpty('$TemplateSpecsSubscriptionId')) {
-    Write-Verbose ('Setting context to subscription [{0}]' -f '$TemplateSpecsSubscriptionId') -Verbose
-    $null = Set-AzContext -Subscription '$TemplateSpecsSubscriptionId'
+  $plainSubscriptionId = ConvertFrom-SecureString $TemplateSpecsSubscriptionId -AsPlainText
+  if (-not [String]::IsNullOrEmpty($plainSubscriptionId)) {
+    Write-Verbose ('Setting context to subscription [{0}]' -f $plainSubscriptionId) -Verbose
+    $null = Set-AzContext -Subscription $plainSubscriptionId
   }
   New-AzTemplateSpec @templateSpecInputObject -Force
 

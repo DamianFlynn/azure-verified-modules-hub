@@ -37,9 +37,9 @@ inputs:
   templateFilePath:
     description: 'The path to the template file to publish'
     required: true
-  subscriptionId:
-    description: 'The ID of the subscription to publish to'
-    required: false
+  # subscriptionId:
+  #   description: 'The ID of the subscription to publish to'
+  #   required: false
   templateSpecsRgName:
     description: 'Required to publish to template spec. ResourceGroup of the template spec to publish to'
     required: false
@@ -112,7 +112,7 @@ runs:
             TemplateFilePath        = Join-Path $env:GITHUB_WORKSPACE "${{ inputs.templateFilePath }}"
             PublicRegistryServer    = ConvertTo-SecureString '${{ env.PUBLISH_REGISTRY_SERVER }}' -AsPlainText -Force
             RepoRoot                = $env:GITHUB_WORKSPACE
-            TemplateSpecsSubscriptionId = '${{ inputs.subscriptionId }}'
+            TemplateSpecsSubscriptionId = ConvertTo-SecureString '${{ env.PUBLISH_SUBSCRIPTION_ID }}' -AsPlainText -Force
             TemplateSpecsRgName     = '${{ inputs.templateSpecsRgName }}'
             TemplateSpecsRgLocation = '${{ inputs.templateSpecsRgLocation }}'
           }

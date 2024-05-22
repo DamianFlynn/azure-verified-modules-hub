@@ -158,7 +158,7 @@ jobs:
         uses: ./.github/actions/templates/hub-publishModule
         with:
           templateFilePath: "${{ inputs.modulePath }}/main.bicep"
-          subscriptionId: "${{ secrets.PUBLISH_SUBSCRIPTION_ID }}"
+          # subscriptionId: "${{ secrets.PUBLISH_SUBSCRIPTION_ID }}"
           templateSpecsRGName: "p-we1iac-specs"
           templateSpecsRGLocation: "westeurope"
           # templateSpecsDescription: "components"
