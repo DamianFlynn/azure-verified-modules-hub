@@ -39,8 +39,9 @@ body:
       options:
         - ""
         - "avm/ptn/lz/container-registry"
+        - "avm/res/custom-providers/resource-providers"
         - "avm/res/dashboard/grafana"
-        - "/avm/res/security-insights/alert-rules"
+        - "avm/res/security-insights/alert-rules"
     validations:
       required: true
   - type: input
