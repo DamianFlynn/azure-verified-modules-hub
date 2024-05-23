@@ -81,10 +81,12 @@ function Invoke-AvmJsonModuleIndexGeneration {
 
     $token = az acr credential show --name $BicepRegistryUrl.Split('.')[0]
     $token = $token | ConvertFrom-Json
-    Write-Verbose "Token retrieved for registry '$BicepRegistryUrl', using username of '$token.username', and '$token.passwords[0].value'" -Verbose
+    $acrUser = $token.username.ToString()
+    $acrPassword = $token.passwords[0].value.ToString()
+    $secPassword = ConvertTo-SecureString $acrPassword -AsPlainText -Force
 
-    $secPassword = ConvertTo-SecureString $token.passwords[0].value -AsPlainText -Force
-    $credential = New-Object System.Management.Automation.PSCredential ($token.username, $secPassword)
+    Write-Verbose "Token retrieved for registry '$BicepRegistryUrl', using username of '$acrUser', and '$acrPassword.Substring(0,10)...'" -Verbose
+    $credential = New-Object System.Management.Automation.PSCredential ($acrUser, $secPassword)
   }
 
   $currentGeneratedModuleIndexJsonFilePath = $prefixForCurrentGeneratedModuleIndexJsonFile + $moduleIndexJsonFilePath
