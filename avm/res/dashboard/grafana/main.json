@@ -6,10 +6,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.26.170.59819",
-      "templateHash": "107937409473811627"
+      "templateHash": "8233930340751094675"
     },
     "name": "Azure Grafana Dashboard",
-    "description": "This module deploys an Azure Grafana Dashboard.",
+    "description": "This module deploys an Azure Grafana Dashboard",
     "owner": "Azure/module-maintainers"
   },
   "definitions": {
@@ -586,8 +586,8 @@
       "properties": {
         "zoneRedundancy": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('zoneRedundancy'), null())]",
         "publicNetworkAccess": "[if(not(empty(parameters('publicNetworkAccess'))), parameters('publicNetworkAccess'), null())]",
-        "apiKey": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('apiKey'), null())]",
-        "deterministicOutboundIP": "[if(equals(parameters('grafanaSku'), 'Standard'), parameters('deterministicOutboundIP'), null())]"
+        "apiKey": "[if(equals(parameters('grafanaSku'), 'Standard'), if(parameters('enableApiKey'), 'Enabled', 'Disabled'), null())]",
+        "deterministicOutboundIP": "[if(equals(parameters('grafanaSku'), 'Standard'), if(parameters('enableDeterministicOutboundIP'), 'Enabled', 'Disabled'), null())]"
       }
     },
     "grafana_lock": {
