@@ -1,4 +1,4 @@
-# Security Insights - Alert Rules `[Microsoft.SecurityInsights/alertRules]`
+# Security Insights - Alert Rules Module `[Microsoft.SecurityInsights/alertRules]`
 
 This Bicep module streamlines the configuration of Azure Sentinel by encompassing critical functionalities such as resource locking, Sentinel solution deployment, and alert rule setup within a Sentinel workspace. Key components include sentinel_lock for resource protection, sentinelWorkspace for existing workspace referencing, sentinel for solution deployment, and scheduledAlertRules for dynamic alert rule deployment. Tailored for flexibility, it adapts to input parameters to conditionally deploy resources, ensuring efficient setup and management of Azure Sentinel environments.
 

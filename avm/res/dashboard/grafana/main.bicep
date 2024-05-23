@@ -29,12 +29,8 @@ param lock lockType
 @description('Optional. Whether or not zone redundancy is enabled for this Grafana dashboard.')
 param zoneRedundancy string = 'Disabled'
 
-@allowed([
-  'Disabled'
-  'Enabled'
-])
 @description('Optional. The api key setting of the Grafana instance.')
-param apiKey string = 'Disabled'
+param enableApiKey bool = false
 
 @description('Optional. Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set and networkRuleSetIpRules are not set.  Note, requires the \'acrSku\' to be \'Premium\'.')
 @allowed([
@@ -43,12 +39,8 @@ param apiKey string = 'Disabled'
 ])
 param publicNetworkAccess string?
 
-@allowed([
-  'Disabled'
-  'Enabled'
-])
 @description('Optional. Whether a Grafana instance uses deterministic outbound IPs for this instancey.')
-param deterministicOutboundIP string = 'Disabled'
+param enableDeterministicOutboundIP bool = false
 
 @description('Optional. Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the \'acrSku\' to be \'Premium\'.')
 param privateEndpoints privateEndpointType
@@ -148,8 +140,8 @@ resource grafana 'Microsoft.Dashboard/grafana@2023-09-01' = {
   properties: {
     zoneRedundancy: grafanaSku == 'Standard' ? zoneRedundancy : null
     publicNetworkAccess: !empty(publicNetworkAccess) ? any(publicNetworkAccess) : null
-    apiKey: grafanaSku == 'Standard' ? apiKey : null
-    deterministicOutboundIP: grafanaSku == 'Standard' ? deterministicOutboundIP : null
+    apiKey: grafanaSku == 'Standard' ? (enableApiKey ? 'Enabled' : 'Disabled') : null
+    deterministicOutboundIP: grafanaSku == 'Standard' ? (enableDeterministicOutboundIP ? 'Enabled' : 'Disabled') : null
   }
 }
 
