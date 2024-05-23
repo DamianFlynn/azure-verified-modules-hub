@@ -22,8 +22,10 @@ Function Get-AvmCsvData {
   )
 
   # CSV file URLs
-  $BicepResourceUrl = 'https://aka.ms/avm/index/bicep/res/csv'
-  $BicepPatternUrl = 'https://aka.ms/avm/index/bicep/ptn/csv'
+  # $BicepResourceUrl = 'https://aka.ms/avm/index/bicep/res/csv' # https://azure.github.io/Azure-Verified-Modules/module-indexes/BicepResourceModules.csv
+  # $BicepPatternUrl = 'https://aka.ms/avm/index/bicep/ptn/csv'  # https://azure.github.io/Azure-Verified-Modules/module-indexes/BicepPatternModules.csv
+  $BicepResourceUrl = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/docs/static/module-indexes/BicepResourceModules.csv'
+  $BicepPatternUrl = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/docs/static/module-indexes/BicepPatternModules.csv'
 
   # Retrieve the CSV file
   switch ($ModuleIndex) {
