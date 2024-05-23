@@ -1,23 +1,23 @@
 $TestModuleLocallyInput = @{
-  TemplateFilePath     = './avm/res/dashboard/grafana/main.bicep'
-  ModuleTestFilePath   = './avm/res/dashboard/grafana/tests/e2e/waf-aligned/main.test.bicep'
+TemplateFilePath = './avm/res/dashboard/grafana/main.bicep'
+ModuleTestFilePath = './avm/res/dashboard/grafana/tests/e2e/waf-aligned/main.test.bicep'
 
-  PesterTest           = $true
-  ValidationTest       = $false
-  WhatIfTest           = $false
-  DeploymentTest       = $false
+PesterTest = $true
+ValidationTest = $true
+WhatIfTest = $false
+DeploymentTest = $true
 
-  ValidateOrDeployParameters = @{
-    Location          = 'westeurope'
-    ResourceGroupName = 'local-validation-rg'
-    SubscriptionId    = 'a39403bb-a54d-4edf-a44e-83a4249d0f4a'
-    ManagementGroupId = 'workloads'
-    RemoveDeployment  = $false
-  }
+ValidateOrDeployParameters = @{
+Location = 'westeurope'
+ResourceGroupName = 'cli-validation'
+SubscriptionId = '7d443596-7c4e-477b-8213-12ef64c1858f'
+ManagementGroupId = 'brightminds'
+RemoveDeployment = $false
+}
 
-  AdditionalTokens  = @{
-    tenantId          = '67481c72-d897-4db4-a7fa-b96d76dfb545'
-    namePrefix        = 'avm'
-    moduleVersion     = '0.010'
-  }
+AdditionalTokens = @{
+tenantId = 'd993d9e4-644e-4d0a-ba80-0e010d0ea023'
+namePrefix = 'cli'
+moduleVersion = '0.010'
+}
 }
