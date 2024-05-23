@@ -156,6 +156,10 @@ module testDeployment '../../../main.bicep' = [
         Environment: 'Non-Prod'
         Role: 'DeploymentValidation'
       }
+      lock: {
+        name: 'lock'
+        kind: 'None'
+      }
     }
     dependsOn: [
       nestedDependencies // We require a function app to be deployed
