@@ -47,6 +47,8 @@ jobs:
             prefixForLastModuleIndexJsonFile             = 'last-'
             prefixForCurrentGeneratedModuleIndexJsonFile = 'generated-'
             ErrorAction                                  = 'Continue'
+            BicepRegistryUrl                             = 'pwe1iacregistry.azurecr.io/v2/public/bicep'
+            repoName                                     = 'DamianFlynn/azure-verified-modules-hub'
           }
 
           Write-Verbose "Invoke task with" -Verbose
