@@ -23,6 +23,9 @@ The prefix to add to the current generated moduleIndex.json file. Default is 'ge
 .PARAMETER doNotMergeWithLastModuleIndexJsonFileVersion
 If specified, the last version of the moduleIndex.json file that is downloaded from the storage account will not be merged with the current generated moduleIndex.json file.
 
+.PARAMETER BicepRegistryUrl
+The URL of the Bicep registry. Default is 'mcr.microsoft.com/v2/bicep'.
+
 .DESCRIPTION
 Creates the moduleIndex.json file for the AVM modules that is used by Visual Studio Code and other IDEs to provide the intellisense list of modules from the Bicep public registry.
 
@@ -62,10 +65,26 @@ function Invoke-AvmJsonModuleIndexGeneration {
     [string] $prefixForCurrentGeneratedModuleIndexJsonFile = 'generated-',
 
     [Parameter(Mandatory = $false)]
-    [switch] $doNotMergeWithLastModuleIndexJsonFileVersion
+    [switch] $doNotMergeWithLastModuleIndexJsonFileVersion,
+
+    [Parameter(Mandatory = $false)]
+    [string] $BicepRegistryUrl = 'mcr.microsoft.com/v2/bicep',
+
+    [Parameter(Mandatory = $false)]
+    [string] $repoName = 'Azure/bicep-registry-modules'
   )
 
   ## Generate the new moduleIndex.json file based off the modules in the repository
+
+  if ($BicepRegistryUrl -ne 'mcr.microsoft.com/v2/bicep') {
+    Write-Warning "The Bicep registry URL is set to '$BicepRegistryUrl'. This is not the default value of 'mcr.microsoft.com/v2/bicep'."
+
+    $token = az acr credential show --name $BicepRegistryUrl.Split('.')[0]
+    $token = $token | ConvertFrom-Json
+
+    $secPassword = ConvertTo-SecureString $token.passwords[0].value -AsPlainText -Force
+    $credential = New-Object System.Management.Automation.PSCredential ($token.username, $secPassword)
+  }
 
   $currentGeneratedModuleIndexJsonFilePath = $prefixForCurrentGeneratedModuleIndexJsonFile + $moduleIndexJsonFilePath
 
@@ -84,14 +103,14 @@ function Invoke-AvmJsonModuleIndexGeneration {
       foreach ($moduleName in $moduleNames) {
         $modulePath = "$moduleGroupPath/$moduleName"
         $mainJsonPath = "$modulePath/main.json"
-        $tagListUrl = "https://mcr.microsoft.com/v2/bicep/$modulePath/tags/list"
+        $tagListUrl = "https://$BicepRegistryUrl/$modulePath/tags/list"
 
         try {
           Write-Verbose "Processing AVM Module '$modulePath'..." -Verbose
           Write-Verbose "  Getting available tags at '$tagListUrl'..." -Verbose
 
           try {
-            $tagListResponse = Invoke-RestMethod -Uri $tagListUrl
+            $tagListResponse = Invoke-RestMethod -Uri $tagListUrl -Method Get -Credential $credential
           } catch {
             $anyErrorsOccurred = $true
             Write-Error "Error occurred while accessing URL: $tagListUrl"
@@ -103,10 +122,10 @@ function Invoke-AvmJsonModuleIndexGeneration {
           $properties = [ordered]@{}
           foreach ($tag in $tags) {
             $gitTag = "$modulePath/$tag"
-            $documentationUri = "https://github.com/Azure/bicep-registry-modules/tree/$gitTag/$modulePath/README.md"
+            $documentationUri = "https://github.com/$repoName/tree/$gitTag/$modulePath/README.md"
 
             try {
-              $moduleMainJsonUri = "https://raw.githubusercontent.com/Azure/bicep-registry-modules/$gitTag/$mainJsonPath"
+              $moduleMainJsonUri = "https://raw.githubusercontent.com/$repoName/$gitTag/$mainJsonPath"
               Write-Verbose "    Getting available description for tag $tag via '$moduleMainJsonUri'..." -Verbose
               $moduleMainJsonUriResponse = Invoke-RestMethod -Uri $moduleMainJsonUri
               $description = $moduleMainJsonUriResponse.metadata.description
@@ -143,6 +162,7 @@ function Invoke-AvmJsonModuleIndexGeneration {
 
   Write-Verbose "Convert moduleIndexData variable to JSON and save as 'generated-moduleIndex.json'" -Verbose
   $moduleIndexData | ConvertTo-Json -Depth 10 | Out-File -FilePath $currentGeneratedModuleIndexJsonFilePath
+
 
   ## Download the current published moduleIndex.json from the storage account if the $doNotMergeWithLastModuleIndexJsonFileVersion is set to $false
   if (-not $doNotMergeWithLastModuleIndexJsonFileVersion) {
