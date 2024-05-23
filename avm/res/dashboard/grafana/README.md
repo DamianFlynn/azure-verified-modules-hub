@@ -1,6 +1,6 @@
 # Azure Grafana Dashboard `[Microsoft.Dashboard/grafana]`
 
-This module deploys an Azure Grafana Dashboard.
+This module deploys an Azure Grafana Dashboard
 
 ## Navigation
 
@@ -124,7 +124,7 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
         subnetResourceId: '<subnetResourceId>'
         tags: {
           Environment: 'Non-Prod'
-          'hidden-title': 'This is visible in the resource name'
+          'hidden-title': 'Test Grafana Instance'
           Role: 'DeploymentValidation'
         }
       }
@@ -214,7 +214,7 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
           "subnetResourceId": "<subnetResourceId>",
           "tags": {
             "Environment": "Non-Prod",
-            "hidden-title": "This is visible in the resource name",
+            "hidden-title": "Test Grafana Instance",
             "Role": "DeploymentValidation"
           }
         },
@@ -272,9 +272,9 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
-| [`apiKey`](#parameter-apikey) | string | The api key setting of the Grafana instance. |
-| [`deterministicOutboundIP`](#parameter-deterministicoutboundip) | string | Whether a Grafana instance uses deterministic outbound IPs for this instancey. |
 | [`diagnosticSettings`](#parameter-diagnosticsettings) | array | The diagnostic settings of the service. |
+| [`enableApiKey`](#parameter-enableapikey) | bool | The api key setting of the Grafana instance. |
+| [`enableDeterministicOutboundIP`](#parameter-enabledeterministicoutboundip) | bool | Whether a Grafana instance uses deterministic outbound IPs for this instancey. |
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`grafanaSku`](#parameter-grafanasku) | string | Tier of your Azure Grafana Dashboard. |
 | [`location`](#parameter-location) | string | Location for all Resources. |
@@ -292,36 +292,6 @@ Name of your Azure Grafana Dashboard.
 
 - Required: Yes
 - Type: string
-
-### Parameter: `apiKey`
-
-The api key setting of the Grafana instance.
-
-- Required: No
-- Type: string
-- Default: `'Disabled'`
-- Allowed:
-  ```Bicep
-  [
-    'Disabled'
-    'Enabled'
-  ]
-  ```
-
-### Parameter: `deterministicOutboundIP`
-
-Whether a Grafana instance uses deterministic outbound IPs for this instancey.
-
-- Required: No
-- Type: string
-- Default: `'Disabled'`
-- Allowed:
-  ```Bicep
-  [
-    'Disabled'
-    'Enabled'
-  ]
-  ```
 
 ### Parameter: `diagnosticSettings`
 
@@ -468,6 +438,22 @@ Resource ID of the diagnostic log analytics workspace. For security reasons, it 
 
 - Required: No
 - Type: string
+
+### Parameter: `enableApiKey`
+
+The api key setting of the Grafana instance.
+
+- Required: No
+- Type: bool
+- Default: `False`
+
+### Parameter: `enableDeterministicOutboundIP`
+
+Whether a Grafana instance uses deterministic outbound IPs for this instancey.
+
+- Required: No
+- Type: bool
+- Default: `False`
 
 ### Parameter: `enableTelemetry`
 

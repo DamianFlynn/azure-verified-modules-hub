@@ -89,7 +89,7 @@ module testDeployment '../../../main.bicep' = [
             nestedDependencies.outputs.privateDNSZoneResourceId
           ]
           tags: {
-            'hidden-title': 'This is visible in the resource name'
+            'hidden-title': 'Test Grafana Instance'
             Environment: 'Non-Prod'
             Role: 'DeploymentValidation'
           }

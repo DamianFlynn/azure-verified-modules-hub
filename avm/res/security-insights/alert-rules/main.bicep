@@ -1,4 +1,4 @@
-metadata name = 'Security Insights - Alert Rules'
+metadata name = 'Security Insights - Alert Rules Module'
 metadata description = 'This Bicep module streamlines the configuration of Azure Sentinel by encompassing critical functionalities such as resource locking, Sentinel solution deployment, and alert rule setup within a Sentinel workspace. Key components include sentinel_lock for resource protection, sentinelWorkspace for existing workspace referencing, sentinel for solution deployment, and scheduledAlertRules for dynamic alert rule deployment. Tailored for flexibility, it adapts to input parameters to conditionally deploy resources, ensuring efficient setup and management of Azure Sentinel environments.'
 metadata owner = '@InnofactorOrg/azure-solutions-avm-ptn-securityinsights-alertrules-module-owners'
 
@@ -31,65 +31,61 @@ param rules array = []
 // Resources      //
 // ============== //
 
-resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' =
-  if (enableTelemetry) {
-    name: '46d3xbcp.ptn.securityinsights-alertrules.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
-    properties: {
-      mode: 'Incremental'
-      template: {
-        '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
-        contentVersion: '1.0.0.0'
-        resources: []
-        outputs: {
-          telemetry: {
-            type: 'String'
-            value: 'For more information, see https://aka.ms/avm/TelemetryInfo'
-          }
+resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableTelemetry) {
+  name: '46d3xbcp.ptn.securityinsights-alertrules.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
+  properties: {
+    mode: 'Incremental'
+    template: {
+      '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
+      contentVersion: '1.0.0.0'
+      resources: []
+      outputs: {
+        telemetry: {
+          type: 'String'
+          value: 'For more information, see https://aka.ms/avm/TelemetryInfo'
         }
       }
     }
   }
+}
 
 //
 // Add your resources here
 //
 
-resource sentinel_lock 'Microsoft.Authorization/locks@2020-05-01' =
-  if (!empty(lock ?? {}) && lock.?kind != 'None') {
-    name: lock.?name ?? 'lock-${name}'
-    properties: {
-      level: lock.?kind ?? ''
-      notes: lock.?kind == 'CanNotDelete'
-        ? 'Cannot delete resource or child resources.'
-        : 'Cannot delete or modify the resource or child resources.'
-    }
-    scope: sentinelWorkspace
+resource sentinel_lock 'Microsoft.Authorization/locks@2020-05-01' = if (!empty(lock ?? {}) && lock.?kind != 'None') {
+  name: lock.?name ?? 'lock-${name}'
+  properties: {
+    level: lock.?kind ?? ''
+    notes: lock.?kind == 'CanNotDelete'
+      ? 'Cannot delete resource or child resources.'
+      : 'Cannot delete or modify the resource or child resources.'
   }
+  scope: sentinelWorkspace
+}
 
 // Get the existing Sentinel workspace
 
-resource sentinelWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing =
-  if (!empty(sentinelWorkspaceId) && !empty(rules)) {
-    name: last(split((!empty(sentinelWorkspaceId) ? sentinelWorkspaceId : 'law'), '/'))!
-  }
+resource sentinelWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = if (!empty(sentinelWorkspaceId) && !empty(rules)) {
+  name: last(split((!empty(sentinelWorkspaceId) ? sentinelWorkspaceId : 'law'), '/'))!
+}
 
 // Ensure we have the sentinel solution
 
-resource sentinel 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' =
-  if (!empty(sentinelWorkspaceId) && !empty(rules)) {
-    name: 'SecurityInsights(${sentinelWorkspace.name})'
-    location: location
-    tags: tags
-    properties: {
-      workspaceResourceId: sentinelWorkspace.id
-    }
-    plan: {
-      name: 'SecurityInsights(${sentinelWorkspace.name})'
-      product: 'OMSGallery/SecurityInsights'
-      promotionCode: ''
-      publisher: 'Microsoft'
-    }
+resource sentinel 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = if (!empty(sentinelWorkspaceId) && !empty(rules)) {
+  name: 'SecurityInsights(${sentinelWorkspace.name})'
+  location: location
+  tags: tags
+  properties: {
+    workspaceResourceId: sentinelWorkspace.id
   }
+  plan: {
+    name: 'SecurityInsights(${sentinelWorkspace.name})'
+    product: 'OMSGallery/SecurityInsights'
+    promotionCode: ''
+    publisher: 'Microsoft'
+  }
+}
 
 // Deploy rules
 

@@ -1,6 +1,6 @@
 targetScope = 'subscription'
 
-metadata name = 'Using only defaults'
+metadata name = 'Custom Function App Resource Provider'
 metadata description = 'This instance deploys the module with the minimum set of required parameters.'
 
 // ========== //
