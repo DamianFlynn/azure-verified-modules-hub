@@ -592,6 +592,22 @@ Resource ID of the diagnostic log analytics workspace. For security reasons, it 
 - Required: No
 - Type: string
 
+### Parameter: `enableApiKey`
+
+The api key setting of the Grafana instance.
+
+- Required: No
+- Type: bool
+- Default: `False`
+
+### Parameter: `enableDeterministicOutboundIP`
+
+Whether a Grafana instance uses deterministic outbound IPs for this instancey.
+
+- Required: No
+- Type: bool
+- Default: `False`
+
 ### Parameter: `enableTelemetry`
 
 Enable/Disable usage telemetry for module.

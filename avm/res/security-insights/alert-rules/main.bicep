@@ -32,7 +32,11 @@ param rules array = []
 // ============== //
 
 resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableTelemetry) {
+<<<<<<< HEAD
   name: '46d3xbcp.res.securityinsights-alertrules.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
+=======
+  name: '46d3xbcp.ptn.securityinsights-alertrules.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}'
+>>>>>>> 031955d (feat: modules grafana dashboard module (#53))
   properties: {
     mode: 'Incremental'
     template: {
