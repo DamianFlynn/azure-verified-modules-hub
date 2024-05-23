@@ -13,22 +13,22 @@ This module deploys an Azure Grafana Dashboard
 
 ## Resource Types
 
-| Resource Type | API Version |
-| :-- | :-- |
-| `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
-| `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
-| `Microsoft.Dashboard/grafana` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Dashboard/2023-09-01/grafana) |
-| `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
-| `Microsoft.Network/privateEndpoints` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints) |
+| Resource Type                                             | API Version                                                                                                                        |
+| :-------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `Microsoft.Authorization/locks`                           | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks)                           |
+| `Microsoft.Authorization/roleAssignments`                 | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments)                 |
+| `Microsoft.Dashboard/grafana`                             | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Dashboard/2023-09-01/grafana)                             |
+| `Microsoft.Insights/diagnosticSettings`                   | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings)   |
+| `Microsoft.Network/privateEndpoints`                      | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints)                      |
 | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints/privateDnsZoneGroups) |
 
 ## Usage examples
 
 The following section provides usage examples for the module, which were used to validate and deploy the module successfully. For a full reference, please review the module's test folder in its repository.
 
->**Note**: Each example lists all the required parameters first, followed by the rest - each in alphabetical order.
+> **Note**: Each example lists all the required parameters first, followed by the rest - each in alphabetical order.
 
->**Note**: To reference the module, please use the following syntax `br/public:avm/res/dashboard/grafana:<version>`.
+> **Note**: To reference the module, please use the following syntax `br/public:avm/res/dashboard/grafana:<version>`.
 
 - [Using only defaults](#example-1-using-only-defaults)
 - [WAF-aligned](#example-2-waf-aligned)
@@ -36,7 +36,6 @@ The following section provides usage examples for the module, which were used to
 ### Example 1: _Using only defaults_
 
 This instance deploys the module with the minimum set of required parameters.
-
 
 <details>
 
@@ -84,7 +83,6 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
 ### Example 2: _WAF-aligned_
 
 This instance deploys the module in alignment with the best-practices of the Azure Well-Architected Framework.
-
 
 <details>
 
@@ -200,17 +198,13 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
     "managedIdentities": {
       "value": {
         "systemAssigned": true,
-        "userAssignedResourceIds": [
-          "<managedIdentityResourceId>"
-        ]
+        "userAssignedResourceIds": ["<managedIdentityResourceId>"]
       }
     },
     "privateEndpoints": {
       "value": [
         {
-          "privateDnsZoneResourceIds": [
-            "<privateDNSZoneResourceId>"
-          ],
+          "privateDnsZoneResourceIds": ["<privateDNSZoneResourceId>"],
           "subnetResourceId": "<subnetResourceId>",
           "tags": {
             "Environment": "Non-Prod",
@@ -219,9 +213,7 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
           }
         },
         {
-          "privateDnsZoneResourceIds": [
-            "<privateDNSZoneResourceId>"
-          ],
+          "privateDnsZoneResourceIds": ["<privateDNSZoneResourceId>"],
           "subnetResourceId": "<subnetResourceId>"
         }
       ]
@@ -259,32 +251,31 @@ module grafana 'br/public:avm/res/dashboard/grafana:<version>' = {
 </details>
 <p>
 
-
 ## Parameters
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                 | Type   | Description                           |
+| :------------------------ | :----- | :------------------------------------ |
 | [`name`](#parameter-name) | string | Name of your Azure Grafana Dashboard. |
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`diagnosticSettings`](#parameter-diagnosticsettings) | array | The diagnostic settings of the service. |
-| [`enableApiKey`](#parameter-enableapikey) | bool | The api key setting of the Grafana instance. |
-| [`enableDeterministicOutboundIP`](#parameter-enabledeterministicoutboundip) | bool | Whether a Grafana instance uses deterministic outbound IPs for this instancey. |
-| [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
-| [`grafanaSku`](#parameter-grafanasku) | string | Tier of your Azure Grafana Dashboard. |
-| [`location`](#parameter-location) | string | Location for all Resources. |
-| [`lock`](#parameter-lock) | object | The lock settings of the service. |
-| [`managedIdentities`](#parameter-managedidentities) | object | The managed identity definition for this resource. |
-| [`privateEndpoints`](#parameter-privateendpoints) | array | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the 'acrSku' to be 'Premium'. |
-| [`publicNetworkAccess`](#parameter-publicnetworkaccess) | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set and networkRuleSetIpRules are not set.  Note, requires the 'acrSku' to be 'Premium'. |
-| [`roleAssignments`](#parameter-roleassignments) | array | Array of role assignments to create. |
-| [`tags`](#parameter-tags) | object | Tags of the resource. |
-| [`zoneRedundancy`](#parameter-zoneredundancy) | string | Whether or not zone redundancy is enabled for this Grafana dashboard. |
+| Parameter                                                                   | Type   | Description                                                                                                                                                                                                                                                                      |
+| :-------------------------------------------------------------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`diagnosticSettings`](#parameter-diagnosticsettings)                       | array  | The diagnostic settings of the service.                                                                                                                                                                                                                                          |
+| [`enableApiKey`](#parameter-enableapikey)                                   | bool   | The api key setting of the Grafana instance.                                                                                                                                                                                                                                     |
+| [`enableDeterministicOutboundIP`](#parameter-enabledeterministicoutboundip) | bool   | Whether a Grafana instance uses deterministic outbound IPs for this instancey.                                                                                                                                                                                                   |
+| [`enableTelemetry`](#parameter-enabletelemetry)                             | bool   | Enable/Disable usage telemetry for module.                                                                                                                                                                                                                                       |
+| [`grafanaSku`](#parameter-grafanasku)                                       | string | Tier of your Azure Grafana Dashboard.                                                                                                                                                                                                                                            |
+| [`location`](#parameter-location)                                           | string | Location for all Resources.                                                                                                                                                                                                                                                      |
+| [`lock`](#parameter-lock)                                                   | object | The lock settings of the service.                                                                                                                                                                                                                                                |
+| [`managedIdentities`](#parameter-managedidentities)                         | object | The managed identity definition for this resource.                                                                                                                                                                                                                               |
+| [`privateEndpoints`](#parameter-privateendpoints)                           | array  | Configuration details for private endpoints. For security reasons, it is recommended to use private endpoints whenever possible. Note, requires the 'acrSku' to be 'Premium'.                                                                                                    |
+| [`publicNetworkAccess`](#parameter-publicnetworkaccess)                     | string | Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set and networkRuleSetIpRules are not set. Note, requires the 'acrSku' to be 'Premium'. |
+| [`roleAssignments`](#parameter-roleassignments)                             | array  | Array of role assignments to create.                                                                                                                                                                                                                                             |
+| [`tags`](#parameter-tags)                                                   | object | Tags of the resource.                                                                                                                                                                                                                                                            |
+| [`zoneRedundancy`](#parameter-zoneredundancy)                               | string | Whether or not zone redundancy is enabled for this Grafana dashboard.                                                                                                                                                                                                            |
 
 ### Parameter: `name`
 
@@ -302,17 +293,17 @@ The diagnostic settings of the service.
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`eventHubAuthorizationRuleResourceId`](#parameter-diagnosticsettingseventhubauthorizationruleresourceid) | string | Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to. |
-| [`eventHubName`](#parameter-diagnosticsettingseventhubname) | string | Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
-| [`logAnalyticsDestinationType`](#parameter-diagnosticsettingsloganalyticsdestinationtype) | string | A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type. |
-| [`logCategoriesAndGroups`](#parameter-diagnosticsettingslogcategoriesandgroups) | array | The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection. |
-| [`marketplacePartnerResourceId`](#parameter-diagnosticsettingsmarketplacepartnerresourceid) | string | The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs. |
-| [`metricCategories`](#parameter-diagnosticsettingsmetriccategories) | array | The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection. |
-| [`name`](#parameter-diagnosticsettingsname) | string | The name of diagnostic setting. |
-| [`storageAccountResourceId`](#parameter-diagnosticsettingsstorageaccountresourceid) | string | Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
-| [`workspaceResourceId`](#parameter-diagnosticsettingsworkspaceresourceid) | string | Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+| Parameter                                                                                                 | Type   | Description                                                                                                                                                                                                                                                                                     |
+| :-------------------------------------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`eventHubAuthorizationRuleResourceId`](#parameter-diagnosticsettingseventhubauthorizationruleresourceid) | string | Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to.                                                                                                                                                |
+| [`eventHubName`](#parameter-diagnosticsettingseventhubname)                                               | string | Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+| [`logAnalyticsDestinationType`](#parameter-diagnosticsettingsloganalyticsdestinationtype)                 | string | A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type.                                                                                                                                              |
+| [`logCategoriesAndGroups`](#parameter-diagnosticsettingslogcategoriesandgroups)                           | array  | The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection.                                                                                                                                                           |
+| [`marketplacePartnerResourceId`](#parameter-diagnosticsettingsmarketplacepartnerresourceid)               | string | The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs.                                                                                                                                                                                           |
+| [`metricCategories`](#parameter-diagnosticsettingsmetriccategories)                                       | array  | The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection.                                                                                                                                               |
+| [`name`](#parameter-diagnosticsettingsname)                                                               | string | The name of diagnostic setting.                                                                                                                                                                                                                                                                 |
+| [`storageAccountResourceId`](#parameter-diagnosticsettingsstorageaccountresourceid)                       | string | Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.                                                                                                 |
+| [`workspaceResourceId`](#parameter-diagnosticsettingsworkspaceresourceid)                                 | string | Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.                                                                                         |
 
 ### Parameter: `diagnosticSettings.eventHubAuthorizationRuleResourceId`
 
@@ -351,11 +342,11 @@ The name of logs that will be streamed. "allLogs" includes all possible logs for
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`category`](#parameter-diagnosticsettingslogcategoriesandgroupscategory) | string | Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here. |
+| Parameter                                                                           | Type   | Description                                                                                                                   |
+| :---------------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------- |
+| [`category`](#parameter-diagnosticsettingslogcategoriesandgroupscategory)           | string | Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here.      |
 | [`categoryGroup`](#parameter-diagnosticsettingslogcategoriesandgroupscategorygroup) | string | Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs. |
-| [`enabled`](#parameter-diagnosticsettingslogcategoriesandgroupsenabled) | bool | Enable or disable the category explicitly. Default is `true`. |
+| [`enabled`](#parameter-diagnosticsettingslogcategoriesandgroupsenabled)             | bool   | Enable or disable the category explicitly. Default is `true`.                                                                 |
 
 ### Parameter: `diagnosticSettings.logCategoriesAndGroups.category`
 
@@ -394,14 +385,14 @@ The name of metrics that will be streamed. "allMetrics" includes all possible me
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                                                           | Type   | Description                                                                                                                      |
+| :------------------------------------------------------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
 | [`category`](#parameter-diagnosticsettingsmetriccategoriescategory) | string | Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics. |
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                                                         | Type | Description                                                   |
+| :---------------------------------------------------------------- | :--- | :------------------------------------------------------------ |
 | [`enabled`](#parameter-diagnosticsettingsmetriccategoriesenabled) | bool | Enable or disable the category explicitly. Default is `true`. |
 
 ### Parameter: `diagnosticSettings.metricCategories.category`
@@ -455,6 +446,152 @@ Whether a Grafana instance uses deterministic outbound IPs for this instancey.
 - Type: bool
 - Default: `False`
 
+### Parameter: `diagnosticSettings`
+
+The diagnostic settings of the service.
+
+- Required: No
+- Type: array
+
+**Optional parameters**
+
+| Parameter                                                                                                 | Type   | Description                                                                                                                                                                                                                                                                                     |
+| :-------------------------------------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`eventHubAuthorizationRuleResourceId`](#parameter-diagnosticsettingseventhubauthorizationruleresourceid) | string | Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to.                                                                                                                                                |
+| [`eventHubName`](#parameter-diagnosticsettingseventhubname)                                               | string | Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub. |
+| [`logAnalyticsDestinationType`](#parameter-diagnosticsettingsloganalyticsdestinationtype)                 | string | A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type.                                                                                                                                              |
+| [`logCategoriesAndGroups`](#parameter-diagnosticsettingslogcategoriesandgroups)                           | array  | The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection.                                                                                                                                                           |
+| [`marketplacePartnerResourceId`](#parameter-diagnosticsettingsmarketplacepartnerresourceid)               | string | The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs.                                                                                                                                                                                           |
+| [`metricCategories`](#parameter-diagnosticsettingsmetriccategories)                                       | array  | The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection.                                                                                                                                               |
+| [`name`](#parameter-diagnosticsettingsname)                                                               | string | The name of diagnostic setting.                                                                                                                                                                                                                                                                 |
+| [`storageAccountResourceId`](#parameter-diagnosticsettingsstorageaccountresourceid)                       | string | Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.                                                                                                 |
+| [`workspaceResourceId`](#parameter-diagnosticsettingsworkspaceresourceid)                                 | string | Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.                                                                                         |
+
+### Parameter: `diagnosticSettings.eventHubAuthorizationRuleResourceId`
+
+Resource ID of the diagnostic event hub authorization rule for the Event Hubs namespace in which the event hub should be created or streamed to.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.eventHubName`
+
+Name of the diagnostic event hub within the namespace to which logs are streamed. Without this, an event hub is created for each log category. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.logAnalyticsDestinationType`
+
+A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'AzureDiagnostics'
+    'Dedicated'
+  ]
+  ```
+
+### Parameter: `diagnosticSettings.logCategoriesAndGroups`
+
+The name of logs that will be streamed. "allLogs" includes all possible logs for the resource. Set to `[]` to disable log collection.
+
+- Required: No
+- Type: array
+
+**Optional parameters**
+
+| Parameter                                                                           | Type   | Description                                                                                                                   |
+| :---------------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------- |
+| [`category`](#parameter-diagnosticsettingslogcategoriesandgroupscategory)           | string | Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here.      |
+| [`categoryGroup`](#parameter-diagnosticsettingslogcategoriesandgroupscategorygroup) | string | Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs. |
+| [`enabled`](#parameter-diagnosticsettingslogcategoriesandgroupsenabled)             | bool   | Enable or disable the category explicitly. Default is `true`.                                                                 |
+
+### Parameter: `diagnosticSettings.logCategoriesAndGroups.category`
+
+Name of a Diagnostic Log category for a resource type this setting is applied to. Set the specific logs to collect here.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.logCategoriesAndGroups.categoryGroup`
+
+Name of a Diagnostic Log category group for a resource type this setting is applied to. Set to `allLogs` to collect all logs.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.logCategoriesAndGroups.enabled`
+
+Enable or disable the category explicitly. Default is `true`.
+
+- Required: No
+- Type: bool
+
+### Parameter: `diagnosticSettings.marketplacePartnerResourceId`
+
+The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic Logs.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.metricCategories`
+
+The name of metrics that will be streamed. "allMetrics" includes all possible metrics for the resource. Set to `[]` to disable metric collection.
+
+- Required: No
+- Type: array
+
+**Required parameters**
+
+| Parameter                                                           | Type   | Description                                                                                                                      |
+| :------------------------------------------------------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| [`category`](#parameter-diagnosticsettingsmetriccategoriescategory) | string | Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics. |
+
+**Optional parameters**
+
+| Parameter                                                         | Type | Description                                                   |
+| :---------------------------------------------------------------- | :--- | :------------------------------------------------------------ |
+| [`enabled`](#parameter-diagnosticsettingsmetriccategoriesenabled) | bool | Enable or disable the category explicitly. Default is `true`. |
+
+### Parameter: `diagnosticSettings.metricCategories.category`
+
+Name of a Diagnostic Metric category for a resource type this setting is applied to. Set to `AllMetrics` to collect all metrics.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `diagnosticSettings.metricCategories.enabled`
+
+Enable or disable the category explicitly. Default is `true`.
+
+- Required: No
+- Type: bool
+
+### Parameter: `diagnosticSettings.name`
+
+The name of diagnostic setting.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.storageAccountResourceId`
+
+Resource ID of the diagnostic storage account. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
+
+- Required: No
+- Type: string
+
+### Parameter: `diagnosticSettings.workspaceResourceId`
+
+Resource ID of the diagnostic log analytics workspace. For security reasons, it is recommended to set diagnostic settings to send data to either storage account, log analytics workspace or event hub.
+
+- Required: No
+- Type: string
+
 ### Parameter: `enableTelemetry`
 
 Enable/Disable usage telemetry for module.
@@ -494,8 +631,8 @@ The lock settings of the service.
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                     | Type   | Description               |
+| :---------------------------- | :----- | :------------------------ |
 | [`kind`](#parameter-lockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-lockname) | string | Specify the name of lock. |
 
@@ -530,10 +667,10 @@ The managed identity definition for this resource.
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`systemAssigned`](#parameter-managedidentitiessystemassigned) | bool | Enables system assigned managed identity on the resource. |
-| [`userAssignedResourceIds`](#parameter-managedidentitiesuserassignedresourceids) | array | The resource ID(s) to assign to the resource. |
+| Parameter                                                                        | Type  | Description                                               |
+| :------------------------------------------------------------------------------- | :---- | :-------------------------------------------------------- |
+| [`systemAssigned`](#parameter-managedidentitiessystemassigned)                   | bool  | Enables system assigned managed identity on the resource. |
+| [`userAssignedResourceIds`](#parameter-managedidentitiesuserassignedresourceids) | array | The resource ID(s) to assign to the resource.             |
 
 ### Parameter: `managedIdentities.systemAssigned`
 
@@ -558,29 +695,29 @@ Configuration details for private endpoints. For security reasons, it is recomme
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                                                         | Type   | Description                                                       |
+| :---------------------------------------------------------------- | :----- | :---------------------------------------------------------------- |
 | [`subnetResourceId`](#parameter-privateendpointssubnetresourceid) | string | Resource ID of the subnet where the endpoint needs to be created. |
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`applicationSecurityGroupResourceIds`](#parameter-privateendpointsapplicationsecuritygroupresourceids) | array | Application security groups in which the private endpoint IP configuration is included. |
-| [`customDnsConfigs`](#parameter-privateendpointscustomdnsconfigs) | array | Custom DNS configurations. |
-| [`customNetworkInterfaceName`](#parameter-privateendpointscustomnetworkinterfacename) | string | The custom name of the network interface attached to the private endpoint. |
-| [`enableTelemetry`](#parameter-privateendpointsenabletelemetry) | bool | Enable/Disable usage telemetry for module. |
-| [`ipConfigurations`](#parameter-privateendpointsipconfigurations) | array | A list of IP configurations of the private endpoint. This will be used to map to the First Party Service endpoints. |
-| [`isManualConnection`](#parameter-privateendpointsismanualconnection) | bool | If Manual Private Link Connection is required. |
-| [`location`](#parameter-privateendpointslocation) | string | The location to deploy the private endpoint to. |
-| [`lock`](#parameter-privateendpointslock) | object | Specify the type of lock. |
-| [`manualConnectionRequestMessage`](#parameter-privateendpointsmanualconnectionrequestmessage) | string | A message passed to the owner of the remote resource with the manual connection request. |
-| [`name`](#parameter-privateendpointsname) | string | The name of the private endpoint. |
-| [`privateDnsZoneGroupName`](#parameter-privateendpointsprivatednszonegroupname) | string | The name of the private DNS zone group to create if `privateDnsZoneResourceIds` were provided. |
-| [`privateDnsZoneResourceIds`](#parameter-privateendpointsprivatednszoneresourceids) | array | The private DNS zone groups to associate the private endpoint with. A DNS zone group can support up to 5 DNS zones. |
-| [`roleAssignments`](#parameter-privateendpointsroleassignments) | array | Array of role assignments to create. |
-| [`service`](#parameter-privateendpointsservice) | string | The subresource to deploy the private endpoint for. For example "vault", "mysqlServer" or "dataFactory". |
-| [`tags`](#parameter-privateendpointstags) | object | Tags to be applied on all resources/resource groups in this deployment. |
+| Parameter                                                                                               | Type   | Description                                                                                                         |
+| :------------------------------------------------------------------------------------------------------ | :----- | :------------------------------------------------------------------------------------------------------------------ |
+| [`applicationSecurityGroupResourceIds`](#parameter-privateendpointsapplicationsecuritygroupresourceids) | array  | Application security groups in which the private endpoint IP configuration is included.                             |
+| [`customDnsConfigs`](#parameter-privateendpointscustomdnsconfigs)                                       | array  | Custom DNS configurations.                                                                                          |
+| [`customNetworkInterfaceName`](#parameter-privateendpointscustomnetworkinterfacename)                   | string | The custom name of the network interface attached to the private endpoint.                                          |
+| [`enableTelemetry`](#parameter-privateendpointsenabletelemetry)                                         | bool   | Enable/Disable usage telemetry for module.                                                                          |
+| [`ipConfigurations`](#parameter-privateendpointsipconfigurations)                                       | array  | A list of IP configurations of the private endpoint. This will be used to map to the First Party Service endpoints. |
+| [`isManualConnection`](#parameter-privateendpointsismanualconnection)                                   | bool   | If Manual Private Link Connection is required.                                                                      |
+| [`location`](#parameter-privateendpointslocation)                                                       | string | The location to deploy the private endpoint to.                                                                     |
+| [`lock`](#parameter-privateendpointslock)                                                               | object | Specify the type of lock.                                                                                           |
+| [`manualConnectionRequestMessage`](#parameter-privateendpointsmanualconnectionrequestmessage)           | string | A message passed to the owner of the remote resource with the manual connection request.                            |
+| [`name`](#parameter-privateendpointsname)                                                               | string | The name of the private endpoint.                                                                                   |
+| [`privateDnsZoneGroupName`](#parameter-privateendpointsprivatednszonegroupname)                         | string | The name of the private DNS zone group to create if `privateDnsZoneResourceIds` were provided.                      |
+| [`privateDnsZoneResourceIds`](#parameter-privateendpointsprivatednszoneresourceids)                     | array  | The private DNS zone groups to associate the private endpoint with. A DNS zone group can support up to 5 DNS zones. |
+| [`roleAssignments`](#parameter-privateendpointsroleassignments)                                         | array  | Array of role assignments to create.                                                                                |
+| [`service`](#parameter-privateendpointsservice)                                                         | string | The subresource to deploy the private endpoint for. For example "vault", "mysqlServer" or "dataFactory".            |
+| [`tags`](#parameter-privateendpointstags)                                                               | object | Tags to be applied on all resources/resource groups in this deployment.                                             |
 
 ### Parameter: `privateEndpoints.subnetResourceId`
 
@@ -605,10 +742,10 @@ Custom DNS configurations.
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`fqdn`](#parameter-privateendpointscustomdnsconfigsfqdn) | string | Fqdn that resolves to private endpoint IP address. |
-| [`ipAddresses`](#parameter-privateendpointscustomdnsconfigsipaddresses) | array | A list of private IP addresses of the private endpoint. |
+| Parameter                                                               | Type   | Description                                             |
+| :---------------------------------------------------------------------- | :----- | :------------------------------------------------------ |
+| [`fqdn`](#parameter-privateendpointscustomdnsconfigsfqdn)               | string | Fqdn that resolves to private endpoint IP address.      |
+| [`ipAddresses`](#parameter-privateendpointscustomdnsconfigsipaddresses) | array  | A list of private IP addresses of the private endpoint. |
 
 ### Parameter: `privateEndpoints.customDnsConfigs.fqdn`
 
@@ -647,10 +784,10 @@ A list of IP configurations of the private endpoint. This will be used to map to
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`name`](#parameter-privateendpointsipconfigurationsname) | string | The name of the resource that is unique within a resource group. |
-| [`properties`](#parameter-privateendpointsipconfigurationsproperties) | object | Properties of private endpoint IP configurations. |
+| Parameter                                                             | Type   | Description                                                      |
+| :-------------------------------------------------------------------- | :----- | :--------------------------------------------------------------- |
+| [`name`](#parameter-privateendpointsipconfigurationsname)             | string | The name of the resource that is unique within a resource group. |
+| [`properties`](#parameter-privateendpointsipconfigurationsproperties) | object | Properties of private endpoint IP configurations.                |
 
 ### Parameter: `privateEndpoints.ipConfigurations.name`
 
@@ -668,11 +805,11 @@ Properties of private endpoint IP configurations.
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`groupId`](#parameter-privateendpointsipconfigurationspropertiesgroupid) | string | The ID of a group obtained from the remote resource that this private endpoint should connect to. |
-| [`memberName`](#parameter-privateendpointsipconfigurationspropertiesmembername) | string | The member name of a group obtained from the remote resource that this private endpoint should connect to. |
-| [`privateIPAddress`](#parameter-privateendpointsipconfigurationspropertiesprivateipaddress) | string | A private IP address obtained from the private endpoint's subnet. |
+| Parameter                                                                                   | Type   | Description                                                                                                |
+| :------------------------------------------------------------------------------------------ | :----- | :--------------------------------------------------------------------------------------------------------- |
+| [`groupId`](#parameter-privateendpointsipconfigurationspropertiesgroupid)                   | string | The ID of a group obtained from the remote resource that this private endpoint should connect to.          |
+| [`memberName`](#parameter-privateendpointsipconfigurationspropertiesmembername)             | string | The member name of a group obtained from the remote resource that this private endpoint should connect to. |
+| [`privateIPAddress`](#parameter-privateendpointsipconfigurationspropertiesprivateipaddress) | string | A private IP address obtained from the private endpoint's subnet.                                          |
 
 ### Parameter: `privateEndpoints.ipConfigurations.properties.groupId`
 
@@ -718,8 +855,8 @@ Specify the type of lock.
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
+| Parameter                                     | Type   | Description               |
+| :-------------------------------------------- | :----- | :------------------------ |
 | [`kind`](#parameter-privateendpointslockkind) | string | Specify the type of lock. |
 | [`name`](#parameter-privateendpointslockname) | string | Specify the name of lock. |
 
@@ -782,20 +919,20 @@ Array of role assignments to create.
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`principalId`](#parameter-privateendpointsroleassignmentsprincipalid) | string | The principal ID of the principal (user/group/identity) to assign the role to. |
+| Parameter                                                                                    | Type   | Description                                                                                                                                                                                                                                                 |
+| :------------------------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`principalId`](#parameter-privateendpointsroleassignmentsprincipalid)                       | string | The principal ID of the principal (user/group/identity) to assign the role to.                                                                                                                                                                              |
 | [`roleDefinitionIdOrName`](#parameter-privateendpointsroleassignmentsroledefinitionidorname) | string | The role to assign. You can provide either the display name of the role definition, the role definition GUID, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'. |
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`condition`](#parameter-privateendpointsroleassignmentscondition) | string | The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container". |
-| [`conditionVersion`](#parameter-privateendpointsroleassignmentsconditionversion) | string | Version of the condition. |
-| [`delegatedManagedIdentityResourceId`](#parameter-privateendpointsroleassignmentsdelegatedmanagedidentityresourceid) | string | The Resource Id of the delegated managed identity resource. |
-| [`description`](#parameter-privateendpointsroleassignmentsdescription) | string | The description of the role assignment. |
-| [`principalType`](#parameter-privateendpointsroleassignmentsprincipaltype) | string | The principal type of the assigned principal ID. |
+| Parameter                                                                                                            | Type   | Description                                                                                                                                                                                                                      |
+| :------------------------------------------------------------------------------------------------------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`condition`](#parameter-privateendpointsroleassignmentscondition)                                                   | string | The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container". |
+| [`conditionVersion`](#parameter-privateendpointsroleassignmentsconditionversion)                                     | string | Version of the condition.                                                                                                                                                                                                        |
+| [`delegatedManagedIdentityResourceId`](#parameter-privateendpointsroleassignmentsdelegatedmanagedidentityresourceid) | string | The Resource Id of the delegated managed identity resource.                                                                                                                                                                      |
+| [`description`](#parameter-privateendpointsroleassignmentsdescription)                                               | string | The description of the role assignment.                                                                                                                                                                                          |
+| [`principalType`](#parameter-privateendpointsroleassignmentsprincipaltype)                                           | string | The principal type of the assigned principal ID.                                                                                                                                                                                 |
 
 ### Parameter: `privateEndpoints.roleAssignments.principalId`
 
@@ -878,7 +1015,7 @@ Tags to be applied on all resources/resource groups in this deployment.
 
 ### Parameter: `publicNetworkAccess`
 
-Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set and networkRuleSetIpRules are not set.  Note, requires the 'acrSku' to be 'Premium'.
+Whether or not public network access is allowed for this resource. For security reasons it should be disabled. If not specified, it will be disabled by default if private endpoints are set and networkRuleSetIpRules are not set. Note, requires the 'acrSku' to be 'Premium'.
 
 - Required: No
 - Type: string
@@ -899,20 +1036,20 @@ Array of role assignments to create.
 
 **Required parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`principalId`](#parameter-roleassignmentsprincipalid) | string | The principal ID of the principal (user/group/identity) to assign the role to. |
+| Parameter                                                                    | Type   | Description                                                                                                                                                                                                                                                 |
+| :--------------------------------------------------------------------------- | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`principalId`](#parameter-roleassignmentsprincipalid)                       | string | The principal ID of the principal (user/group/identity) to assign the role to.                                                                                                                                                                              |
 | [`roleDefinitionIdOrName`](#parameter-roleassignmentsroledefinitionidorname) | string | The role to assign. You can provide either the display name of the role definition, the role definition GUID, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'. |
 
 **Optional parameters**
 
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| [`condition`](#parameter-roleassignmentscondition) | string | The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container". |
-| [`conditionVersion`](#parameter-roleassignmentsconditionversion) | string | Version of the condition. |
-| [`delegatedManagedIdentityResourceId`](#parameter-roleassignmentsdelegatedmanagedidentityresourceid) | string | The Resource Id of the delegated managed identity resource. |
-| [`description`](#parameter-roleassignmentsdescription) | string | The description of the role assignment. |
-| [`principalType`](#parameter-roleassignmentsprincipaltype) | string | The principal type of the assigned principal ID. |
+| Parameter                                                                                            | Type   | Description                                                                                                                                                                                                                      |
+| :--------------------------------------------------------------------------------------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`condition`](#parameter-roleassignmentscondition)                                                   | string | The conditions on the role assignment. This limits the resources it can be assigned to. e.g.: @Resource[Microsoft.Storage/storageAccounts/blobServices/containers:ContainerName] StringEqualsIgnoreCase "foo_storage_container". |
+| [`conditionVersion`](#parameter-roleassignmentsconditionversion)                                     | string | Version of the condition.                                                                                                                                                                                                        |
+| [`delegatedManagedIdentityResourceId`](#parameter-roleassignmentsdelegatedmanagedidentityresourceid) | string | The Resource Id of the delegated managed identity resource.                                                                                                                                                                      |
+| [`description`](#parameter-roleassignmentsdescription)                                               | string | The description of the role assignment.                                                                                                                                                                                          |
+| [`principalType`](#parameter-roleassignmentsprincipaltype)                                           | string | The principal type of the assigned principal ID.                                                                                                                                                                                 |
 
 ### Parameter: `roleAssignments.principalId`
 
@@ -1001,24 +1138,23 @@ Whether or not zone redundancy is enabled for this Grafana dashboard.
   ]
   ```
 
-
 ## Outputs
 
-| Output | Type | Description |
-| :-- | :-- | :-- |
-| `location` | string | The location the resource was deployed into. |
-| `loginServer` | string | The reference to the Azure Grafana Dashboard. |
-| `name` | string | The Name of the Azure Grafana Dashboard. |
-| `resourceGroupName` | string | The name of the Azure Grafana Dashboard. |
-| `resourceId` | string | The resource ID of the Azure Grafana Dashboard. |
+| Output                        | Type   | Description                                       |
+| :---------------------------- | :----- | :------------------------------------------------ |
+| `location`                    | string | The location the resource was deployed into.      |
+| `loginServer`                 | string | The reference to the Azure Grafana Dashboard.     |
+| `name`                        | string | The Name of the Azure Grafana Dashboard.          |
+| `resourceGroupName`           | string | The name of the Azure Grafana Dashboard.          |
+| `resourceId`                  | string | The resource ID of the Azure Grafana Dashboard.   |
 | `systemAssignedMIPrincipalId` | string | The principal ID of the system assigned identity. |
 
 ## Cross-referenced modules
 
 This section gives you an overview of all local-referenced module files (i.e., other modules that are referenced in this module) and all remote-referenced files (i.e., Bicep modules that are referenced from a Bicep Registry or Template Specs).
 
-| Reference | Type |
-| :-- | :-- |
+| Reference                                          | Type             |
+| :------------------------------------------------- | :--------------- |
 | `br/public:avm/res/network/private-endpoint:0.4.1` | Remote reference |
 
 ## Data Collection
