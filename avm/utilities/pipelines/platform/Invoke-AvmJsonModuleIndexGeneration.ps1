@@ -75,12 +75,13 @@ function Invoke-AvmJsonModuleIndexGeneration {
   )
 
   ## Generate the new moduleIndex.json file based off the modules in the repository
-
+  $credential = $null
   if ($BicepRegistryUrl -ne 'mcr.microsoft.com/v2/bicep') {
     Write-Warning "The Bicep registry URL is set to '$BicepRegistryUrl'. This is not the default value of 'mcr.microsoft.com/v2/bicep'."
 
     $token = az acr credential show --name $BicepRegistryUrl.Split('.')[0]
     $token = $token | ConvertFrom-Json
+    Write-Verbose "Token retrieved for registry '$BicepRegistryUrl', using username of '$token.username', and '$token.passwords[0].value'" -Verbose
 
     $secPassword = ConvertTo-SecureString $token.passwords[0].value -AsPlainText -Force
     $credential = New-Object System.Management.Automation.PSCredential ($token.username, $secPassword)
