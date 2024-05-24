@@ -27,7 +27,7 @@ The following section provides usage examples for the module, which were used to
 >**Note**: To reference the module, please use the following syntax `br/public:avm/res/custom-providers/resource-providers:<version>`.
 
 - [Custom Function App Resource Provider](#example-1-custom-function-app-resource-provider)
-- [Custom Function App Resource Provider](#example-2-custom-function-app-resource-provider)
+- [Custom Function App Resource Provider - WAF Aligned](#example-2-custom-function-app-resource-provider---waf-aligned)
 
 ### Example 1: _Custom Function App Resource Provider_
 
@@ -97,7 +97,7 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
 </details>
 <p>
 
-### Example 2: _Custom Function App Resource Provider_
+### Example 2: _Custom Function App Resource Provider - WAF Aligned_
 
 This instance deploys the module with the minimum set of required parameters.
 
@@ -115,6 +115,10 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
     // Non-required parameters
     actions: '<actions>'
     location: '<location>'
+    lock: {
+      kind: 'CanNotDelete'
+      name: 'myCustomLockName'
+    }
     resourceTypes: '<resourceTypes>'
     tags: {
       Environment: 'Non-Prod'
@@ -147,6 +151,12 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
     },
     "location": {
       "value": "<location>"
+    },
+    "lock": {
+      "value": {
+        "kind": "CanNotDelete",
+        "name": "myCustomLockName"
+      }
     },
     "resourceTypes": {
       "value": "<resourceTypes>"
