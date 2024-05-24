@@ -1,6 +1,6 @@
-# <Add module name> `[Microsoft.lz/spoke]`
+# Spoke Landing Zone with Virtual Machine `[Microsoft.lz/spoke]`
 
-<Add description>
+This Instance deploys a Spoke Landing Zone with Virtual Machine
 
 ## Navigation
 
@@ -15,6 +15,46 @@
 
 | Resource Type | API Version |
 | :-- | :-- |
+| `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
+| `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
+| `Microsoft.Automanage/configurationProfileAssignments` | [2022-05-04](https://learn.microsoft.com/en-us/azure/templates) |
+| `Microsoft.Compute/virtualMachines` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2023-09-01/virtualMachines) |
+| `Microsoft.Compute/virtualMachines/extensions` | [2022-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2022-11-01/virtualMachines/extensions) |
+| `Microsoft.DevTestLab/schedules` | [2018-09-15](https://learn.microsoft.com/en-us/azure/templates/Microsoft.DevTestLab/2018-09-15/schedules) |
+| `Microsoft.GuestConfiguration/guestConfigurationAssignments` | [2020-06-25](https://learn.microsoft.com/en-us/azure/templates/Microsoft.GuestConfiguration/2020-06-25/guestConfigurationAssignments) |
+| `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
+| `Microsoft.ManagedIdentity/userAssignedIdentities` | [2023-01-31](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2023-01-31/userAssignedIdentities) |
+| `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials` | [2023-01-31](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2023-01-31/userAssignedIdentities/federatedIdentityCredentials) |
+| `Microsoft.Network/applicationSecurityGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/applicationSecurityGroups) |
+| `Microsoft.Network/loadBalancers` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers) |
+| `Microsoft.Network/loadBalancers/backendAddressPools` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/backendAddressPools) |
+| `Microsoft.Network/loadBalancers/inboundNatRules` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/inboundNatRules) |
+| `Microsoft.Network/networkInterfaces` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkInterfaces) |
+| `Microsoft.Network/privateEndpoints` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints) |
+| `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints/privateDnsZoneGroups) |
+| `Microsoft.Network/publicIPAddresses` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-09-01/publicIPAddresses) |
+| `Microsoft.Network/routeTables` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/routeTables) |
+| `Microsoft.Network/virtualNetworks` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks) |
+| `Microsoft.Network/virtualNetworks/subnets` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks/subnets) |
+| `Microsoft.Network/virtualNetworks/virtualNetworkPeerings` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks/virtualNetworkPeerings) |
+| `Microsoft.RecoveryServices/vaults` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults) |
+| `Microsoft.RecoveryServices/vaults/backupconfig` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupconfig) |
+| `Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupFabrics/protectionContainers) |
+| `Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupFabrics/protectionContainers/protectedItems) |
+| `Microsoft.RecoveryServices/vaults/backupPolicies` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupPolicies) |
+| `Microsoft.RecoveryServices/vaults/backupstorageconfig` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupstorageconfig) |
+| `Microsoft.RecoveryServices/vaults/replicationAlertSettings` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationAlertSettings) |
+| `Microsoft.RecoveryServices/vaults/replicationFabrics` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics) |
+| `Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics/replicationProtectionContainers) |
+| `Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings) |
+| `Microsoft.RecoveryServices/vaults/replicationPolicies` | [2023-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/vaults/replicationPolicies) |
+| `Microsoft.Resources/resourceGroups` | [2021-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Resources/2021-04-01/resourceGroups) |
+| `Microsoft.Security/autoProvisioningSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/autoProvisioningSettings) |
+| `Microsoft.Security/deviceSecurityGroups` | [2019-08-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2019-08-01/deviceSecurityGroups) |
+| `Microsoft.Security/iotSecuritySolutions` | [2019-08-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2019-08-01/iotSecuritySolutions) |
+| `Microsoft.Security/pricings` | [2018-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2018-06-01/pricings) |
+| `Microsoft.Security/securityContacts` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/securityContacts) |
+| `Microsoft.Security/workspaceSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/workspaceSettings) |
 
 ## Usage examples
 
@@ -24,10 +64,13 @@ The following section provides usage examples for the module, which were used to
 
 >**Note**: To reference the module, please use the following syntax `br/public:avm/ptn/lz/spoke:<version>`.
 
-- [Defaults](#example-1-defaults)
-- [Waf-Aligned](#example-2-waf-aligned)
+- [Spoke Landing Zone with Virtual Machine WAF Aligned](#example-1-spoke-landing-zone-with-virtual-machine-waf-aligned)
+- [Spoke Landing Zone with Virtual Machine WAF Aligned](#example-2-spoke-landing-zone-with-virtual-machine-waf-aligned)
 
-### Example 1: _Defaults_
+### Example 1: _Spoke Landing Zone with Virtual Machine WAF Aligned_
+
+This module deploys an Azure Continer Registry using minimal parameters.
+
 
 <details>
 
@@ -38,9 +81,13 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
   name: 'spokeDeployment'
   params: {
     // Required parameters
-    name: 'lsdef001'
-    // Non-required parameters
     location: '<location>'
+    name: 'lzmin001'
+    // Non-required parameters
+    eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+    eventHubName: '<eventHubName>'
+    storageAccountResourceId: '<storageAccountResourceId>'
+    workspaceResourceId: '<workspaceResourceId>'
   }
 }
 ```
@@ -58,12 +105,24 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
   "contentVersion": "1.0.0.0",
   "parameters": {
     // Required parameters
-    "name": {
-      "value": "lsdef001"
-    },
-    // Non-required parameters
     "location": {
       "value": "<location>"
+    },
+    "name": {
+      "value": "lzmin001"
+    },
+    // Non-required parameters
+    "eventHubAuthorizationRuleResourceId": {
+      "value": "<eventHubAuthorizationRuleResourceId>"
+    },
+    "eventHubName": {
+      "value": "<eventHubName>"
+    },
+    "storageAccountResourceId": {
+      "value": "<storageAccountResourceId>"
+    },
+    "workspaceResourceId": {
+      "value": "<workspaceResourceId>"
     }
   }
 }
@@ -72,7 +131,10 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
 </details>
 <p>
 
-### Example 2: _Waf-Aligned_
+### Example 2: _Spoke Landing Zone with Virtual Machine WAF Aligned_
+
+This module deploys an Azure Continer Registry using minimal parameters.
+
 
 <details>
 
@@ -83,9 +145,13 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
   name: 'spokeDeployment'
   params: {
     // Required parameters
-    name: 'lswaf001'
-    // Non-required parameters
     location: '<location>'
+    name: 'lzwaf001'
+    // Non-required parameters
+    eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
+    eventHubName: '<eventHubName>'
+    storageAccountResourceId: '<storageAccountResourceId>'
+    workspaceResourceId: '<workspaceResourceId>'
   }
 }
 ```
@@ -103,12 +169,24 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
   "contentVersion": "1.0.0.0",
   "parameters": {
     // Required parameters
-    "name": {
-      "value": "lswaf001"
-    },
-    // Non-required parameters
     "location": {
       "value": "<location>"
+    },
+    "name": {
+      "value": "lzwaf001"
+    },
+    // Non-required parameters
+    "eventHubAuthorizationRuleResourceId": {
+      "value": "<eventHubAuthorizationRuleResourceId>"
+    },
+    "eventHubName": {
+      "value": "<eventHubName>"
+    },
+    "storageAccountResourceId": {
+      "value": "<storageAccountResourceId>"
+    },
+    "workspaceResourceId": {
+      "value": "<workspaceResourceId>"
     }
   }
 }
@@ -124,14 +202,26 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
+| [`location`](#parameter-location) | string | Location for all Resources. |
 | [`name`](#parameter-name) | string | Name of the resource to create. |
 
 **Optional parameters**
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
+| [`addressPrefix`](#parameter-addressprefix) | string | The address prefix for the virtual network. |
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
-| [`location`](#parameter-location) | string | Location for all Resources. |
+| [`eventHubAuthorizationRuleResourceId`](#parameter-eventhubauthorizationruleresourceid) | string | The event hub authorization rule resource ID. |
+| [`eventHubName`](#parameter-eventhubname) | string | The event hub namespace name. |
+| [`storageAccountResourceId`](#parameter-storageaccountresourceid) | string | The storage account resource ID. |
+| [`workspaceResourceId`](#parameter-workspaceresourceid) | string | The log analytics workspace resource ID. |
+
+### Parameter: `location`
+
+Location for all Resources.
+
+- Required: Yes
+- Type: string
 
 ### Parameter: `name`
 
@@ -139,6 +229,14 @@ Name of the resource to create.
 
 - Required: Yes
 - Type: string
+
+### Parameter: `addressPrefix`
+
+The address prefix for the virtual network.
+
+- Required: No
+- Type: string
+- Default: `'10.0.0.0/24'`
 
 ### Parameter: `enableTelemetry`
 
@@ -148,13 +246,37 @@ Enable/Disable usage telemetry for module.
 - Type: bool
 - Default: `True`
 
-### Parameter: `location`
+### Parameter: `eventHubAuthorizationRuleResourceId`
 
-Location for all Resources.
+The event hub authorization rule resource ID.
 
 - Required: No
 - Type: string
-- Default: `[resourceGroup().location]`
+- Default: `''`
+
+### Parameter: `eventHubName`
+
+The event hub namespace name.
+
+- Required: No
+- Type: string
+- Default: `''`
+
+### Parameter: `storageAccountResourceId`
+
+The storage account resource ID.
+
+- Required: No
+- Type: string
+- Default: `''`
+
+### Parameter: `workspaceResourceId`
+
+The log analytics workspace resource ID.
+
+- Required: No
+- Type: string
+- Default: `''`
 
 
 ## Outputs
@@ -164,7 +286,18 @@ Location for all Resources.
 
 ## Cross-referenced modules
 
-_None_
+This section gives you an overview of all local-referenced module files (i.e., other modules that are referenced in this module) and all remote-referenced files (i.e., Bicep modules that are referenced from a Bicep Registry or Template Specs).
+
+| Reference | Type |
+| :-- | :-- |
+| `br/public:avm/ptn/security/security-center:0.1.0` | Remote reference |
+| `br/public:avm/res/compute/virtual-machine:0.4.2` | Remote reference |
+| `br/public:avm/res/managed-identity/user-assigned-identity:0.2.1` | Remote reference |
+| `br/public:avm/res/network/application-security-group:0.1.3` | Remote reference |
+| `br/public:avm/res/network/load-balancer:0.1.4` | Remote reference |
+| `br/public:avm/res/network/route-table:0.2.2` | Remote reference |
+| `br/public:avm/res/network/virtual-network:0.1.6` | Remote reference |
+| `br/public:avm/res/recovery-services/vault:0.2.1` | Remote reference |
 
 ## Data Collection
 
