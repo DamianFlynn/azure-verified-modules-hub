@@ -15,6 +15,7 @@ This module deploys an Azure Custom Resource Provider.
 
 | Resource Type | API Version |
 | :-- | :-- |
+| `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
 | `Microsoft.CustomProviders/resourceProviders` | [2018-09-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.CustomProviders/2018-09-01-preview/resourceProviders) |
 
 ## Usage examples
@@ -26,7 +27,7 @@ The following section provides usage examples for the module, which were used to
 >**Note**: To reference the module, please use the following syntax `br/public:avm/res/custom-providers/resource-providers:<version>`.
 
 - [Custom Function App Resource Provider](#example-1-custom-function-app-resource-provider)
-- [Waf-Aligned](#example-2-waf-aligned)
+- [Custom Function App Resource Provider](#example-2-custom-function-app-resource-provider)
 
 ### Example 1: _Custom Function App Resource Provider_
 
@@ -42,7 +43,7 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
   name: 'resourceProvidersDeployment'
   params: {
     // Required parameters
-    name: 'dbgmin001'
+    name: 'cprmin001'
     // Non-required parameters
     actions: '<actions>'
     location: '<location>'
@@ -70,7 +71,7 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
   "parameters": {
     // Required parameters
     "name": {
-      "value": "dbgmin001"
+      "value": "cprmin001"
     },
     // Non-required parameters
     "actions": {
@@ -96,7 +97,10 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
 </details>
 <p>
 
-### Example 2: _Waf-Aligned_
+### Example 2: _Custom Function App Resource Provider_
+
+This instance deploys the module with the minimum set of required parameters.
+
 
 <details>
 
@@ -109,7 +113,14 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
     // Required parameters
     name: 'cprpwaf001'
     // Non-required parameters
+    actions: '<actions>'
     location: '<location>'
+    resourceTypes: '<resourceTypes>'
+    tags: {
+      Environment: 'Non-Prod'
+      'hidden-title': 'This is visible in the resource name'
+      Role: 'DeploymentValidation'
+    }
   }
 }
 ```
@@ -131,8 +142,21 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
       "value": "cprpwaf001"
     },
     // Non-required parameters
+    "actions": {
+      "value": "<actions>"
+    },
     "location": {
       "value": "<location>"
+    },
+    "resourceTypes": {
+      "value": "<resourceTypes>"
+    },
+    "tags": {
+      "value": {
+        "Environment": "Non-Prod",
+        "hidden-title": "This is visible in the resource name",
+        "Role": "DeploymentValidation"
+      }
     }
   }
 }
@@ -155,7 +179,9 @@ module resourceProviders 'br/public:avm/res/custom-providers/resource-providers:
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`actions`](#parameter-actions) | array | Actions of the resource. |
+| [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`location`](#parameter-location) | string | Location for all Resources. |
+| [`lock`](#parameter-lock) | object | The lock settings of the service. |
 | [`resourceTypes`](#parameter-resourcetypes) | array | Resource Types of the resource. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
 | [`validations`](#parameter-validations) | array | Validations endpoints of the resource. |
@@ -175,6 +201,14 @@ Actions of the resource.
 - Type: array
 - Default: `[]`
 
+### Parameter: `enableTelemetry`
+
+Enable/Disable usage telemetry for module.
+
+- Required: No
+- Type: bool
+- Default: `True`
+
 ### Parameter: `location`
 
 Location for all Resources.
@@ -182,6 +216,42 @@ Location for all Resources.
 - Required: No
 - Type: string
 - Default: `[resourceGroup().location]`
+
+### Parameter: `lock`
+
+The lock settings of the service.
+
+- Required: No
+- Type: object
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`kind`](#parameter-lockkind) | string | Specify the type of lock. |
+| [`name`](#parameter-lockname) | string | Specify the name of lock. |
+
+### Parameter: `lock.kind`
+
+Specify the type of lock.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'CanNotDelete'
+    'None'
+    'ReadOnly'
+  ]
+  ```
+
+### Parameter: `lock.name`
+
+Specify the name of lock.
+
+- Required: No
+- Type: string
 
 ### Parameter: `resourceTypes`
 
