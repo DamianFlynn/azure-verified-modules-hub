@@ -1,15 +1,17 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 using CustomProvider.Authentication;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services => {
+    .ConfigureServices(services =>
+    {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddSingleton(new AzureAuthentication());
+        services.AddSingleton<AzureAuthentication>();
     })
     .Build();
 

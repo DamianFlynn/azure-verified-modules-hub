@@ -36,7 +36,7 @@ param tags object = {
 
 resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableTelemetry) {
   name: take(
-    '46d3xbcp.ptn.containerregistry-landingzone.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}',
+    '46d3xbcp.ptn.lz-containerregistry.${replace('-..--..-', '.', '-')}.${substring(uniqueString(deployment().name, location), 0, 4)}',
     64
   )
   location: location

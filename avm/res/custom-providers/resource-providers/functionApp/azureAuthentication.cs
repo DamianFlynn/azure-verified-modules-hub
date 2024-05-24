@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Resources;
+using Microsoft.Extensions.Configuration;
 
 /// <summary>
 /// The CustomProvider.Authentication namespace contains classes used for handling authentication with Azure.
@@ -14,17 +15,20 @@ namespace CustomProvider.Authentication
     {
         private readonly ArmClient _armClient;
         public readonly TenantResource? _armTenant = null;
+        private readonly IConfiguration _configuration;
 
-        
+
         /// <summary>
         /// Initializes a new instance of the AzureAuthentication class.
         /// </summary>
-        public AzureAuthentication()
+        public AzureAuthentication(IConfiguration configuration)
         {
-            string tenantId = "c0ff482c-f0bb-426d-b91b-5fae5b5ace06";
+            _configuration = configuration;
+            string tenantId = _configuration["TenantId"];
             _armClient = new ArmClient(new DefaultAzureCredential());
-            
-            try{
+
+            try
+            {
                 Console.WriteLine($"Retrieving Tenant Details");
 
                 /// <summary>
@@ -35,7 +39,7 @@ namespace CustomProvider.Authentication
                     _armTenant = _armClient.GetTenants().FirstOrDefault();
                 else
                     _armTenant = _armClient.GetTenants().Where(x => x.Data.TenantId == new Guid(tenantId)).FirstOrDefault();
-                
+
                 Console.WriteLine($"Tenant Information: {_armTenant?.Data.DisplayName} '{_armTenant?.Data.TenantId}' ({_armTenant?.Data.DefaultDomain})");
             }
             catch (Exception ex)
