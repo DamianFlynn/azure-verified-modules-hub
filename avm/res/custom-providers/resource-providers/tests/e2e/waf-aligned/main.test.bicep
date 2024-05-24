@@ -151,9 +151,6 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       location: resourceLocation
-      actions: actions
-      resourceTypes: resourceTypes
-      // validations: validations
       tags: {
         'hidden-title': 'This is visible in the resource name'
         Environment: 'Non-Prod'
