@@ -1,6 +1,6 @@
 targetScope = 'subscription'
 
-metadata name = 'Custom Function App Resource Provider'
+metadata name = 'Custom Function App Resource Provider - WAF Aligned'
 metadata description = 'This instance deploys the module with the minimum set of required parameters.'
 metadata owner = 'DamianFlynn/avm-res-customproviders-resourceproviders-module-owners-bicep'
 
@@ -151,14 +151,18 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       location: resourceLocation
-      actions: actions
-      resourceTypes: resourceTypes
-      // validations: validations
       tags: {
         'hidden-title': 'This is visible in the resource name'
         Environment: 'Non-Prod'
         Role: 'DeploymentValidation'
       }
+      lock: {
+        kind: 'CanNotDelete'
+        name: 'myCustomLockName'
+      }
+      actions: actions
+      resourceTypes: resourceTypes
+      // validations: validations
     }
     dependsOn: [
       nestedDependencies // We require a function app to be deployed

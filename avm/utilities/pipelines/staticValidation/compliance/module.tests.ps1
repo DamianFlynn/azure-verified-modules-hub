@@ -22,8 +22,8 @@ $script:MgDeploymentSchema = 'https://schema.management.azure.com/schemas/2019-0
 $script:TenantDeploymentSchema = 'https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#'
 # $script:telemetryResCsvLink = 'https://aka.ms/avm/index/bicep/res/csv'
 # $script:telemetryPtnCsvLink = 'https://aka.ms/avm/index/bicep/ptn/csv'
-$script:telemetryResCsvLink = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/docs/static/module-indexes/BicepResourceModules.csv'
-$script:telemetryPtnCsvLink = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/docs/static/module-indexes/BicepPatternModules.csv'
+$script:telemetryResCsvLink = 'https://raw.githubusercontent.com/DamianFlynn/azure-verified-modules-hub/main/docs/static/module-indexes/BicepResourceModules.csv'
+$script:telemetryPtnCsvLink = 'https://raw.githubusercontent.com/DamianFlynn/azure-verified-modules-hub/main/docs/static/module-indexes/BicepPatternModules.csv'
 
 $script:moduleFolderPaths = $moduleFolderPaths
 
