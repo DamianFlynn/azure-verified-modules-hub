@@ -21,6 +21,8 @@ This Instance deploys a Spoke Landing Zone with Virtual Machine
 | `Microsoft.Compute/virtualMachines` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2023-09-01/virtualMachines) |
 | `Microsoft.Compute/virtualMachines/extensions` | [2022-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2022-11-01/virtualMachines/extensions) |
 | `Microsoft.DevTestLab/schedules` | [2018-09-15](https://learn.microsoft.com/en-us/azure/templates/Microsoft.DevTestLab/2018-09-15/schedules) |
+| `Microsoft.EventGrid/systemTopics` | [2023-12-15-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.EventGrid/2023-12-15-preview/systemTopics) |
+| `Microsoft.EventGrid/systemTopics/eventSubscriptions` | [2023-12-15-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.EventGrid/2023-12-15-preview/systemTopics/eventSubscriptions) |
 | `Microsoft.GuestConfiguration/guestConfigurationAssignments` | [2020-06-25](https://learn.microsoft.com/en-us/azure/templates/Microsoft.GuestConfiguration/2020-06-25/guestConfigurationAssignments) |
 | `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
 | `Microsoft.ManagedIdentity/userAssignedIdentities` | [2023-01-31](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2023-01-31/userAssignedIdentities) |
@@ -30,6 +32,11 @@ This Instance deploys a Spoke Landing Zone with Virtual Machine
 | `Microsoft.Network/loadBalancers/backendAddressPools` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/backendAddressPools) |
 | `Microsoft.Network/loadBalancers/inboundNatRules` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/inboundNatRules) |
 | `Microsoft.Network/networkInterfaces` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkInterfaces) |
+| `Microsoft.Network/networkSecurityGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkSecurityGroups) |
+| `Microsoft.Network/networkSecurityGroups/securityRules` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkSecurityGroups/securityRules) |
+| `Microsoft.Network/networkWatchers` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkWatchers) |
+| `Microsoft.Network/networkWatchers/connectionMonitors` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkWatchers/connectionMonitors) |
+| `Microsoft.Network/networkWatchers/flowLogs` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkWatchers/flowLogs) |
 | `Microsoft.Network/privateEndpoints` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints) |
 | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints/privateDnsZoneGroups) |
 | `Microsoft.Network/publicIPAddresses` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-09-01/publicIPAddresses) |
@@ -55,6 +62,18 @@ This Instance deploys a Spoke Landing Zone with Virtual Machine
 | `Microsoft.Security/pricings` | [2018-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2018-06-01/pricings) |
 | `Microsoft.Security/securityContacts` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/securityContacts) |
 | `Microsoft.Security/workspaceSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/workspaceSettings) |
+| `Microsoft.Storage/storageAccounts` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts) |
+| `Microsoft.Storage/storageAccounts/blobServices` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts/blobServices) |
+| `Microsoft.Storage/storageAccounts/blobServices/containers` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts/blobServices/containers) |
+| `Microsoft.Storage/storageAccounts/blobServices/containers/immutabilityPolicies` | [2022-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2022-09-01/storageAccounts/blobServices/containers/immutabilityPolicies) |
+| `Microsoft.Storage/storageAccounts/fileServices` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/fileServices) |
+| `Microsoft.Storage/storageAccounts/fileServices/shares` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2023-01-01/storageAccounts/fileServices/shares) |
+| `Microsoft.Storage/storageAccounts/localUsers` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/localUsers) |
+| `Microsoft.Storage/storageAccounts/managementPolicies` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/2023-01-01/storageAccounts/managementPolicies) |
+| `Microsoft.Storage/storageAccounts/queueServices` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/queueServices) |
+| `Microsoft.Storage/storageAccounts/queueServices/queues` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/queueServices/queues) |
+| `Microsoft.Storage/storageAccounts/tableServices` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/tableServices) |
+| `Microsoft.Storage/storageAccounts/tableServices/tables` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Storage/storageAccounts/tableServices/tables) |
 
 ## Usage examples
 
@@ -84,9 +103,14 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
     location: '<location>'
     name: 'lzmin001'
     // Non-required parameters
+    enableBCDR: false
     eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
     eventHubName: '<eventHubName>'
     storageAccountResourceId: '<storageAccountResourceId>'
+    tags: {
+      Environment: 'Non-Prod'
+      Role: 'DeploymentValidation'
+    }
     workspaceResourceId: '<workspaceResourceId>'
   }
 }
@@ -112,6 +136,9 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
       "value": "lzmin001"
     },
     // Non-required parameters
+    "enableBCDR": {
+      "value": false
+    },
     "eventHubAuthorizationRuleResourceId": {
       "value": "<eventHubAuthorizationRuleResourceId>"
     },
@@ -120,6 +147,12 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
     },
     "storageAccountResourceId": {
       "value": "<storageAccountResourceId>"
+    },
+    "tags": {
+      "value": {
+        "Environment": "Non-Prod",
+        "Role": "DeploymentValidation"
+      }
     },
     "workspaceResourceId": {
       "value": "<workspaceResourceId>"
@@ -210,10 +243,16 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
 | [`addressPrefix`](#parameter-addressprefix) | string | The address prefix for the virtual network. |
+| [`azureActivitiesSink`](#parameter-azureactivitiessink) | string | The resource ID of an auding function. |
+| [`enableBCDR`](#parameter-enablebcdr) | bool | Enable Recovery Vault Disaster Recovery replications. |
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`eventHubAuthorizationRuleResourceId`](#parameter-eventhubauthorizationruleresourceid) | string | The event hub authorization rule resource ID. |
 | [`eventHubName`](#parameter-eventhubname) | string | The event hub namespace name. |
+| [`hubFirewallPrivateIp`](#parameter-hubfirewallprivateip) | string | The IP Address of the Hub Firewall. |
+| [`lock`](#parameter-lock) | object | The lock settings of the service. |
+| [`partnerCountry`](#parameter-partnercountry) | string | The Partner ID for partner attribution. |
 | [`storageAccountResourceId`](#parameter-storageaccountresourceid) | string | The storage account resource ID. |
+| [`tags`](#parameter-tags) | object | Tags of the resource. |
 | [`workspaceResourceId`](#parameter-workspaceresourceid) | string | The log analytics workspace resource ID. |
 
 ### Parameter: `location`
@@ -237,6 +276,22 @@ The address prefix for the virtual network.
 - Required: No
 - Type: string
 - Default: `'10.0.0.0/24'`
+
+### Parameter: `azureActivitiesSink`
+
+The resource ID of an auding function.
+
+- Required: No
+- Type: string
+- Default: `''`
+
+### Parameter: `enableBCDR`
+
+Enable Recovery Vault Disaster Recovery replications.
+
+- Required: No
+- Type: bool
+- Default: `False`
 
 ### Parameter: `enableTelemetry`
 
@@ -262,6 +317,58 @@ The event hub namespace name.
 - Type: string
 - Default: `''`
 
+### Parameter: `hubFirewallPrivateIp`
+
+The IP Address of the Hub Firewall.
+
+- Required: No
+- Type: string
+- Default: `'10.1.1.4'`
+
+### Parameter: `lock`
+
+The lock settings of the service.
+
+- Required: No
+- Type: object
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`kind`](#parameter-lockkind) | string | Specify the type of lock. |
+| [`name`](#parameter-lockname) | string | Specify the name of lock. |
+
+### Parameter: `lock.kind`
+
+Specify the type of lock.
+
+- Required: No
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'CanNotDelete'
+    'None'
+    'ReadOnly'
+  ]
+  ```
+
+### Parameter: `lock.name`
+
+Specify the name of lock.
+
+- Required: No
+- Type: string
+
+### Parameter: `partnerCountry`
+
+The Partner ID for partner attribution.
+
+- Required: No
+- Type: string
+- Default: `'norway'`
+
 ### Parameter: `storageAccountResourceId`
 
 The storage account resource ID.
@@ -269,6 +376,13 @@ The storage account resource ID.
 - Required: No
 - Type: string
 - Default: `''`
+
+### Parameter: `tags`
+
+Tags of the resource.
+
+- Required: No
+- Type: object
 
 ### Parameter: `workspaceResourceId`
 
@@ -292,12 +406,16 @@ This section gives you an overview of all local-referenced module files (i.e., o
 | :-- | :-- |
 | `br/public:avm/ptn/security/security-center:0.1.0` | Remote reference |
 | `br/public:avm/res/compute/virtual-machine:0.4.2` | Remote reference |
+| `br/public:avm/res/event-grid/system-topic:0.2.6` | Remote reference |
 | `br/public:avm/res/managed-identity/user-assigned-identity:0.2.1` | Remote reference |
 | `br/public:avm/res/network/application-security-group:0.1.3` | Remote reference |
 | `br/public:avm/res/network/load-balancer:0.1.4` | Remote reference |
+| `br/public:avm/res/network/network-security-group:0.1.3` | Remote reference |
+| `br/public:avm/res/network/network-watcher:0.1.1` | Remote reference |
 | `br/public:avm/res/network/route-table:0.2.2` | Remote reference |
 | `br/public:avm/res/network/virtual-network:0.1.6` | Remote reference |
 | `br/public:avm/res/recovery-services/vault:0.2.1` | Remote reference |
+| `br/public:avm/res/storage/storage-account:0.9.0` | Remote reference |
 
 ## Data Collection
 

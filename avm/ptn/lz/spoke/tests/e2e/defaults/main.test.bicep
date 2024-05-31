@@ -61,10 +61,16 @@ module testDeployment '../../../main.bicep' = [
       // You parameters go here
       name: '${namePrefix}${serviceShort}001'
       location: resourceLocation
+      enableBCDR: false
+
       eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
       eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
       storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId
       workspaceResourceId: diagnosticDependencies.outputs.logAnalyticsWorkspaceResourceId
+      tags: {
+        Environment: 'Non-Prod'
+        Role: 'DeploymentValidation'
+      }
     }
   }
 ]
