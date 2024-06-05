@@ -171,6 +171,114 @@ var defaultBackendNsgRules = [
   }
 ]
 
+// This pattern has opinionated defaults for the traffic flow from the spoke to the hub
+// providing a routes paramater will replace this default configuration
+var defaultRoutes = [
+  {
+    name: 'Everywhere'
+    properties: {
+      addressPrefix: '0.0.0.0/0'
+      nextHopIpAddress: hubFirewallPrivateIp
+      nextHopType: 'VirtualAppliance'
+    }
+  }
+]
+
+// This pattern has opinionated defaults for the security rules for the frontend and backend subnets
+// providing a frontendSecurityRules or backendSecurityRules parameter will append those rules to
+// this default configuration. The Union function is used to ensure that the default rules are
+// always included in the final configuration.
+
+var defaultFrontendNsgRules = [
+  {
+    name: 'AllowDnsFromFirewallToFrontendsubnet'
+    properties: {
+      description: 'Allow DNS queries from the Azure Firewall'
+      protocol: 'Udp'
+      sourcePortRange: '*'
+      destinationPortRange: '53'
+      sourceAddressPrefix: hubFirewallPrivateIp
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
+      access: 'Allow'
+      priority: 1000
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowProbeFromAzureloadbalancerToFrontendsubnet'
+    properties: {
+      description: 'Allow probe from Azure Load Balancer to the Frontend Subnet'
+      protocol: '*'
+      sourcePortRange: '*'
+      destinationPortRange: '*'
+      sourceAddressPrefix: 'AzureLoadBalancer'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
+      access: 'Allow'
+      priority: 3900
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'DenyAll'
+    properties: {
+      access: 'Deny'
+      description: 'Default rule to deny all inbound traffic'
+      destinationAddressPrefix: '*'
+      destinationPortRange: '*'
+      direction: 'Inbound'
+      priority: 4000
+      protocol: '*'
+      sourceAddressPrefix: '*'
+      sourcePortRange: '*'
+    }
+  }
+]
+
+var defaultBackendNsgRules = [
+  {
+    name: 'AllowDnsFromDcsubnetToBackendsubnet'
+    properties: {
+      description: 'Allow DNS replies from the domain controllers'
+      protocol: 'Udp'
+      sourceAddressPrefix: '10.1.8.0/26'
+      sourcePortRange: '*'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
+      destinationPortRange: '53'
+      access: 'Allow'
+      priority: 1200
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowProbeFromAzureloadbalancerToBackendsubnet'
+    properties: {
+      description: 'Allow probe from Azure Load Balancer to the Backend Subnet'
+      protocol: '*'
+      sourceAddressPrefix: 'AzureLoadBalancer'
+      sourcePortRange: '*'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
+      destinationPortRange: '*'
+      access: 'Allow'
+      priority: 3900
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'DenyAll'
+    properties: {
+      access: 'Deny'
+      description: 'Default rule to deny all inbound traffic'
+      destinationAddressPrefix: '*'
+      destinationPortRange: '*'
+      direction: 'Inbound'
+      priority: 4000
+      protocol: '*'
+      sourceAddressPrefix: '*'
+      sourcePortRange: '*'
+    }
+  }
+]
+
 // ============== //
 // Resources      //
 // ============== //
