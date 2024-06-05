@@ -22,8 +22,20 @@ param tags object?
 //
 // Add your parameters here
 //
+@description('Optional. The IP Address of the Hub Firewall.')
+param hubFirewallPrivateIp string = '10.1.1.4'
+
 @description('Optional. The address prefix for the virtual network.')
 param addressPrefix string = '10.0.0.0/24'
+
+@description('Optional. An array of routes to be established within the hub route table.')
+param routes routeType
+
+@description('Optional. Array of Security Rules to deploy to the Frontend Network Security Group. When not provided, an NSG including only the default rules will be deployed.')
+param frontendSecurityRules array = []
+
+@description('Optional. Array of Security Rules to deploy to the Backend Network Security Group. When not provided, an NSG including only the default rules will be deployed.')
+param backendSecurityRules array = []
 
 @description('Optional. The event hub namespace name.')
 param eventHubName string = ''
@@ -37,24 +49,127 @@ param storageAccountResourceId string = ''
 @description('Optional. The log analytics workspace resource ID.')
 param workspaceResourceId string = ''
 
-@description('Optional. Enable Recovery Vault Disaster Recovery replications.')
-param enableBCDR bool = false
-
 @description('Optional. The resource ID of an auding function.')
 param azureActivitiesSink string = ''
-
-@description('Optional. The IP Address of the Hub Firewall.')
-param hubFirewallPrivateIp string = '10.1.1.4'
 
 @description('Optional. The Partner ID for partner attribution.')
 param partnerCountry string = 'norway'
 
+// This pattern has opinionated defaults for the tags that are applied to all resources
+// providing a tags parameter will merge supplied tags to this default configuration
 var defaultTag = {
   iacVersion: loadJsonContent('./version.json').version
   iacTemplate: loadJsonContent('./version.json').name
 }
-
 var tagResources = union(defaultTag, tags)
+
+// This pattern has opinionated defaults for the traffic flow from the spoke to the hub
+// providing a routes paramater will replace this default configuration
+var defaultRoutes = [
+  {
+    name: 'Everywhere'
+    properties: {
+      addressPrefix: '0.0.0.0/0'
+      nextHopIpAddress: hubFirewallPrivateIp
+      nextHopType: 'VirtualAppliance'
+    }
+  }
+]
+
+// This pattern has opinionated defaults for the security rules for the frontend and backend subnets
+// providing a frontendSecurityRules or backendSecurityRules parameter will append those rules to
+// this default configuration. The Union function is used to ensure that the default rules are
+// always included in the final configuration.
+
+var defaultFrontendNsgRules = [
+  {
+    name: 'AllowDnsFromFirewallToFrontendsubnet'
+    properties: {
+      description: 'Allow DNS queries from the Azure Firewall'
+      protocol: 'Udp'
+      sourcePortRange: '*'
+      destinationPortRange: '53'
+      sourceAddressPrefix: hubFirewallPrivateIp
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
+      access: 'Allow'
+      priority: 1000
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowProbeFromAzureloadbalancerToFrontendsubnet'
+    properties: {
+      description: 'Allow probe from Azure Load Balancer to the Frontend Subnet'
+      protocol: '*'
+      sourcePortRange: '*'
+      destinationPortRange: '*'
+      sourceAddressPrefix: 'AzureLoadBalancer'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
+      access: 'Allow'
+      priority: 3900
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'DenyAll'
+    properties: {
+      access: 'Deny'
+      description: 'Default rule to deny all inbound traffic'
+      destinationAddressPrefix: '*'
+      destinationPortRange: '*'
+      direction: 'Inbound'
+      priority: 4000
+      protocol: '*'
+      sourceAddressPrefix: '*'
+      sourcePortRange: '*'
+    }
+  }
+]
+
+var defaultBackendNsgRules = [
+  {
+    name: 'AllowDnsFromDcsubnetToBackendsubnet'
+    properties: {
+      description: 'Allow DNS replies from the domain controllers'
+      protocol: 'Udp'
+      sourceAddressPrefix: '10.1.8.0/26'
+      sourcePortRange: '*'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
+      destinationPortRange: '53'
+      access: 'Allow'
+      priority: 1200
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowProbeFromAzureloadbalancerToBackendsubnet'
+    properties: {
+      description: 'Allow probe from Azure Load Balancer to the Backend Subnet'
+      protocol: '*'
+      sourceAddressPrefix: 'AzureLoadBalancer'
+      sourcePortRange: '*'
+      destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
+      destinationPortRange: '*'
+      access: 'Allow'
+      priority: 3900
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'DenyAll'
+    properties: {
+      access: 'Deny'
+      description: 'Default rule to deny all inbound traffic'
+      destinationAddressPrefix: '*'
+      destinationPortRange: '*'
+      direction: 'Inbound'
+      priority: 4000
+      protocol: '*'
+      sourceAddressPrefix: '*'
+      sourcePortRange: '*'
+    }
+  }
+]
 
 // ============== //
 // Resources      //
@@ -115,7 +230,7 @@ resource iacTelemetry 'Microsoft.Resources/deployments@2024-03-01' = {
 // ===============
 
 module securityCenter 'br/public:avm/ptn/security/security-center:0.1.0' = {
-  name: '${uniqueString(deployment().name, location)}-sub-securityCenter-${name}'
+  name: '${name}.sub.seuritycenter.${uniqueString(deployment().name, location)}'
   params: {
     scope: '/subscriptions/${subscription().subscriptionId}'
     workspaceResourceId: workspaceResourceId
@@ -209,10 +324,10 @@ resource auditResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 module systemTopic 'br/public:avm/res/event-grid/system-topic:0.2.6' = {
   scope: auditResourceGroup
-  name: '${uniqueString(deployment().name, location)}-audit-SystemTopic-${name}'
+  name: '${name}.sub.auditRg.res.systemTopic.${uniqueString(deployment().name, location)}'
   params: {
     location: 'global'
-    name: '${name}-audit-governance-egst'
+    name: '${auditResourceGroup.name}-topic'
     tags: union(tagResources, {
       'hidden-title': 'Governance: Auditing Events'
       Role: 'Governance'
@@ -223,7 +338,7 @@ module systemTopic 'br/public:avm/res/event-grid/system-topic:0.2.6' = {
     diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
       ? [
           {
-            name: '${name}-diagnostics'
+            name: '${auditResourceGroup.name}-topic-diag'
             metricCategories: [
               {
                 category: 'AllMetrics'
@@ -231,7 +346,7 @@ module systemTopic 'br/public:avm/res/event-grid/system-topic:0.2.6' = {
             ]
             eventHubName: eventHubName
             eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
+            // storageAccountResourceId: storageAccountResourceId
             workspaceResourceId: workspaceResourceId
           }
         ]
@@ -301,9 +416,176 @@ resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = 
   })
 }
 
+module frontendNetworkSecruityGroups 'br/public:avm/res/network/network-security-group:0.1.3' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.frontendNsg.${uniqueString(deployment().name, location)}'
+  params: {
+    name: '${name}-FrontendSubnet-nsg'
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking ACL'
+      Role: 'Networking'
+    })
+    securityRules: !empty(frontendSecurityRules)
+      ? union(frontendSecurityRules, defaultFrontendNsgRules)
+      : defaultFrontendNsgRules
+    lock: lock
+    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
+      ? [
+          {
+            name: '${name}-nsg-frontend-diagnostics'
+            metricCategories: [
+              {
+                category: 'NetworkSecurityGroupEvent'
+              }
+              {
+                category: 'NetworkSecurityGroupRuleCounter'
+              }
+            ]
+            eventHubName: eventHubName
+            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
+            storageAccountResourceId: storageAccountResourceId
+            workspaceResourceId: workspaceResourceId
+          }
+        ]
+      : []
+  }
+}
+
+module frontendRouteTable 'br/public:avm/res/network/route-table:0.2.2' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.frontendRT.${uniqueString(deployment().name, location)}'
+  params: {
+    enableTelemetry: false
+    name: '${name}-FrontendSubnet-rt'
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking Route Table'
+      Role: 'Networking'
+    })
+    routes: !empty(routes) ? routes : defaultRoutes
+    lock: lock
+  }
+}
+module backendNetworkSecruityGroups 'br/public:avm/res/network/network-security-group:0.1.3' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.backendNsg.${uniqueString(deployment().name, location)}'
+  params: {
+    name: '${name}-BackendSubnet-nsg'
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking ACL'
+      Role: 'Networking'
+    })
+    securityRules: !empty(backendSecurityRules)
+      ? union(backendSecurityRules, defaultBackendNsgRules)
+      : defaultBackendNsgRules
+    lock: lock
+    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
+      ? [
+          {
+            name: '${name}-nsg-backend-diagnostics'
+            metricCategories: [
+              {
+                category: 'NetworkSecurityGroupEvent'
+              }
+              {
+                category: 'NetworkSecurityGroupRuleCounter'
+              }
+            ]
+            eventHubName: eventHubName
+            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
+            storageAccountResourceId: storageAccountResourceId
+            workspaceResourceId: workspaceResourceId
+          }
+        ]
+      : []
+  }
+}
+
+module backendRouteTable 'br/public:avm/res/network/route-table:0.2.2' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.backendRt.${uniqueString(deployment().name, location)}'
+  params: {
+    enableTelemetry: false
+    name: '${name}-BackendSubnet-rt'
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking Route Table'
+      Role: 'Networking'
+    })
+    routes: !empty(routes) ? routes : defaultRoutes
+    lock: lock
+  }
+}
+
+module networkWatcher 'br/public:avm/res/network/network-watcher:0.1.1' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.networkWatcher.${uniqueString(deployment().name, location)}'
+  params: {
+    name: '${name}-networkwatcher'
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking'
+      Role: 'Networking'
+    })
+    flowLogs: [
+      {
+        enabled: false
+        formatVersion: 2
+        name: '${name}-fl-frontend'
+        retentionInDays: 8
+        storageId: nsgFlowlogsStorage.outputs.resourceId
+        targetResourceId: frontendNetworkSecruityGroups.outputs.resourceId
+        trafficAnalyticsInterval: 10
+        workspaceResourceId: workspaceResourceId
+      }
+      {
+        formatVersion: 2
+        name: '${name}-fl-backend'
+        retentionInDays: 8
+        storageId: nsgFlowlogsStorage.outputs.resourceId
+        targetResourceId: backendNetworkSecruityGroups.outputs.resourceId
+        trafficAnalyticsInterval: 10
+        workspaceResourceId: workspaceResourceId
+      }
+    ]
+    lock: lock
+  }
+}
+
+module nsgFlowlogsStorage 'br/public:avm/res/storage/storage-account:0.9.0' = {
+  scope: networkResourceGroup
+  name: '${name}.sub.networkRg.res.FlowlogsStorage.${uniqueString(deployment().name, location)}'
+  params: {
+    name: take(replace(replace('${name}vnetflowlogstg', '-', ''), '_', ''), 24)
+    location: location
+    tags: union(tagResources, {
+      'hidden-title': '${name} Networking'
+      Role: 'Networking'
+    })
+    networkAcls: {
+      defaultAction: 'Deny'
+      bypass: 'AzureServices'
+    }
+    lock: lock
+    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
+      ? [
+          {
+            name: '${name}-nsg-flow-diagnostics'
+            metricCategories: [
+              {
+                category: 'AllMetrics'
+              }
+            ]
+            eventHubName: eventHubName
+            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
+            storageAccountResourceId: storageAccountResourceId
+            workspaceResourceId: workspaceResourceId
+          }
+        ]
+      : []
+  }
+}
+
 module virtualNetwork 'br/public:avm/res/network/virtual-network:0.1.6' = {
   scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-vnet-${name}'
+  name: '${name}.sub.networkRg.res.virtualNetwork.${uniqueString(deployment().name, location)}'
   params: {
     name: '${name}-vnet'
     tags: union(tagResources, {
@@ -319,7 +601,7 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.1.6' = {
         addressPrefix: cidrSubnet(addressPrefix, 25, 0)
         name: 'FrontendSubnet'
         networkSecurityGroupResourceId: frontendNetworkSecruityGroups.outputs.resourceId
-        routeTableResourceId: frontendRouteTable_Resource.outputs.resourceId
+        routeTableResourceId: frontendRouteTable.outputs.resourceId
         privateEndpointNetworkPolicies: 'Enabled'
         privateLinkServiceNetworkPolicies: 'Enabled'
       }
@@ -327,7 +609,7 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.1.6' = {
         addressPrefix: cidrSubnet(addressPrefix, 25, 1)
         name: 'BackendSubnet'
         networkSecurityGroupResourceId: backendNetworkSecruityGroups.outputs.resourceId
-        routeTableResourceId: backendRouteTable_Resource.outputs.resourceId
+        routeTableResourceId: backendRouteTable.outputs.resourceId
         privateEndpointNetworkPolicies: 'Enabled'
         privateLinkServiceNetworkPolicies: 'Enabled'
         serviceEndpoints: [
@@ -341,7 +623,7 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.1.6' = {
     diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
       ? [
           {
-            name: '${name}-diagnostics'
+            name: '${name}-vnet-diagnostics'
             metricCategories: [
               {
                 category: 'AllMetrics'
@@ -354,803 +636,6 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.1.6' = {
           }
         ]
       : []
-  }
-}
-
-module nsgFlowLogsStorage_Resource 'br/public:avm/res/storage/storage-account:0.9.0' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-FlowLogStorage-${name}'
-  params: {
-    name: '${name}vnetstorage'
-    location: location
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking'
-      Role: 'Networking'
-    })
-    networkAcls: {
-      defaultAction: 'Deny'
-      bypass: 'AzureServices'
-    }
-    lock: lock
-    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
-      ? [
-          {
-            name: '${name}-diagnostics'
-            metricCategories: [
-              {
-                category: 'AllMetrics'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      : []
-  }
-}
-
-module networkWatcher 'br/public:avm/res/network/network-watcher:0.1.1' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-watcher-${name}'
-  params: {
-    name: '${name}-nw'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking'
-      Role: 'Networking'
-    })
-    flowLogs: [
-      {
-        enabled: false
-        formatVersion: 2
-        name: '${name}-fl-backend'
-        retentionInDays: 8
-        storageId: nsgFlowLogsStorage_Resource.outputs.resourceId
-        targetResourceId: frontendNetworkSecruityGroups.outputs.resourceId
-        trafficAnalyticsInterval: 10
-        workspaceResourceId: workspaceResourceId
-      }
-      {
-        formatVersion: 2
-        name: '${name}-fl-backend'
-        retentionInDays: 8
-        storageId: nsgFlowLogsStorage_Resource.outputs.resourceId
-        targetResourceId: backendNetworkSecruityGroups.outputs.resourceId
-        trafficAnalyticsInterval: 10
-        workspaceResourceId: workspaceResourceId
-      }
-    ]
-    lock: lock
-  }
-}
-
-module frontendRouteTable_Resource 'br/public:avm/res/network/route-table:0.2.2' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-frontRT-${name}'
-  params: {
-    enableTelemetry: false
-    name: '${name}-FrontendSubnet-RT'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking Route Table'
-      Role: 'Networking'
-    })
-    routes: [
-      {
-        name: 'Everywhere'
-        properties: {
-          addressPrefix: '0.0.0.0/0'
-          nextHopIpAddress: hubFirewallPrivateIp
-          nextHopType: 'VirtualAppliance'
-        }
-      }
-    ]
-    lock: lock
-  }
-}
-
-module frontendNetworkSecruityGroups 'br/public:avm/res/network/network-security-group:0.1.3' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-frontNSG-${name}'
-  params: {
-    name: '${name}-FrontendSubnet-nsg'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking ACL'
-      Role: 'Networking'
-    })
-    securityRules: [
-      {
-        name: 'AllowDnsFromFirewallToFrontendsubnet'
-        properties: {
-          description: 'Allow DNS queries from the Azure Firewall'
-          protocol: 'Udp'
-          sourcePortRange: '*'
-          destinationPortRange: '53'
-          sourceAddressPrefix: hubFirewallPrivateIp
-          destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
-          access: 'Allow'
-          priority: 1000
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'AllowProbeFromAzureloadbalancerToFrontendsubnet'
-        properties: {
-          description: 'Allow probe from Azure Load Balancer to the Frontend Subnet'
-          protocol: '*'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: 'AzureLoadBalancer'
-          destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
-          access: 'Allow'
-          priority: 3900
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'DenyAll'
-        properties: {
-          access: 'Deny'
-          description: 'Default rule to deny all inbound traffic'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '*'
-          direction: 'Inbound'
-          priority: 4000
-          protocol: '*'
-          sourceAddressPrefix: '*'
-          sourcePortRange: '*'
-        }
-      }
-    ]
-    lock: lock
-    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
-      ? [
-          {
-            name: '${name}-diagnostics'
-            metricCategories: [
-              {
-                category: 'NetworkSecurityGroupEvent'
-              }
-              {
-                category: 'NetworkSecurityGroupRuleCounter'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      : []
-  }
-}
-
-module backendRouteTable_Resource 'br/public:avm/res/network/route-table:0.2.2' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-backRT-${name}'
-  params: {
-    enableTelemetry: false
-    name: '${name}-BackendSubnet-RT'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking Route Table'
-      Role: 'Networking'
-    })
-    routes: [
-      {
-        name: 'Everywhere'
-        properties: {
-          addressPrefix: '0.0.0.0/0'
-          nextHopIpAddress: hubFirewallPrivateIp
-          nextHopType: 'VirtualAppliance'
-        }
-      }
-    ]
-    lock: lock
-  }
-}
-
-module backendNetworkSecruityGroups 'br/public:avm/res/network/network-security-group:0.1.3' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-backNSG-${name}'
-  params: {
-    name: '${name}-BackendSubnet-nsg'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking ACL'
-      Role: 'Networking'
-    })
-    securityRules: [
-      {
-        name: 'AllowDnsFromDcsubnetToBackendsubnet'
-        properties: {
-          description: 'Allow DNS replies from the domain controllers'
-          protocol: 'Udp'
-          sourceAddressPrefix: '10.1.8.0/26'
-          sourcePortRange: '*'
-          destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
-          destinationPortRange: '53'
-          access: 'Allow'
-          priority: 1200
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'AllowProbeFromAzureloadbalancerToBackendsubnet'
-        properties: {
-          description: 'Allow probe from Azure Load Balancer to the Backend Subnet'
-          protocol: '*'
-          sourceAddressPrefix: 'AzureLoadBalancer'
-          sourcePortRange: '*'
-          destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 1)
-          destinationPortRange: '*'
-          access: 'Allow'
-          priority: 3900
-          direction: 'Inbound'
-        }
-      }
-      {
-        name: 'DenyAll'
-        properties: {
-          access: 'Deny'
-          description: 'Default rule to deny all inbound traffic'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '*'
-          direction: 'Inbound'
-          priority: 4000
-          protocol: '*'
-          sourceAddressPrefix: '*'
-          sourcePortRange: '*'
-        }
-      }
-    ]
-    lock: lock
-    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
-      ? [
-          {
-            name: '${name}-diagnostics'
-            metricCategories: [
-              {
-                category: 'NetworkSecurityGroupEvent'
-              }
-              {
-                category: 'NetworkSecurityGroupRuleCounter'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      : []
-  }
-}
-
-module applicationSecurityGroup 'br/public:avm/res/network/application-security-group:0.1.3' = {
-  scope: networkResourceGroup
-  name: '${uniqueString(deployment().name, location)}-network-appSG-${name}'
-  params: {
-    name: '${name}-asg'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Networking Group'
-      Role: 'Networking'
-    })
-    lock: lock
-  }
-}
-
-// General resources
-// =================
-
-resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: name
-  location: location
-  tags: union(tagResources, {
-    'hidden-title': '${name} Workload'
-    Role: 'Workload'
-  })
-}
-
-module managedIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.2.1' = {
-  scope: workloadResourceGroup
-  name: '${uniqueString(deployment().name, location)}-workload-mi-${name}'
-  params: {
-    name: '${name}-mi'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Workload Identity'
-      Role: 'Workload'
-    })
-    lock: lock
-  }
-}
-
-module loadBalancer 'br/public:avm/res/network/load-balancer:0.1.4' = {
-  scope: workloadResourceGroup
-  name: '${uniqueString(deployment().name, location)}-workload-ilb-${name}'
-  params: {
-    name: '${name}-lb'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Workload Ballancer'
-      Role: 'Workload'
-    })
-
-    skuName: 'Standard'
-    frontendIPConfigurations: [
-      {
-        name: '${name}-lb-privateIP'
-        subnetId: virtualNetwork.outputs.subnetResourceIds[0]
-      }
-    ]
-    backendAddressPools: [
-      {
-        name: 'servers'
-      }
-    ]
-    inboundNatRules: [
-      {
-        backendPort: 443
-        enableFloatingIP: false
-        enableTcpReset: false
-        frontendIPConfigurationName: '${name}-lb-privateIP'
-        frontendPort: 443
-        idleTimeoutInMinutes: 4
-        name: 'HTTPS'
-        protocol: 'Tcp'
-      }
-      {
-        backendPort: 3389
-        frontendIPConfigurationName: '${name}-lb-privateIP'
-        frontendPort: 3389
-        name: 'RDP'
-      }
-      {
-        backendPort: 22
-        frontendIPConfigurationName: '${name}-lb-privateIP'
-        frontendPort: 22
-        name: 'SSH'
-        protocol: 'Udp'
-      }
-    ]
-    loadBalancingRules: [
-      {
-        backendAddressPoolName: 'servers'
-        backendPort: 0
-        disableOutboundSnat: true
-        enableFloatingIP: true
-        enableTcpReset: false
-        frontendIPConfigurationName: '${name}-lb-privateIP'
-        frontendPort: 0
-        idleTimeoutInMinutes: 4
-        loadDistribution: 'Default'
-        name: '${name}-frontend-ip-lb-rule'
-        probeName: '${name}-lb-probe1'
-        protocol: 'All'
-      }
-    ]
-    probes: [
-      {
-        intervalInSeconds: 5
-        name: '${name}-lb-probe1'
-        numberOfProbes: 2
-        port: '62000'
-        protocol: 'Tcp'
-      }
-    ]
-    roleAssignments: [
-      {
-        roleDefinitionIdOrName: 'Owner'
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        roleDefinitionIdOrName: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        roleDefinitionIdOrName: subscriptionResourceId(
-          'Microsoft.Authorization/roleDefinitions',
-          'acdd72a7-3385-48ef-bd42-f606fba81ae7'
-        )
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-    ]
-    lock: lock
-    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
-      ? [
-          {
-            name: '${name}-diagnostics'
-            metricCategories: [
-              {
-                category: 'AllMetrics'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      : []
-  }
-}
-
-module recoveryServices 'br/public:avm/res/recovery-services/vault:0.2.1' = {
-  scope: workloadResourceGroup
-  name: '${uniqueString(deployment().name, location)}-workload-recovery-${name}'
-  params: {
-    name: '${name}-rs'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Workload Recovery'
-      Role: 'Workload'
-    })
-
-    replicationAlertSettings: {
-      customEmailAddresses: [
-        'damian.flynn@innofactor.com'
-      ]
-      locale: 'en-IE'
-      sendToOwners: 'Send'
-    }
-    securitySettings: {
-      immutabilitySettings: {
-        state: 'Unlocked'
-      }
-    }
-    backupPolicies: [
-      {
-        name: 'vmBackupPolicy'
-        properties: {
-          backupManagementType: 'AzureIaasVM'
-          instantRPDetails: {}
-          instantRpRetentionRangeInDays: 2
-          protectedItemsCount: 0
-          retentionPolicy: {
-            dailySchedule: {
-              retentionDuration: {
-                count: 180
-                durationType: 'Days'
-              }
-              retentionTimes: [
-                '2019-11-07T07:00:00Z'
-              ]
-            }
-            monthlySchedule: {
-              retentionDuration: {
-                count: 60
-                durationType: 'Months'
-              }
-              retentionScheduleFormatType: 'Weekly'
-              retentionScheduleWeekly: {
-                daysOfTheWeek: [
-                  'Sunday'
-                ]
-                weeksOfTheMonth: [
-                  'First'
-                ]
-              }
-              retentionTimes: [
-                '2019-11-07T07:00:00Z'
-              ]
-            }
-            retentionPolicyType: 'LongTermRetentionPolicy'
-            weeklySchedule: {
-              daysOfTheWeek: [
-                'Sunday'
-              ]
-              retentionDuration: {
-                count: 12
-                durationType: 'Weeks'
-              }
-              retentionTimes: [
-                '2019-11-07T07:00:00Z'
-              ]
-            }
-            yearlySchedule: {
-              monthsOfYear: [
-                'January'
-              ]
-              retentionDuration: {
-                count: 10
-                durationType: 'Years'
-              }
-              retentionScheduleFormatType: 'Weekly'
-              retentionScheduleWeekly: {
-                daysOfTheWeek: [
-                  'Sunday'
-                ]
-                weeksOfTheMonth: [
-                  'First'
-                ]
-              }
-              retentionTimes: [
-                '2019-11-07T07:00:00Z'
-              ]
-            }
-          }
-          schedulePolicy: {
-            schedulePolicyType: 'SimpleSchedulePolicy'
-            scheduleRunFrequency: 'Daily'
-            scheduleRunTimes: [
-              '2019-11-07T07:00:00Z'
-            ]
-            scheduleWeeklyFrequency: 0
-          }
-          timeZone: 'UTC'
-        }
-      }
-    ]
-    backupStorageConfig: {
-      crossRegionRestoreFlag: true
-      storageModelType: 'GeoRedundant'
-    }
-    managedIdentities: {
-      systemAssigned: true
-      userAssignedResourceIds: [
-        managedIdentity.outputs.resourceId
-      ]
-    }
-    monitoringSettings: {
-      azureMonitorAlertSettings: {
-        alertsForAllJobFailures: 'Enabled'
-      }
-      classicAlertSettings: {
-        alertsForCriticalOperations: 'Enabled'
-      }
-    }
-    backupConfig: {
-      enhancedSecurityState: 'Disabled'
-      softDeleteFeatureState: 'Disabled'
-    }
-    replicationFabrics: !enableBCDR
-      ? [
-          {
-            location: 'NorthEurope'
-            replicationContainers: [
-              {
-                name: 'ne-container1'
-                replicationContainerMappings: [
-                  {
-                    policyName: 'Default_values'
-                    targetContainerName: 'pluto'
-                    targetProtectionContainerId: '${workloadResourceGroup.id}/providers/Microsoft.RecoveryServices/vaults/${name}-rs/replicationFabrics/NorthEurope/replicationProtectionContainers/ne-container2'
-                  }
-                ]
-              }
-              {
-                name: 'ne-container2'
-                replicationContainerMappings: [
-                  {
-                    policyName: 'Default_values'
-                    targetContainerFabricName: 'WE-2'
-                    targetContainerName: 'we-container1'
-                  }
-                ]
-              }
-            ]
-          }
-          {
-            location: 'WestEurope'
-            name: 'WE-2'
-            replicationContainers: [
-              {
-                name: 'we-container1'
-                replicationContainerMappings: [
-                  {
-                    policyName: 'Default_values'
-                    targetContainerFabricName: 'NorthEurope'
-                    targetContainerName: 'ne-container2'
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      : []
-    replicationPolicies: !enableBCDR
-      ? [
-          {
-            name: 'Default_values'
-          }
-          {
-            appConsistentFrequencyInMinutes: 240
-            crashConsistentFrequencyInMinutes: 7
-            multiVmSyncStatus: 'Disable'
-            name: 'Custom_values'
-            recoveryPointHistory: 2880
-          }
-        ]
-      : []
-    lock: lock
-    diagnosticSettings: (!empty(storageAccountResourceId) && !empty(workspaceResourceId))
-      ? [
-          {
-            name: '${name}-diagnostics'
-            metricCategories: [
-              {
-                category: 'AllMetrics'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      : []
-  }
-}
-
-module virtualMachine 'br/public:avm/res/compute/virtual-machine:0.4.2' = {
-  scope: workloadResourceGroup
-  name: '${uniqueString(deployment().name, location)}-workload-vm-${name}'
-  params: {
-    name: name
-    computerName: name
-    adminUsername: 'SysAdmin'
-    adminPassword: 'P@ssw0rd1234!'
-    tags: union(tagResources, {
-      'hidden-title': '${name} Workload VM'
-      Role: 'Workload'
-    })
-
-    imageReference: {
-      publisher: 'MicrosoftWindowsServer'
-      offer: 'WindowsServer'
-      sku: '2019-datacenter'
-      version: 'latest'
-    }
-    nicConfigurations: [
-      {
-        deleteOption: 'Delete'
-        ipConfigurations: [
-          {
-            applicationSecurityGroups: [
-              {
-                id: applicationSecurityGroup.outputs.resourceId
-              }
-            ]
-            loadBalancerBackendAddressPools: [
-              {
-                id: loadBalancer.outputs.backendpools[0].id
-              }
-            ]
-            name: 'ipconfig01'
-            pipConfiguration: {
-              publicIpNameSuffix: '-pip-01'
-              zones: [
-                1
-                2
-                3
-              ]
-              roleAssignments: [
-                {
-                  roleDefinitionIdOrName: 'Reader'
-                  principalId: managedIdentity.outputs.principalId
-                  principalType: 'ServicePrincipal'
-                }
-              ]
-            }
-            subnetResourceId: virtualNetwork.outputs.subnetResourceIds[0]
-            diagnosticSettings: [
-              {
-                name: 'ipconfig01Diagnostic'
-                metricCategories: [
-                  {
-                    category: 'AllMetrics'
-                  }
-                ]
-                eventHubName: eventHubName
-                eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-                storageAccountResourceId: storageAccountResourceId
-                workspaceResourceId: workspaceResourceId
-              }
-            ]
-          }
-        ]
-        nicSuffix: '-nic-01'
-        roleAssignments: [
-          {
-            roleDefinitionIdOrName: 'Reader'
-            principalId: managedIdentity.outputs.principalId
-            principalType: 'ServicePrincipal'
-          }
-        ]
-        diagnosticSettings: [
-          {
-            name: 'nicDiagnosticsSetting'
-            metricCategories: [
-              {
-                category: 'AllMetrics'
-              }
-            ]
-            eventHubName: eventHubName
-            eventHubAuthorizationRuleResourceId: eventHubAuthorizationRuleResourceId
-            storageAccountResourceId: storageAccountResourceId
-            workspaceResourceId: workspaceResourceId
-          }
-        ]
-      }
-    ]
-    osDisk: {
-      caching: 'ReadWrite'
-      createOption: 'FromImage'
-      deleteOption: 'Delete'
-      diskSizeGB: 128
-      managedDisk: {
-        storageAccountType: 'Premium_LRS'
-      }
-    }
-    osType: 'Windows'
-    vmSize: 'Standard_DS2_v2'
-    zone: 0
-    dataDisks: [
-      {
-        caching: 'ReadOnly'
-        createOption: 'Empty'
-        deleteOption: 'Delete'
-        diskSizeGB: 128
-        managedDisk: {
-          storageAccountType: 'Premium_LRS'
-        }
-      }
-    ]
-    enableAutomaticUpdates: true
-    patchMode: 'AutomaticByPlatform'
-    encryptionAtHost: false
-    backupPolicyName: 'vmBackupPolicy'
-    backupVaultResourceGroup: recoveryServices.outputs.resourceGroupName
-    backupVaultName: recoveryServices.outputs.name
-    autoShutdownConfig: {
-      status: 'Enabled'
-      dailyRecurrenceTime: '19:00'
-      timeZone: 'UTC'
-      notificationStatus: 'Enabled'
-      notificationEmail: 'damian.flynn@innofactor.com'
-      notificationLocale: 'en'
-      notificationTimeInMinutes: 30
-    }
-    extensionMonitoringAgentConfig: {
-      enabled: true
-      tags: union(tagResources, {
-        'hidden-title': '${name} Workload VM Monitoring'
-        Role: 'Workload'
-      })
-    }
-    extensionNetworkWatcherAgentConfig: {
-      enabled: true
-      tags: union(tagResources, {
-        'hidden-title': '${name} Workload Watcher'
-        Role: 'Workload'
-      })
-    }
-    roleAssignments: [
-      {
-        roleDefinitionIdOrName: 'Owner'
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        roleDefinitionIdOrName: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-      {
-        roleDefinitionIdOrName: subscriptionResourceId(
-          'Microsoft.Authorization/roleDefinitions',
-          'acdd72a7-3385-48ef-bd42-f606fba81ae7'
-        )
-        principalId: managedIdentity.outputs.principalId
-        principalType: 'ServicePrincipal'
-      }
-    ]
-    managedIdentities: {
-      systemAssigned: true
-      userAssignedResourceIds: [
-        managedIdentity.outputs.resourceId
-      ]
-    }
-    lock: lock
   }
 }
 
@@ -1163,11 +648,16 @@ module virtualMachine 'br/public:avm/res/compute/virtual-machine:0.4.2' = {
 // @description('The resource ID of the resource.')
 // output resourceId string = <Resource>.id
 
-// @description('The name of the resource.')
-// output name string = <Resource>.name
+@description('The name of the virtual network.')
+output name string = virtualNetwork.name
 
-// @description('The location the resource was deployed into.')
-// output location string = <Resource>.location
+@description('The location the resource was deployed into.')
+output location string = virtualNetwork.outputs.location
+
+@description('The names of the deployed subnets.')
+output subnetNames array = virtualNetwork.outputs.subnetNames
+
+output virtualNetworkResourceId string = virtualNetwork.outputs.resourceId
 
 // ================ //
 // Definitions      //
@@ -1183,3 +673,23 @@ type lockType = {
   @description('Optional. Specify the type of lock.')
   kind: ('CanNotDelete' | 'ReadOnly' | 'None')?
 }?
+
+type routeType = {
+  @description('Required. Name of the route.')
+  name: string
+
+  @description('Required. Properties of the route.')
+  properties: {
+    @description('Required. The type of Azure hop the packet should be sent to.')
+    nextHopType: ('VirtualAppliance' | 'VnetLocal' | 'Internet' | 'VirtualNetworkGateway' | 'None')
+
+    @description('Optional. The destination CIDR to which the route applies.')
+    addressPrefix: string?
+
+    @description('Optional. A value indicating whether this route overrides overlapping BGP routes regardless of LPM.')
+    hasBgpOverride: bool?
+
+    @description('Optional. The IP address packets should be forwarded to. Next hop values are only allowed in routes where the next hop type is VirtualAppliance.')
+    nextHopIpAddress: string?
+  }
+}[]?

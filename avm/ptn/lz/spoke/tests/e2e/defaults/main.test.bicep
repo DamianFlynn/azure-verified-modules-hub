@@ -27,10 +27,21 @@ param namePrefix string = '#_namePrefix_#'
 // Dependencies //
 // ============ //
 
+var locationAbbreviations = {
+  'westeurope': 'we'
+  'westus': 'wu'
+  'eastus': 'eu'
+  // Add more locations as needed
+}
+
+var currentLocationAbbreviation = locationAbbreviations[resourceLocation]
+var addressPrefix = '10.0.0.0/24'
+
 // General resources
 // =================
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${resourceGroupName}-diag'
+  // name: '${resourceGroupName}-diag'
+  name: 't-${currentLocationAbbreviation}1${serviceShort}-diag-${namePrefix}'
   location: resourceLocation
 }
 
@@ -39,12 +50,15 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 
 module diagnosticDependencies '../../../../../../utilities/e2e-template-assets/templates/diagnostic.dependencies.bicep' = {
   scope: resourceGroup
-  name: '${uniqueString(deployment().name, resourceLocation)}-diagnosticDependencies'
+  name: '${serviceShort}-dep-test-diag-${uniqueString(deployment().name, resourceLocation)}'
   params: {
-    storageAccountName: 'dep${namePrefix}diasa${serviceShort}01'
-    logAnalyticsWorkspaceName: 'dep-${namePrefix}-law-${serviceShort}'
-    eventHubNamespaceEventHubName: 'dep-${namePrefix}-evh-${serviceShort}'
-    eventHubNamespaceName: 'dep-${namePrefix}-evhns-${serviceShort}'
+    storageAccountName: take(
+      replace(replace('t-${currentLocationAbbreviation}1${serviceShort}-diag-${namePrefix}', '-', ''), '_', ''),
+      24
+    )
+    logAnalyticsWorkspaceName: 't-${currentLocationAbbreviation}1${serviceShort}-diag-${namePrefix}-law'
+    eventHubNamespaceEventHubName: 't-${currentLocationAbbreviation}1${serviceShort}-diag-${namePrefix}-evh'
+    eventHubNamespaceName: 't-${currentLocationAbbreviation}1${serviceShort}-diag-${namePrefix}-evhns'
     location: resourceLocation
   }
 }
@@ -56,13 +70,29 @@ module diagnosticDependencies '../../../../../../utilities/e2e-template-assets/t
 @batchSize(1)
 module testDeployment '../../../main.bicep' = [
   for iteration in ['init', 'idem']: {
-    name: '${uniqueString(deployment().name, resourceLocation)}-test-${serviceShort}-${iteration}'
+    name: '${serviceShort}-${iteration}-test-${uniqueString(deployment().name, resourceLocation)}'
     params: {
       // You parameters go here
-      name: '${namePrefix}${serviceShort}001'
+      name: 't-${currentLocationAbbreviation}1${serviceShort}-${namePrefix}'
       location: resourceLocation
-      enableBCDR: false
-
+      // enableBCDR: false
+      addressPrefix: addressPrefix
+      frontendSecurityRules: [
+        {
+          name: 'AllowRdoFromFirewallToFrontendsubnet'
+          properties: {
+            description: 'Allow RDP Connections from the Azure Firewall'
+            protocol: 'Udp'
+            sourcePortRange: '*'
+            destinationPortRange: '3389'
+            sourceAddressPrefix: '10.1.1.4'
+            destinationAddressPrefix: cidrSubnet(addressPrefix, 25, 0)
+            access: 'Allow'
+            priority: 1100
+            direction: 'Inbound'
+          }
+        }
+      ]
       eventHubName: diagnosticDependencies.outputs.eventHubNamespaceEventHubName
       eventHubAuthorizationRuleResourceId: diagnosticDependencies.outputs.eventHubAuthorizationRuleId
       storageAccountResourceId: diagnosticDependencies.outputs.storageAccountResourceId

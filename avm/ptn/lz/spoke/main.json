@@ -5973,7 +5973,7 @@
                                 "RootSquash"
                               ],
                               "metadata": {
-                                "description": "Optional. Permissions for NFS file shares are enforced by the client OS rather than the Azure Files service. Toggling the root squash behavior reduces the rights of the root user for NFS shares."
+                                "description": "Optional. Permissions for NFS file shares are enforced by the #_namePrefix_#ent OS rather than the Azure Files service. Toggling the root squash behavior reduces the rights of the root user for NFS shares."
                               }
                             },
                             "roleAssignments": {
@@ -10940,12 +10940,12 @@
               },
               "value": "[reference('userAssignedIdentity').principalId]"
             },
-            "clientId": {
+            "#_namePrefix_#entId": {
               "type": "string",
               "metadata": {
-                "description": "The client ID (application ID) of the user assigned identity."
+                "description": "The #_namePrefix_#ent ID (application ID) of the user assigned identity."
               },
-              "value": "[reference('userAssignedIdentity').clientId]"
+              "value": "[reference('userAssignedIdentity').#_namePrefix_#entId]"
             },
             "resourceGroupName": {
               "type": "string",
@@ -11647,7 +11647,7 @@
                       "type": "int",
                       "defaultValue": 0,
                       "metadata": {
-                        "description": "Optional. Amount of seconds Load Balancer waits for before sending RESET to client and backend address. if value is 0 then this property will be set to null. Subscription must register the feature Microsoft.Network/SLBAllowConnectionDraining before using this property."
+                        "description": "Optional. Amount of seconds Load Balancer waits for before sending RESET to #_namePrefix_#ent and backend address. if value is 0 then this property will be set to null. Subscription must register the feature Microsoft.Network/SLBAllowConnectionDraining before using this property."
                       }
                     },
                     "syncMode": {
@@ -15491,7 +15491,7 @@
               "allowedValues": [
                 "RHEL_BYOS",
                 "SLES_BYOS",
-                "Windows_Client",
+                "Windows_#_namePrefix_#ent",
                 "Windows_Server",
                 ""
               ],

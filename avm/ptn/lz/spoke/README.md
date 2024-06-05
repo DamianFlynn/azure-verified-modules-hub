@@ -17,21 +17,9 @@ This Instance deploys a Spoke Landing Zone with Virtual Machine
 | :-- | :-- |
 | `Microsoft.Authorization/locks` | [2020-05-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
 | `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
-| `Microsoft.Automanage/configurationProfileAssignments` | [2022-05-04](https://learn.microsoft.com/en-us/azure/templates) |
-| `Microsoft.Compute/virtualMachines` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2023-09-01/virtualMachines) |
-| `Microsoft.Compute/virtualMachines/extensions` | [2022-11-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Compute/2022-11-01/virtualMachines/extensions) |
-| `Microsoft.DevTestLab/schedules` | [2018-09-15](https://learn.microsoft.com/en-us/azure/templates/Microsoft.DevTestLab/2018-09-15/schedules) |
 | `Microsoft.EventGrid/systemTopics` | [2023-12-15-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.EventGrid/2023-12-15-preview/systemTopics) |
 | `Microsoft.EventGrid/systemTopics/eventSubscriptions` | [2023-12-15-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.EventGrid/2023-12-15-preview/systemTopics/eventSubscriptions) |
-| `Microsoft.GuestConfiguration/guestConfigurationAssignments` | [2020-06-25](https://learn.microsoft.com/en-us/azure/templates/Microsoft.GuestConfiguration/2020-06-25/guestConfigurationAssignments) |
 | `Microsoft.Insights/diagnosticSettings` | [2021-05-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Insights/2021-05-01-preview/diagnosticSettings) |
-| `Microsoft.ManagedIdentity/userAssignedIdentities` | [2023-01-31](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2023-01-31/userAssignedIdentities) |
-| `Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials` | [2023-01-31](https://learn.microsoft.com/en-us/azure/templates/Microsoft.ManagedIdentity/2023-01-31/userAssignedIdentities/federatedIdentityCredentials) |
-| `Microsoft.Network/applicationSecurityGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/applicationSecurityGroups) |
-| `Microsoft.Network/loadBalancers` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers) |
-| `Microsoft.Network/loadBalancers/backendAddressPools` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/backendAddressPools) |
-| `Microsoft.Network/loadBalancers/inboundNatRules` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/loadBalancers/inboundNatRules) |
-| `Microsoft.Network/networkInterfaces` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkInterfaces) |
 | `Microsoft.Network/networkSecurityGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkSecurityGroups) |
 | `Microsoft.Network/networkSecurityGroups/securityRules` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkSecurityGroups/securityRules) |
 | `Microsoft.Network/networkWatchers` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkWatchers) |
@@ -39,22 +27,10 @@ This Instance deploys a Spoke Landing Zone with Virtual Machine
 | `Microsoft.Network/networkWatchers/flowLogs` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/networkWatchers/flowLogs) |
 | `Microsoft.Network/privateEndpoints` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints) |
 | `Microsoft.Network/privateEndpoints/privateDnsZoneGroups` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/privateEndpoints/privateDnsZoneGroups) |
-| `Microsoft.Network/publicIPAddresses` | [2023-09-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-09-01/publicIPAddresses) |
 | `Microsoft.Network/routeTables` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/routeTables) |
 | `Microsoft.Network/virtualNetworks` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks) |
 | `Microsoft.Network/virtualNetworks/subnets` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks/subnets) |
 | `Microsoft.Network/virtualNetworks/virtualNetworkPeerings` | [2023-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Network/2023-04-01/virtualNetworks/virtualNetworkPeerings) |
-| `Microsoft.RecoveryServices/vaults` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults) |
-| `Microsoft.RecoveryServices/vaults/backupconfig` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupconfig) |
-| `Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupFabrics/protectionContainers) |
-| `Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupFabrics/protectionContainers/protectedItems) |
-| `Microsoft.RecoveryServices/vaults/backupPolicies` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupPolicies) |
-| `Microsoft.RecoveryServices/vaults/backupstorageconfig` | [2023-01-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2023-01-01/vaults/backupstorageconfig) |
-| `Microsoft.RecoveryServices/vaults/replicationAlertSettings` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationAlertSettings) |
-| `Microsoft.RecoveryServices/vaults/replicationFabrics` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics) |
-| `Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics/replicationProtectionContainers) |
-| `Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings` | [2022-10-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/2022-10-01/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionContainerMappings) |
-| `Microsoft.RecoveryServices/vaults/replicationPolicies` | [2023-06-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.RecoveryServices/vaults/replicationPolicies) |
 | `Microsoft.Resources/resourceGroups` | [2021-04-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Resources/2021-04-01/resourceGroups) |
 | `Microsoft.Security/autoProvisioningSettings` | [2017-08-01-preview](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2017-08-01-preview/autoProvisioningSettings) |
 | `Microsoft.Security/deviceSecurityGroups` | [2019-08-01](https://learn.microsoft.com/en-us/azure/templates/Microsoft.Security/2019-08-01/deviceSecurityGroups) |
@@ -101,11 +77,27 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
   params: {
     // Required parameters
     location: '<location>'
-    name: 'lzmin001'
+    name: '<name>'
     // Non-required parameters
-    enableBCDR: false
+    addressPrefix: '<addressPrefix>'
     eventHubAuthorizationRuleResourceId: '<eventHubAuthorizationRuleResourceId>'
     eventHubName: '<eventHubName>'
+    frontendSecurityRules: [
+      {
+        name: 'AllowRdoFromFirewallToFrontendsubnet'
+        properties: {
+          access: 'Allow'
+          description: 'Allow RDP Connections from the Azure Firewall'
+          destinationAddressPrefix: '<destinationAddressPrefix>'
+          destinationPortRange: '3389'
+          direction: 'Inbound'
+          priority: 1100
+          protocol: 'Udp'
+          sourceAddressPrefix: '10.1.1.4'
+          sourcePortRange: '*'
+        }
+      }
+    ]
     storageAccountResourceId: '<storageAccountResourceId>'
     tags: {
       Environment: 'Non-Prod'
@@ -133,17 +125,35 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
       "value": "<location>"
     },
     "name": {
-      "value": "lzmin001"
+      "value": "<name>"
     },
     // Non-required parameters
-    "enableBCDR": {
-      "value": false
+    "addressPrefix": {
+      "value": "<addressPrefix>"
     },
     "eventHubAuthorizationRuleResourceId": {
       "value": "<eventHubAuthorizationRuleResourceId>"
     },
     "eventHubName": {
       "value": "<eventHubName>"
+    },
+    "frontendSecurityRules": {
+      "value": [
+        {
+          "name": "AllowRdoFromFirewallToFrontendsubnet",
+          "properties": {
+            "access": "Allow",
+            "description": "Allow RDP Connections from the Azure Firewall",
+            "destinationAddressPrefix": "<destinationAddressPrefix>",
+            "destinationPortRange": "3389",
+            "direction": "Inbound",
+            "priority": 1100,
+            "protocol": "Udp",
+            "sourceAddressPrefix": "10.1.1.4",
+            "sourcePortRange": "*"
+          }
+        }
+      ]
     },
     "storageAccountResourceId": {
       "value": "<storageAccountResourceId>"
@@ -244,13 +254,15 @@ module spoke 'br/public:avm/ptn/lz/spoke:<version>' = {
 | :-- | :-- | :-- |
 | [`addressPrefix`](#parameter-addressprefix) | string | The address prefix for the virtual network. |
 | [`azureActivitiesSink`](#parameter-azureactivitiessink) | string | The resource ID of an auding function. |
-| [`enableBCDR`](#parameter-enablebcdr) | bool | Enable Recovery Vault Disaster Recovery replications. |
+| [`backendSecurityRules`](#parameter-backendsecurityrules) | array | Array of Security Rules to deploy to the Backend Network Security Group. When not provided, an NSG including only the default rules will be deployed. |
 | [`enableTelemetry`](#parameter-enabletelemetry) | bool | Enable/Disable usage telemetry for module. |
 | [`eventHubAuthorizationRuleResourceId`](#parameter-eventhubauthorizationruleresourceid) | string | The event hub authorization rule resource ID. |
 | [`eventHubName`](#parameter-eventhubname) | string | The event hub namespace name. |
+| [`frontendSecurityRules`](#parameter-frontendsecurityrules) | array | Array of Security Rules to deploy to the Frontend Network Security Group. When not provided, an NSG including only the default rules will be deployed. |
 | [`hubFirewallPrivateIp`](#parameter-hubfirewallprivateip) | string | The IP Address of the Hub Firewall. |
 | [`lock`](#parameter-lock) | object | The lock settings of the service. |
 | [`partnerCountry`](#parameter-partnercountry) | string | The Partner ID for partner attribution. |
+| [`routes`](#parameter-routes) | array | An array of routes to be established within the hub route table. |
 | [`storageAccountResourceId`](#parameter-storageaccountresourceid) | string | The storage account resource ID. |
 | [`tags`](#parameter-tags) | object | Tags of the resource. |
 | [`workspaceResourceId`](#parameter-workspaceresourceid) | string | The log analytics workspace resource ID. |
@@ -285,13 +297,13 @@ The resource ID of an auding function.
 - Type: string
 - Default: `''`
 
-### Parameter: `enableBCDR`
+### Parameter: `backendSecurityRules`
 
-Enable Recovery Vault Disaster Recovery replications.
+Array of Security Rules to deploy to the Backend Network Security Group. When not provided, an NSG including only the default rules will be deployed.
 
 - Required: No
-- Type: bool
-- Default: `False`
+- Type: array
+- Default: `[]`
 
 ### Parameter: `enableTelemetry`
 
@@ -316,6 +328,14 @@ The event hub namespace name.
 - Required: No
 - Type: string
 - Default: `''`
+
+### Parameter: `frontendSecurityRules`
+
+Array of Security Rules to deploy to the Frontend Network Security Group. When not provided, an NSG including only the default rules will be deployed.
+
+- Required: No
+- Type: array
+- Default: `[]`
 
 ### Parameter: `hubFirewallPrivateIp`
 
@@ -369,6 +389,86 @@ The Partner ID for partner attribution.
 - Type: string
 - Default: `'norway'`
 
+### Parameter: `routes`
+
+An array of routes to be established within the hub route table.
+
+- Required: No
+- Type: array
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`name`](#parameter-routesname) | string | Name of the route. |
+| [`properties`](#parameter-routesproperties) | object | Properties of the route. |
+
+### Parameter: `routes.name`
+
+Name of the route.
+
+- Required: Yes
+- Type: string
+
+### Parameter: `routes.properties`
+
+Properties of the route.
+
+- Required: Yes
+- Type: object
+
+**Required parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`nextHopType`](#parameter-routespropertiesnexthoptype) | string | The type of Azure hop the packet should be sent to. |
+
+**Optional parameters**
+
+| Parameter | Type | Description |
+| :-- | :-- | :-- |
+| [`addressPrefix`](#parameter-routespropertiesaddressprefix) | string | The destination CIDR to which the route applies. |
+| [`hasBgpOverride`](#parameter-routespropertieshasbgpoverride) | bool | A value indicating whether this route overrides overlapping BGP routes regardless of LPM. |
+| [`nextHopIpAddress`](#parameter-routespropertiesnexthopipaddress) | string | The IP address packets should be forwarded to. Next hop values are only allowed in routes where the next hop type is VirtualAppliance. |
+
+### Parameter: `routes.properties.nextHopType`
+
+The type of Azure hop the packet should be sent to.
+
+- Required: Yes
+- Type: string
+- Allowed:
+  ```Bicep
+  [
+    'Internet'
+    'None'
+    'VirtualAppliance'
+    'VirtualNetworkGateway'
+    'VnetLocal'
+  ]
+  ```
+
+### Parameter: `routes.properties.addressPrefix`
+
+The destination CIDR to which the route applies.
+
+- Required: No
+- Type: string
+
+### Parameter: `routes.properties.hasBgpOverride`
+
+A value indicating whether this route overrides overlapping BGP routes regardless of LPM.
+
+- Required: No
+- Type: bool
+
+### Parameter: `routes.properties.nextHopIpAddress`
+
+The IP address packets should be forwarded to. Next hop values are only allowed in routes where the next hop type is VirtualAppliance.
+
+- Required: No
+- Type: string
+
 ### Parameter: `storageAccountResourceId`
 
 The storage account resource ID.
@@ -395,8 +495,12 @@ The log analytics workspace resource ID.
 
 ## Outputs
 
-| Output | Type |
-| :-- | :-- |
+| Output | Type | Description |
+| :-- | :-- | :-- |
+| `location` | string | The location the resource was deployed into. |
+| `name` | string | The name of the virtual network. |
+| `subnetNames` | array | The names of the deployed subnets. |
+| `virtualNetworkResourceId` | string | The names of the deployed subnets. |
 
 ## Cross-referenced modules
 
@@ -405,16 +509,11 @@ This section gives you an overview of all local-referenced module files (i.e., o
 | Reference | Type |
 | :-- | :-- |
 | `br/public:avm/ptn/security/security-center:0.1.0` | Remote reference |
-| `br/public:avm/res/compute/virtual-machine:0.4.2` | Remote reference |
 | `br/public:avm/res/event-grid/system-topic:0.2.6` | Remote reference |
-| `br/public:avm/res/managed-identity/user-assigned-identity:0.2.1` | Remote reference |
-| `br/public:avm/res/network/application-security-group:0.1.3` | Remote reference |
-| `br/public:avm/res/network/load-balancer:0.1.4` | Remote reference |
 | `br/public:avm/res/network/network-security-group:0.1.3` | Remote reference |
 | `br/public:avm/res/network/network-watcher:0.1.1` | Remote reference |
 | `br/public:avm/res/network/route-table:0.2.2` | Remote reference |
 | `br/public:avm/res/network/virtual-network:0.1.6` | Remote reference |
-| `br/public:avm/res/recovery-services/vault:0.2.1` | Remote reference |
 | `br/public:avm/res/storage/storage-account:0.9.0` | Remote reference |
 
 ## Data Collection
