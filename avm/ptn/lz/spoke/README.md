@@ -500,7 +500,7 @@ The log analytics workspace resource ID.
 | `location` | string | The location the resource was deployed into. |
 | `name` | string | The name of the virtual network. |
 | `subnetNames` | array | The names of the deployed subnets. |
-| `virtualNetworkResourceId` | string | The names of the deployed subnets. |
+| `virtualNetworkResourceId` | string | The resource ID of the deployed virtual network. |
 
 ## Cross-referenced modules
 

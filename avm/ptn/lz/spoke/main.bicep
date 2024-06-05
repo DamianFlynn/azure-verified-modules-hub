@@ -657,6 +657,7 @@ output location string = virtualNetwork.outputs.location
 @description('The names of the deployed subnets.')
 output subnetNames array = virtualNetwork.outputs.subnetNames
 
+@description('The resource ID of the deployed virtual network.')
 output virtualNetworkResourceId string = virtualNetwork.outputs.resourceId
 
 // ================ //
