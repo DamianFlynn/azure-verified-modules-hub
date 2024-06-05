@@ -1,8 +1,7 @@
 targetScope = 'subscription'
 
-metadata name = 'Custom Function App Resource Provider'
+metadata name = 'Using only defaults'
 metadata description = 'This instance deploys the module with the minimum set of required parameters.'
-metadata owner = 'DamianFlynn/avm-res-customproviders-resourceproviders-module-owners-bicep'
 
 // ========== //
 // Parameters //
@@ -16,10 +15,10 @@ param resourceGroupName string = 'dep-${namePrefix}-customrp-${serviceShort}-rg'
 param resourceLocation string = 'westeurope' //deployment().location
 
 @description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
-param serviceShort string = 'cprmin'
+param serviceShort string = 'dbgmin'
 
 @description('Optional. A token to inject into the name of each resource. This value can be automatically injected by the CI.')
-param namePrefix string = '#_namePrefix_#'
+param namePrefix string = 'custrp' //'#_namePrefix_#'
 
 //
 // Custom RP parameters
@@ -28,7 +27,7 @@ param namePrefix string = '#_namePrefix_#'
 param functionAppName string = 'dep-${namePrefix}-fn-${serviceShort}'
 
 @description('Optional. The URI of the zip file containing the function code.')
-param zipFileBlobUri string = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/avm/res/custom-providers/resource-providers/functionApp/functionApp.zip?raw=true'
+param zipFileBlobUri string = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/avm/ptn/management/cortex/functionApp/functionApp.zip?raw=true'
 
 @description('Optional. Actions of the resource as published in the Function Code.')
 param actions array = [
@@ -52,12 +51,12 @@ param actions array = [
 @description('Optional. Resource Types of the resource as published in the function code.')
 param resourceTypes array = [
   {
-    name: 'ping'
+    name: 'users'
     routingType: 'Proxy,Cache'
     endpoint: 'https://${functionAppName}.azurewebsites.net/api/{requestPath}'
   }
   {
-    name: 'users'
+    name: 'NextAvailableNetwork'
     routingType: 'Proxy,Cache'
     endpoint: 'https://${functionAppName}.azurewebsites.net/api/{requestPath}'
   }
