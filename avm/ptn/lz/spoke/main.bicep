@@ -61,7 +61,8 @@ var defaultTag = {
   iacVersion: loadJsonContent('./version.json').version
   iacTemplate: loadJsonContent('./version.json').name
 }
-var tagResources = union(defaultTag, tags)
+var tagResources = !empty(tags) ? union(defaultTag, tags) : defaultTag
+
 
 // This pattern has opinionated defaults for the traffic flow from the spoke to the hub
 // providing a routes paramater will replace this default configuration
