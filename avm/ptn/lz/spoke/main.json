@@ -7718,7 +7718,7 @@
                                 "RootSquash"
                               ],
                               "metadata": {
-                                "description": "Optional. Permissions for NFS file shares are enforced by the client OS rather than the Azure Files service. Toggling the root squash behavior reduces the rights of the root user for NFS shares."
+                                "description": "Optional. Permissions for NFS file shares are enforced by the #_namePrefix_#ent OS rather than the Azure Files service. Toggling the root squash behavior reduces the rights of the root user for NFS shares."
                               }
                             },
                             "roleAssignments": {

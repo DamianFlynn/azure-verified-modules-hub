@@ -30,7 +30,7 @@ param namePrefix string = '#_namePrefix_#'
 param functionAppName string = 'dep-${namePrefix}-fn-${serviceShort}'
 
 @description('Optional. The URI of the zip file containing the function code.')
-param zipFileBlobUri string = 'https://github.com/DamianFlynn/bicep-registry-modules/blob/avm-res-dashboard-grafana/avm/res/custom-providers/resource-providers/functionApp/functionApp.zip?raw=true'
+param zipFileBlobUri string = 'https://github.com/DamianFlynn/azure-verified-modules-hub/blob/main/avm/res/custom-providers/resource-providers/functionApp/functionApp.zip?raw=true'
 
 @description('Optional. Actions of the resource as published in the Function Code.')
 param actions array = [
@@ -151,6 +151,9 @@ module testDeployment '../../../main.bicep' = [
     params: {
       name: '${namePrefix}${serviceShort}001'
       location: resourceLocation
+      actions: actions
+      resourceTypes: resourceTypes
+      // validations: validations
       tags: {
         'hidden-title': 'This is visible in the resource name'
         Environment: 'Non-Prod'
@@ -160,9 +163,6 @@ module testDeployment '../../../main.bicep' = [
         kind: 'CanNotDelete'
         name: 'myCustomLockName'
       }
-      actions: actions
-      resourceTypes: resourceTypes
-      // validations: validations
     }
     dependsOn: [
       nestedDependencies // We require a function app to be deployed
