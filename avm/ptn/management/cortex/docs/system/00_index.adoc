@@ -1,0 +1,55 @@
+= System Documentation
+
+// toc-title definition MUST follow document title without blank line!
+:toc-title: Table of Contents
+
+// numbering from here on
+:numbered:
+
+<<<<
+// 1. Introduction and Goals
+include::docs/system/01_introduction_and_goals.adoc[]
+
+<<<<
+// 2. Architecture Constraints
+include::docs/system/02_architecture_constraints.adoc[]
+
+<<<<
+// 3. System Scope and Context
+include::docs/system/03_system_scope_and_context.adoc[]
+
+<<<<
+// 4. Solution Strategy
+include::docs/system/04_solution_strategy.adoc[]
+
+<<<<
+// 5. Building Block View
+include::docs/system/05_building_block_view.adoc[]
+
+<<<<
+// 6. Runtime View
+include::docs/system/06_runtime_view.adoc[]
+
+<<<<
+// 7. Deployment View
+include::docs/system/07_deployment_view.adoc[]
+
+<<<<
+// 8. Concepts
+include::docs/system/08_concepts.adoc[]
+
+<<<<
+// 9. Architecture Decisions
+include::docs/system/09_architecture_decisions.adoc[]
+
+<<<<
+// 10. Quality Requirements
+include::docs/system/10_quality_requirements.adoc[]
+
+<<<<
+// 11. Technical Risks
+include::docs/system/11_technical_risks.adoc[]
+
+<<<<
+// 12. Glossary
+include::docs/system/12_glossary.adoc[]

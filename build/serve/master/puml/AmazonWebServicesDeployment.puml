@@ -1,0 +1,64 @@
+@startuml
+set separator none
+title Example E-Commerce Store - Deployment - Live
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+!include <C4/C4_Deployment>
+
+Deployment_Node(Live.AzureWorkloads, "Azure Workloads", $type="", $descr="", $tags="", $link="") {
+  Deployment_Node(Live.AzureWorkloads.PublicDNSSubscription, "Public DNS Subscription", $type="", $descr="", $tags="", $link="") {
+    Deployment_Node(Live.AzureWorkloads.PublicDNSSubscription.DNSResourceGroup, "DNS Resource Group", $type="", $descr="", $tags="", $link="") {
+      Deployment_Node(Live.AzureWorkloads.PublicDNSSubscription.DNSResourceGroup.DNSZones, "DNS Zones", $type="", $descr="Highly available and scalable cloud DNS service.", $tags="", $link="")
+    }
+
+  }
+
+  Deployment_Node(Live.AzureWorkloads.WebAppFirewallSubscription, "Web App Firewall Subscription", $type="", $descr="", $tags="", $link="") {
+    Deployment_Node(Live.AzureWorkloads.WebAppFirewallSubscription.WAFResourceGroup, "WAF Resource Group", $type="", $descr="", $tags="", $link="") {
+      Deployment_Node(Live.AzureWorkloads.WebAppFirewallSubscription.WAFResourceGroup.ApplicationGateway, "Application Gateway", $type="", $descr="Automatically distributes incoming application traffic.", $tags="", $link="")
+    }
+
+    Deployment_Node(Live.AzureWorkloads.WebAppFirewallSubscription.WAFNetworkResourceGroup, "WAF Network Resource Group", $type="", $descr="", $tags="", $link="") {
+      Deployment_Node(Live.AzureWorkloads.WebAppFirewallSubscription.WAFNetworkResourceGroup.ApplicationGatewayvNET, "Application Gateway vNET", $type="", $descr="Virtual Network for Web App Gateway.", $tags="", $link="")
+    }
+
+  }
+
+  Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription, "Production Store Subscription", $type="", $descr="", $tags="", $link="") {
+    Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup, "Workload Resource Group", $type="", $descr="", $tags="", $link="") {
+      Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AppServicePlan, "AppService Plan", $type="", $descr="", $tags="", $link="") {
+        Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AppServicePlan.WebApp, "Web App", $type="", $descr="", $tags="", $link="") {
+          Container(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AppServicePlan.WebApp.StockManagementPortalSPA_1, "Stock Management Portal SPA", $techn="Angular", $descr="Order fulfillment, stock management, order dispatch", $tags="", $link="")
+        }
+
+      }
+
+      Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AzureSQLDatabase, "Azure SQL Database", $type="", $descr="", $tags="", $link="") {
+        Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AzureSQLDatabase.MySQL, "MySQL", $type="", $descr="", $tags="", $link="") {
+          ContainerDb(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AzureSQLDatabase.MySQL.Database_1, "Database", $techn="SQL Server", $descr="Customers, Orders, Payments", $tags="", $link="")
+        }
+
+      }
+
+    }
+
+    Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadNetworkResourceGroup, "Workload Network Resource Group", $type="", $descr="", $tags="", $link="") {
+      Deployment_Node(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadNetworkResourceGroup.WorkloadvNET, "Workload vNET", $type="", $descr="Virtual Network for Web App Workload.", $tags="", $link="")
+    }
+
+  }
+
+}
+
+Rel(Live.AzureWorkloads.WebAppFirewallSubscription.WAFResourceGroup.ApplicationGateway, Live.AzureWorkloads.WebAppFirewallSubscription.WAFNetworkResourceGroup.ApplicationGatewayvNET, "Connected to", $techn="FrontendSubnet", $tags="", $link="")
+Rel(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AppServicePlan, Live.AzureWorkloads.ProductionStoreSubscription.WorkloadNetworkResourceGroup.WorkloadvNET, "Connected to", $techn="FrontendSubnet", $tags="", $link="")
+Rel(Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AzureSQLDatabase, Live.AzureWorkloads.ProductionStoreSubscription.WorkloadNetworkResourceGroup.WorkloadvNET, "Connected to", $techn="BackendSubnet", $tags="", $link="")
+Rel(Live.AzureWorkloads.PublicDNSSubscription.DNSResourceGroup.DNSZones, Live.AzureWorkloads.WebAppFirewallSubscription.WAFResourceGroup.ApplicationGateway, "Forwards requests to", $techn="HTTPS", $tags="", $link="")
+Rel(Live.AzureWorkloads.WebAppFirewallSubscription.WAFResourceGroup.ApplicationGateway, Live.AzureWorkloads.ProductionStoreSubscription.WorkloadResourceGroup.AppServicePlan.WebApp.StockManagementPortalSPA_1, "Forwards requests to", $techn="HTTPS", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml

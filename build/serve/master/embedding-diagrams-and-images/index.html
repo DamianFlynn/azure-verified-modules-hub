@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en" data-theme="light" class="has-background-light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Embedding diagrams and images | Azure Verified Modules and Patterns</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css" rel="stylesheet">
+    <link href="../../style.css" rel="stylesheet">
+    <link href="./../style-branding.css" rel="stylesheet">
+    <script type="text/javascript" src="../../modal.js"></script>
+    <script type="text/javascript" src="../../svg-modal.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script type="text/javascript" src="../../auto-reload.js"></script>
+  </head>
+  <body>
+    <div class="is-overlay is-front-centered"><progress class="progress is-small mt-1 is-hidden" id="updating-site" value="0"></progress></div>
+    <script type="text/javascript" src="../../header.js"></script>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand has-site-branding"><a href="../" class="navbar-item"><span class="has-text-weight-semibold has-site-branding">Azure Verified Modules and Patterns</span></a></div>
+      <div class="navbar-menu has-site-branding">
+        <div class="navbar-end">
+          <div class="navbar-item"><input class="input is-small is-rounded has-site-branding" id="search" type="search" size="30" maxlength="50" placeholder="Search..." onkeyup="redirect(event, value, '../search/')"></div>
+          <div class="navbar-item has-dropdown is-hoverable"><a class="navbar-link has-site-branding">master</a>
+            <div class="navbar-dropdown is-right"><a href="../../master/" class="navbar-item">master</a>
+              <hr class="navbar-divider">
+              <div class="navbar-item has-text-grey-light"><span>v</span><span>0.0.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="site-layout" id="site">
+      <aside class="menu p-3">
+        <p class="menu-label">General</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../" class="">Home</a><a href="../decisions/" class="">Decisions</a><a href="../software-systems/" class="">Software Systems</a><a href="./" class="is-active">Embedding diagrams and images</a></li>
+        </ul>
+        <p class="menu-label">Software systems</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../email-system/" class="">Email System</a><a href="../example-e-commerce-store/" class="">Example E-Commerce Store</a><a href="../software-system/" class="">Software System</a></li>
+        </ul>
+      </aside>
+      <div class="container is-fluid has-background-white">
+        <div class="content p-3">
+          <div><h2>Embedding diagrams and images</h2>
+<p>This page showcases the ability to embed diagrams and static images in documentation.</p>
+<h3>Embedding diagrams</h3>
+<p>Diagrams can be embedded using the <code>embed:</code> syntax:</p>
+<pre><code class="language-markdown">![System Landscape Diagram](embed:SystemLandscape)
+</code></pre>
+<p>See also: <a href="https://www.structurizr.com/help/documentation/diagrams">https://www.structurizr.com/help/documentation/diagrams</a></p>
+<h4>Example: Embedded diagram</h4>
+<p>
+ <div>
+  <figure style="width: min(100%, 327px);">
+   <div>
+    <!--?xml version="1.0" encoding="us-ascii" standalone="no"?-->
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" preserveAspectRatio="meet" version="1.1" viewBox="0 0 327 460" zoomAndPan="magnify">
+     <defs /><g>
+      <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="148" x="85.5" y="22.9951">System Landscape</text><!--cluster group_1-->
+      <g id="cluster_group_1">
+       <rect fill="none" height="284" rx="2.5" ry="2.5" style="stroke:#CCCCCC;stroke-width:1.0;stroke-dasharray:7.0,7.0;" width="242" x="46" y="44.2969" />
+       <text fill="#CCCCCC" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="93" x="120.5" y="61.1484">enterprise</text>
+       <text fill="#CCCCCC" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="84" x="125" y="76.0605">[Enterprise]</text>
+      </g><!--entity EmailSystem-->
+      <g id="elem_EmailSystem">
+       <a href="../email-system/context/" target="_top" title="../email-system/context/" xlink:actuate="onRequest" xlink:href="../email-system/context/" xlink:show="new" xlink:title="../email-system/context/" xlink:type="simple">
+        <rect fill="#1168BD" height="71.2188" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="136" x="99" y="241.2969" />
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="44" x="109" y="266.1484">Email</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="153" y="266.1484">&nbsp;</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="66" x="159" y="266.1484">System</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="165" y="282.917">&nbsp;</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="136" y="299.2139">Sendgrid</text>
+       </a>
+      </g><!--entity ExampleECommerceStore-->
+      <g id="elem_ExampleECommerceStore">
+       <a href="../example-e-commerce-store/context/" target="_top" title="../example-e-commerce-store/context/" xlink:actuate="onRequest" xlink:href="../example-e-commerce-store/context/" xlink:show="new" xlink:title="../example-e-commerce-store/context/" xlink:type="simple">
+        <rect fill="#1168BD" height="57.25" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="210" x="62" y="95.2969" />
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="72" y="120.1484">Example</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="144" y="120.1484">&nbsp;</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="112" x="150" y="120.1484">E-Commerce</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="49" x="142.5" y="138.7734">Store</text>
+       </a>
+      </g><!--link ExampleECommerceStore to EmailSystem-->
+      <g id="link_ExampleECommerceStore_EmailSystem">
+       <path d="M167,152.4969 C167,177.4369 167,206.2169 167,233.1069 " fill="none" id="ExampleECommerceStore-to-EmailSystem" style="stroke:#666666;stroke-width:1.0;" />
+       <polygon fill="#666666" points="167,241.1069,170,233.1069,164,233.1069,167,241.1069" style="stroke:#666666;stroke-width:1.0;" />
+       <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="51" x="168" y="194.4355">Trigger</text>
+       <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="4" x="219" y="194.4355">&nbsp;</text>
+       <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="46" x="223" y="194.4355">emails</text>
+       <text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="43" x="197" y="208.4043">[https]</text>
+      </g>
+      <rect fill="none" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="352.2969" />
+      <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="59" x="17" y="365.292">Legend</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="76" y="365.292">&nbsp;</text>
+      <rect fill="#1168BD" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="368.5938" />
+      <text fill="#3C7FC0" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="381.5889">▯</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="381.5889">&nbsp;</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="37" y="381.5889">system</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="91" y="381.5889">&nbsp;</text>
+      <rect fill="#66622E" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="384.8906" />
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="397.8857">▯</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="397.8857">&nbsp;</text>
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="37" y="397.8857">enterprise boundary</text>
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="117" x="181" y="398.8291">(last back color, dashed)</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="298" y="397.8857">&nbsp;</text>
+      <rect fill="none" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="401.1875" />
+      <text fill="#444444" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="414.1826">▯</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="414.1826">&nbsp;</text>
+      <text fill="#444444" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="65" x="37" y="414.1826">boundary</text>
+      <text fill="#444444" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="43" x="106" y="415.126">(dashed)</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="149" y="414.1826">&nbsp;</text>
+      <rect fill="#66622E" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="417.4844" />
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="430.4795">▯</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="430.4795">&nbsp;</text>
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="37" y="430.4795">enterprise boundary</text>
+      <text fill="#CCCCCC" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="117" x="181" y="431.4229">(last back color, dashed)</text>
+      <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="298" y="430.4795">&nbsp;</text>
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="352.2969" y2="352.2969" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="368.5938" y2="368.5938" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="384.8906" y2="384.8906" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="401.1875" y2="401.1875" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="417.4844" y2="417.4844" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="433.7813" y2="433.7813" />
+      <line style="stroke:none;stroke-width:1.0;" x1="17" x2="17" y1="352.2969" y2="433.7813" />
+      <line style="stroke:none;stroke-width:1.0;" x1="302" x2="302" y1="352.2969" y2="433.7813" />
+     </g>
+    </svg>
+   </div>
+   <figcaption>
+    <a onclick="openSvgModal('SystemLandscape-modal', 'SystemLandscape-svg')">System Landscape Diagram</a>
+   </figcaption>
+  </figure>
+  <div class="modal" id="SystemLandscape-modal">
+   <div class="modal-background" onclick="closeModal('SystemLandscape-modal')"></div>
+   <div class="modal-content">
+    <div class="box">
+     <div id="SystemLandscape-svg" class="modal-box-content">
+      <!--?xml version="1.0" encoding="us-ascii" standalone="no"?-->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" preserveAspectRatio="meet" version="1.1" viewBox="0 0 327 460" zoomAndPan="magnify">
+       <defs /><g>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="148" x="85.5" y="22.9951">System Landscape</text><!--cluster group_1-->
+        <g id="cluster_group_1">
+         <rect fill="none" height="284" rx="2.5" ry="2.5" style="stroke:#CCCCCC;stroke-width:1.0;stroke-dasharray:7.0,7.0;" width="242" x="46" y="44.2969" />
+         <text fill="#CCCCCC" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="93" x="120.5" y="61.1484">enterprise</text>
+         <text fill="#CCCCCC" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="84" x="125" y="76.0605">[Enterprise]</text>
+        </g><!--entity EmailSystem-->
+        <g id="elem_EmailSystem">
+         <a href="../email-system/context/" target="_top" title="../email-system/context/" xlink:actuate="onRequest" xlink:href="../email-system/context/" xlink:show="new" xlink:title="../email-system/context/" xlink:type="simple">
+          <rect fill="#1168BD" height="71.2188" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="136" x="99" y="241.2969" />
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="44" x="109" y="266.1484">Email</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="153" y="266.1484">&nbsp;</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="66" x="159" y="266.1484">System</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="165" y="282.917">&nbsp;</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="136" y="299.2139">Sendgrid</text>
+         </a>
+        </g><!--entity ExampleECommerceStore-->
+        <g id="elem_ExampleECommerceStore">
+         <a href="../example-e-commerce-store/context/" target="_top" title="../example-e-commerce-store/context/" xlink:actuate="onRequest" xlink:href="../example-e-commerce-store/context/" xlink:show="new" xlink:title="../example-e-commerce-store/context/" xlink:type="simple">
+          <rect fill="#1168BD" height="57.25" rx="2.5" ry="2.5" style="stroke:#3C7FC0;stroke-width:0.5;" width="210" x="62" y="95.2969" />
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="72" y="120.1484">Example</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="144" y="120.1484">&nbsp;</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="112" x="150" y="120.1484">E-Commerce</text>
+          <text fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="49" x="142.5" y="138.7734">Store</text>
+         </a>
+        </g><!--link ExampleECommerceStore to EmailSystem-->
+        <g id="link_ExampleECommerceStore_EmailSystem">
+         <path d="M167,152.4969 C167,177.4369 167,206.2169 167,233.1069 " fill="none" id="ExampleECommerceStore-to-EmailSystem" style="stroke:#666666;stroke-width:1.0;" />
+         <polygon fill="#666666" points="167,241.1069,170,233.1069,164,233.1069,167,241.1069" style="stroke:#666666;stroke-width:1.0;" />
+         <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="51" x="168" y="194.4355">Trigger</text>
+         <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="4" x="219" y="194.4355">&nbsp;</text>
+         <text fill="#666666" font-family="sans-serif" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="46" x="223" y="194.4355">emails</text>
+         <text fill="#666666" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacing" textLength="43" x="197" y="208.4043">[https]</text>
+        </g>
+        <rect fill="none" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="352.2969" />
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="59" x="17" y="365.292">Legend</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="76" y="365.292">&nbsp;</text>
+        <rect fill="#1168BD" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="368.5938" />
+        <text fill="#3C7FC0" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="381.5889">▯</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="381.5889">&nbsp;</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="37" y="381.5889">system</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="91" y="381.5889">&nbsp;</text>
+        <rect fill="#66622E" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="384.8906" />
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="397.8857">▯</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="397.8857">&nbsp;</text>
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="37" y="397.8857">enterprise boundary</text>
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="117" x="181" y="398.8291">(last back color, dashed)</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="298" y="397.8857">&nbsp;</text>
+        <rect fill="none" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="401.1875" />
+        <text fill="#444444" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="414.1826">▯</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="414.1826">&nbsp;</text>
+        <text fill="#444444" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="65" x="37" y="414.1826">boundary</text>
+        <text fill="#444444" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="43" x="106" y="415.126">(dashed)</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="149" y="414.1826">&nbsp;</text>
+        <rect fill="#66622E" height="16.2969" style="stroke:none;stroke-width:1.0;" width="285" x="17" y="417.4844" />
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8" x="21" y="430.4795">▯</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="29" y="430.4795">&nbsp;</text>
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="37" y="430.4795">enterprise boundary</text>
+        <text fill="#CCCCCC" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="117" x="181" y="431.4229">(last back color, dashed)</text>
+        <text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4" x="298" y="430.4795">&nbsp;</text>
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="352.2969" y2="352.2969" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="368.5938" y2="368.5938" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="384.8906" y2="384.8906" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="401.1875" y2="401.1875" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="417.4844" y2="417.4844" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="302" y1="433.7813" y2="433.7813" />
+        <line style="stroke:none;stroke-width:1.0;" x1="17" x2="17" y1="352.2969" y2="433.7813" />
+        <line style="stroke:none;stroke-width:1.0;" x1="302" x2="302" y1="352.2969" y2="433.7813" />
+       </g>
+      </svg>
+     </div>
+     <div class="has-text-centered">
+      System Landscape Diagram [<a href="../svg/SystemLandscape.svg" target="_blank">svg</a>|<a href="../png/SystemLandscape.png" target="_blank">png</a>|<a href="../puml/SystemLandscape.puml" target="_blank">puml</a>]
+     </div>
+    </div>
+   </div><button class="modal-close is-large" aria-label="close" onclick="closeModal('SystemLandscape-modal')"></button>
+  </div>
+ </div></p>
+<h3>Embedding static images</h3>
+<p>Static assets can be included in the generated site, using the <code>--assets-dir</code> command-line flag. This flag can be used with the <code>serve</code> command and the <code>generate-site</code> command.</p>
+<p>When, for example, you would like to embed a nice picture which is located in the <code>pictures</code> directory under the assets directory, you can do that as follows:</p>
+<pre><code class="language-markdown">![A nice picture](/pictures/nice-picture.png)
+</code></pre>
+<h4>Example: Embedded picture</h4>
+<p><a href="https://www.flickr.com/photos/schmollmolch/4937297813/">Sun</a>, by Christian Scheja</p>
+<p><img src="../pictures/nice-picture.png" alt="A nice picture"></p>
+<h3>Embedding PlantUML diagrams</h3>
+<p>Structurizr Site Generatr supports rendering PlantUML embedded in Markdown files.</p>
+<h4>Sequence diagram example</h4>
+<pre><code class="language-markdown">```puml
+@startuml
+Foo -&gt; Bar: doSomething()
+@enduml
+```
+</code></pre>
+<div>
+ <!--?xml version="1.0" encoding="us-ascii" standalone="no"?-->
+ <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="120px" preserveAspectRatio="none" style="width:169px;height:120px;background:#FFFFFF;" version="1.1" viewBox="0 0 169 120" width="169px" zoomAndPan="magnify">
+  <defs /><g>
+   <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="25" x2="25" y1="36.2969" y2="85.4297" />
+   <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="144.5" x2="144.5" y1="36.2969" y2="85.4297" />
+   <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="40" x="5" y="5" />
+   <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="26" x="12" y="24.9951">Foo</text>
+   <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="40" x="5" y="84.4297" />
+   <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="26" x="12" y="104.4248">Foo</text>
+   <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="37" x="126.5" y="5" />
+   <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="23" x="133.5" y="24.9951">Bar</text>
+   <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="37" x="126.5" y="84.4297" />
+   <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="23" x="133.5" y="104.4248">Bar</text>
+   <polygon fill="#181818" points="133,63.4297,143,67.4297,133,71.4297,137,67.4297" style="stroke:#181818;stroke-width:1.0;" />
+   <line style="stroke:#181818;stroke-width:1.0;" x1="25" x2="139" y1="67.4297" y2="67.4297" />
+   <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96" x="32" y="62.3638">doSomething()</text>
+  </g>
+ </svg>
+</div>
+<h3>Class diagram example</h3>
+<pre><code class="language-markdown">```puml
+@startuml
+class Foo {
+    +property: String
+    +foo()
+}
+
+class Bar {
+    -privateProperty: String
+    +bar()
+}
+
+Foo ..&gt; Bar: Uses
+@enduml
+```
+</code></pre>
+<div>
+ <!--?xml version="1.0" encoding="us-ascii" standalone="no"?-->
+ <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="252px" preserveAspectRatio="none" style="width:193px;height:252px;background:#FFFFFF;" version="1.1" viewBox="0 0 193 252" width="193px" zoomAndPan="magnify">
+  <defs /><g>
+   <!--class Foo-->
+   <g id="elem_Foo">
+    <rect codeLine="1" fill="#F1F1F1" height="80.5938" id="Foo" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="133" x="30" y="7" />
+    <ellipse cx="79.25" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;" />
+    <path d="M82.2188,28.6406 Q81.6406,28.9375 81,29.0781 Q80.3594,29.2344 79.6563,29.2344 Q77.1563,29.2344 75.8281,27.5938 Q74.5156,25.9375 74.5156,22.8125 Q74.5156,19.6875 75.8281,18.0313 Q77.1563,16.375 79.6563,16.375 Q80.3594,16.375 81,16.5313 Q81.6563,16.6875 82.2188,16.9844 L82.2188,19.7031 Q81.5938,19.125 81,18.8594 Q80.4063,18.5781 79.7813,18.5781 Q78.4375,18.5781 77.75,19.6563 Q77.0625,20.7188 77.0625,22.8125 Q77.0625,24.9063 77.75,25.9844 Q78.4375,27.0469 79.7813,27.0469 Q80.4063,27.0469 81,26.7813 Q81.5938,26.5 82.2188,25.9219 L82.2188,28.6406 Z " fill="#000000" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="26" x="99.75" y="27.8467">Foo</text>
+    <line style="stroke:#181818;stroke-width:0.5;" x1="31" x2="162" y1="39" y2="39" />
+    <ellipse cx="41" cy="52.6484" fill="none" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107" x="50" y="55.9951">property: String</text>
+    <line style="stroke:#181818;stroke-width:0.5;" x1="31" x2="162" y1="63.2969" y2="63.2969" />
+    <ellipse cx="41" cy="76.9453" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="32" x="50" y="80.292">foo()</text>
+   </g><!--class Bar-->
+   <g id="elem_Bar">
+    <rect codeLine="6" fill="#F1F1F1" height="80.5938" id="Bar" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="179" x="7" y="165" />
+    <ellipse cx="80.75" cy="181" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;" />
+    <path d="M83.7188,186.6406 Q83.1406,186.9375 82.5,187.0781 Q81.8594,187.2344 81.1563,187.2344 Q78.6563,187.2344 77.3281,185.5938 Q76.0156,183.9375 76.0156,180.8125 Q76.0156,177.6875 77.3281,176.0313 Q78.6563,174.375 81.1563,174.375 Q81.8594,174.375 82.5,174.5313 Q83.1563,174.6875 83.7188,174.9844 L83.7188,177.7031 Q83.0938,177.125 82.5,176.8594 Q81.9063,176.5781 81.2813,176.5781 Q79.9375,176.5781 79.25,177.6563 Q78.5625,178.7188 78.5625,180.8125 Q78.5625,182.9063 79.25,183.9844 Q79.9375,185.0469 81.2813,185.0469 Q81.9063,185.0469 82.5,184.7813 Q83.0938,184.5 83.7188,183.9219 L83.7188,186.6406 Z " fill="#000000" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="23" x="101.25" y="185.8467">Bar</text>
+    <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="185" y1="197" y2="197" />
+    <rect fill="none" height="6" style="stroke:#C82930;stroke-width:1.0;" width="6" x="15" y="207.6484" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="153" x="27" y="213.9951">privateProperty: String</text>
+    <line style="stroke:#181818;stroke-width:0.5;" x1="8" x2="185" y1="221.2969" y2="221.2969" />
+    <ellipse cx="18" cy="234.9453" fill="#84BE84" rx="3" ry="3" style="stroke:#038048;stroke-width:1.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="32" x="27" y="238.292">bar()</text>
+   </g><!--link Foo to Bar-->
+   <g id="link_Foo_Bar">
+    <path codeLine="11" d="M96.5,88.27 C96.5,111.74 96.5,135.35 96.5,158.8 " fill="none" id="Foo-to-Bar" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;" />
+    <polygon fill="#181818" points="96.5,164.8,100.5,155.8,96.5,159.8,92.5,155.8,96.5,164.8" style="stroke:#181818;stroke-width:1.0;" />
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32" x="97.5" y="131.0669">Uses</text>
+   </g>
+  </g>
+ </svg>
+</div>
+<h3>Embedding mermaid diagrams</h3>
+<p>Structurizr Site Generatr is supporting mermaid diagrams in markdown pages using the actual mermaid.js version. Therefore every diagram type, supported by mermaid may be used in markdown documentation files.</p>
+<ul>
+ <li>flowchart</li>
+ <li>sequence diagram</li>
+ <li>class diagram</li>
+ <li>state diagram</li>
+ <li>entity-relationship diagram</li>
+ <li>user journey</li>
+ <li>gantt chart</li>
+ <li>pie chart</li>
+ <li>requirement diagram</li>
+ <li>and some more</li>
+</ul>
+<p>Please find the full list of supported chart types on <a href="https://mermaid.js.org/intro/#diagram-types">mermaid.js.org/intro</a></p>
+<h4>Flowchart Diagram Example</h4>
+<pre><code class="language-markdown">```mermaid
+graph TD;
+  A--&gt;B;
+  A--&gt;C;
+  B--&gt;D;
+  C--&gt;D;
+```
+</code></pre>
+<pre><code class="language-mermaid">graph TD;
+  A--&gt;B;
+  A--&gt;C;
+  B--&gt;D;
+  C--&gt;D;
+</code></pre>
+<h4>Sequence Diagram Example</h4>
+<pre><code class="language-markdown">```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice-&gt;&gt;John: Hello John, how are you?
+    loop Healthcheck
+        John-&gt;&gt;John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts &lt;br/&gt;prevail!
+    John--&gt;&gt;Alice: Great!
+    John-&gt;&gt;Bob: How about you?
+    Bob--&gt;&gt;John: Jolly good!
+```
+</code></pre>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice-&gt;&gt;John: Hello John, how are you?
+    loop Healthcheck
+        John-&gt;&gt;John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts &lt;br/&gt;prevail!
+    John--&gt;&gt;Alice: Great!
+    John-&gt;&gt;Bob: How about you?
+    Bob--&gt;&gt;John: Jolly good!
+</code></pre></div>
+        </div>
+      </div>
+    </div>
+    <div class="container is-hidden" id="update-site-error">
+      <div class="hero is-danger mt-6">
+        <div class="hero-body">
+          <p class="title">Error loading workspace file</p>
+          <p class="subtitle" id="update-site-error-message"></p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="../../reformat-mermaid.js"></script>
+    <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs';</script>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-theme="light" class="has-background-light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search results | Azure Verified Modules and Patterns</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css" rel="stylesheet">
+    <link href="../../style.css" rel="stylesheet">
+    <link href="./../style-branding.css" rel="stylesheet">
+    <script type="text/javascript" src="../../modal.js"></script>
+    <script type="text/javascript" src="../../svg-modal.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+    <script type="text/javascript" src="../../auto-reload.js"></script>
+  </head>
+  <body>
+    <div class="is-overlay is-front-centered"><progress class="progress is-small mt-1 is-hidden" id="updating-site" value="0"></progress></div>
+    <script type="text/javascript" src="../../header.js"></script>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand has-site-branding"><a href="../" class="navbar-item"><span class="has-text-weight-semibold has-site-branding">Azure Verified Modules and Patterns</span></a></div>
+      <div class="navbar-menu has-site-branding">
+        <div class="navbar-end">
+          <div class="navbar-item"><input class="input is-small is-rounded has-site-branding" id="search" type="search" size="30" maxlength="50" placeholder="Search..." onkeyup="redirect(event, value, './')"></div>
+          <div class="navbar-item has-dropdown is-hoverable"><a class="navbar-link has-site-branding">master</a>
+            <div class="navbar-dropdown is-right"><a href="../../master/" class="navbar-item">master</a>
+              <hr class="navbar-divider">
+              <div class="navbar-item has-text-grey-light"><span>v</span><span>0.0.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="site-layout" id="site">
+      <aside class="menu p-3">
+        <p class="menu-label">General</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../" class="">Home</a><a href="../decisions/" class="">Decisions</a><a href="../software-systems/" class="">Software Systems</a><a href="../embedding-diagrams-and-images/" class="">Embedding diagrams and images</a></li>
+        </ul>
+        <p class="menu-label">Software systems</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../email-system/" class="">Email System</a><a href="../example-e-commerce-store/" class="">Example E-Commerce Store</a><a href="../software-system/" class="">Software System</a></li>
+        </ul>
+      </aside>
+      <div class="container is-fluid has-background-white">
+        <div class="content p-3">
+          <h2>Search results</h2>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr-languages@1.14.0/min/lunr.stemmer.support.min.js"></script>
+          <script type="text/javascript">const documents = [{"href":"../","type":"Home","title":"Azure Verified Module Hub","text":"Azure Verified Module Hub Lets get started This site contains the C4 architecture model for Patterns and Modules. This page is the home page, because it is the first file in the `docs` directory, when the files are sorted\nalphabetically."},{"href":"../decisions/0/","type":"Workspace Decision","title":"Architecture documentation","text":"Architecture documentation Status Context Decision Consequences Date: 2024-06-06 Accepted We need to apply template for architecture communication and documentation. We will use [arc42](https://docs.arc42.org/home/) which answers the two questions in a pragmatic way. ![arc42](./assets/0000%20arc42%20Template%20Overview%20V8.png) The template defines multiple sections where the different diagram types provided by the C4 model can be used. The following table shows how the C4 diagram types can be mapped to the arc42 template sections. | arc42 template section | C4 diagram type                                     |\n| ---------------------- | --------------------------------------------------- |\n| Context and Scope      | System context diagram</br>System landscape diagram |\n| Building Block View    | Container diagram</br>Component diagram             |\n| Runtime View           | Dynamic diagram                                     |\n| Deployment View        | Deployment diagram                                  | Additionally, Code diagrams can be added to the building block, runtime or deployment view, but should only be added if they provide value to the reader. Such low-level diagrams contain a lot of detail, which tend to become obsolete fast and thus need a lot of maintenance to keep them up to date. To minimize these efforts, they should be generated from code automatically. This also applies to component diagrams. How component diagrams, and other elements of the Structurizr model, can be generated from code. See Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's [adr-tools](https://github.com/npryce/adr-tools)."},{"href":"../decisions/1/","type":"Workspace Decision","title":"Record architecture decisions","text":"Record architecture decisions Status Context Decision Consequences Date: 2024-06-06 Accepted We need to record the architectural decisions made on this project, so that we understand the key decisions that have been made and why they were made. We will use Architecture Decision Records, as [described by Michael Nygard](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions). See Michael Nygard's article, linked above. For a lightweight ADR toolset, see Nat Pryce's [adr-tools](https://github.com/npryce/adr-tools)."},{"href":"../embedding-diagrams-and-images/","type":"Workspace Documentation","title":"Embedding diagrams and images","text":"Embedding diagrams and images Embedding diagrams Example: Embedded diagram Embedding static images Example: Embedded picture Embedding PlantUML diagrams Sequence diagram example Class diagram example Embedding mermaid diagrams Flowchart Diagram Example Sequence Diagram Example This page showcases the ability to embed diagrams and static images in documentation. Diagrams can be embedded using the `embed:` syntax: See also: <https://www.structurizr.com/help/documentation/diagrams> ![System Landscape Diagram](embed:SystemLandscape) Static assets can be included in the generated site, using the `--assets-dir` command-line flag. This flag can be used\nwith the `serve` command and the `generate-site` command. When, for example, you would like to embed a nice picture which is located in the `pictures` directory under the assets\ndirectory, you can do that as follows: [Sun](https://www.flickr.com/photos/schmollmolch/4937297813/), by Christian Scheja ![A nice picture](/pictures/nice-picture.png) Structurizr Site Generatr supports rendering PlantUML embedded in Markdown files. Structurizr Site Generatr is supporting mermaid diagrams in markdown pages using the actual mermaid.js version.\nTherefore every diagram type, supported by mermaid may be used in markdown documentation files. Please find the full list of supported chart types\non [mermaid.js.org/intro](https://mermaid.js.org/intro/#diagram-types)"},{"href":"../software-system/","type":"Software System Info","title":"Software System | Info","text":"softwaresystem"},{"href":"../software-system/context/","type":"Context views","title":"Software System | Context views","text":"Software System My software system."},{"href":"../example-e-commerce-store/","type":"Software System Info","title":"Example E-Commerce Store | Info","text":"ecommercesystem"},{"href":"../example-e-commerce-store/context/","type":"Context views","title":"Example E-Commerce Store | Context views","text":"Example E-Commerce Store"},{"href":"../example-e-commerce-store/container/","type":"Container views","title":"Example E-Commerce Store | Container views","text":"API Backend ASP.NET Core Database Customers, Orders, Payments SQL Server Stock Management Portal SPA Order fulfillment, stock management, order dispatch Angular Web App SPA E-Commerce Store Angular"},{"href":"../example-e-commerce-store/component/","type":"Component views","title":"Example E-Commerce Store | Component views","text":"API Controller Requests, responses, routing and serialization ASP.NET Core Authorization Policy Authentication and authorization ASP.NET Core Command Handler Business logic for changing state and triggering events MediatR request handler Command Validator Business validation prior to changing state Fluent Validation DB Context ORM - Maps LINQ queries to the data store Entity Framework Core MediatR Provides decoupling of requests and handlers MediatR Model Domain models DTO/POCO classes Query Handler Business logic for retrieving data MediatR request handler"},{"href":"../example-e-commerce-store/dependencies/","type":"Dependencies","title":"Example E-Commerce Store | Dependencies","text":"Email System Trigger emails https"},{"href":"../email-system/","type":"Software System Info","title":"Email System | Info","text":"emailsystem"},{"href":"../email-system/context/","type":"Context views","title":"Email System | Context views","text":"Email System Sendgrid"},{"href":"../email-system/dependencies/","type":"Dependencies","title":"Email System | Dependencies","text":"Customer Delivers emails https Example E-Commerce Store Trigger emails https"}];const idx = lunr(function () {
+                        this.ref('href')
+                        this.field('text')
+
+                        documents.forEach(function (doc) {
+                          this.add(doc)
+                        }, this)
+                      });
+                    </script>
+          <script type="text/javascript" src="../../search.js"></script>
+          <div id="search-results"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container is-hidden" id="update-site-error">
+      <div class="hero is-danger mt-6">
+        <div class="hero-body">
+          <p class="title">Error loading workspace file</p>
+          <p class="subtitle" id="update-site-error-message"></p>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="../../reformat-mermaid.js"></script>
+    <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs';</script>
+  </body>
+</html>

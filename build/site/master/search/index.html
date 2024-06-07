@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-theme="light" class="has-background-light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search results | Name</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css" rel="stylesheet">
+    <link href="../../style.css" rel="stylesheet">
+    <link href="./../style-branding.css" rel="stylesheet">
+    <script type="text/javascript" src="../../modal.js"></script>
+    <script type="text/javascript" src="../../svg-modal.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript" src="../../header.js"></script>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand has-site-branding"><a href="../" class="navbar-item"><span class="has-text-weight-semibold has-site-branding">Name</span></a></div>
+      <div class="navbar-menu has-site-branding">
+        <div class="navbar-end">
+          <div class="navbar-item"><input class="input is-small is-rounded has-site-branding" id="search" type="search" size="30" maxlength="50" placeholder="Search..." onkeyup="redirect(event, value, './')"></div>
+          <div class="navbar-item has-dropdown is-hoverable"><a class="navbar-link has-site-branding">master</a>
+            <div class="navbar-dropdown is-right"><a href="../../master/" class="navbar-item">master</a>
+              <hr class="navbar-divider">
+              <div class="navbar-item has-text-grey-light"><span>v</span><span>0.0.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="site-layout" id="site">
+      <aside class="menu p-3">
+        <p class="menu-label">General</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../" class="">Home</a><a href="../software-systems/" class="">Software Systems</a></li>
+        </ul>
+        <p class="menu-label">Software systems</p>
+        <ul class="menu-list has-site-branding">
+          <li><a href="../software-system/" class="">Software System</a></li>
+        </ul>
+      </aside>
+      <div class="container is-fluid has-background-white">
+        <div class="content p-3">
+          <h2>Search results</h2>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script>
+          <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr-languages@1.14.0/min/lunr.stemmer.support.min.js"></script>
+          <script type="text/javascript">const documents = [{"href":"../software-system/","type":"Software System Info","title":"Software System | Info","text":"softwaresystem"},{"href":"../software-system/context/","type":"Context views","title":"Software System | Context views","text":"Software System"}];const idx = lunr(function () {
+                        this.ref('href')
+                        this.field('text')
+
+                        documents.forEach(function (doc) {
+                          this.add(doc)
+                        }, this)
+                      });
+                    </script>
+          <script type="text/javascript" src="../../search.js"></script>
+          <div id="search-results"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="../../reformat-mermaid.js"></script>
+    <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs';</script>
+  </body>
+</html>

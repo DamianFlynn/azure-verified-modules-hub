@@ -31,3 +31,29 @@ To get started with the AVMH, please follow these steps:
 1. Publish your custom modules to the AVMH
 1. Integrate the AVMH with your Azure environment
 1. Start customizing and extending Azure Verified Modules for your organization
+
+## Structurizr
+
+The Structurizr diagram below shows the high-level architecture of the Azure Verified Module Hub.
+
+The following will install the container on your local machine:
+
+```sh
+docker pull ghcr.io/avisi-cloud/structurizr-site-generatr
+docker run -it --rm ghcr.io/avisi-cloud/structurizr-site-generatr --help
+docker run -it --rm ghcr.io/avisi-cloud/structurizr-site-generatr version
+```
+
+With a working installation, we can proceed to generate the diagram:
+
+```sh
+docker run -it --rm -v /Users/damianflynn/Developer/DamianFlynn/Azure-Verified-Module-Hub:/var/model ghcr.io/avisi-cloud/structurizr-site-generatr generate-site -w workspace.dsl
+```
+
+This is create a fresh version of the static site in the build directory.
+
+Now, to develop the site locally, we can use the following command:
+
+```sh
+docker run -it --rm -v /Users/damianflynn/Developer/DamianFlynn/Azure-Verified-Module-Hub:/var/model -p 8080:8080 ghcr.io/avisi-cloud/structurizr-site-generatr serve -w workspace.dsl
+```

@@ -1,0 +1,25 @@
+@startuml
+set separator none
+title Example E-Commerce Store - System Context
+
+top to bottom direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+AddBoundaryTag("enterprise", $borderColor="#cccccc", $fontColor="#cccccc", $borderStyle="dashed")
+Boundary(group_1, "enterprise", $tags="enterprise") {
+  Person(Customer, "Customer", $descr="", $tags="", $link="")
+  System(EmailSystem, "Email System", $descr="Sendgrid", $tags="", $link="")
+  Person(WarehouseStaff, "Warehouse Staff", $descr="", $tags="", $link="")
+  System(ExampleECommerceStore, "Example E-Commerce Store", $descr="", $tags="", $link="")
+}
+
+
+Rel(Customer, ExampleECommerceStore, "Places Orders", $techn="https", $tags="", $link="")
+Rel(WarehouseStaff, ExampleECommerceStore, "Dispatches Orders", $techn="https", $tags="", $link="")
+Rel(ExampleECommerceStore, EmailSystem, "Trigger emails", $techn="https", $tags="", $link="")
+Rel(EmailSystem, Customer, "Delivers emails", $techn="https", $tags="", $link="")
+
+SHOW_LEGEND(true)
+@enduml
