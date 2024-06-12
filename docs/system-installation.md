@@ -77,6 +77,7 @@ These secrets are used for general housekeeping tasks in the GitHub Actions work
 
 ```sh
 BOT_APP_ID="213270"
+BOT_APP_PRIVATE_KEY="e3e7e2b..."
 ```
 
 ### 3. Create and Push Repository to GitHub
@@ -227,6 +228,7 @@ gh secret set PUBLISH_REGISTRY_SERVER -b"$PUBLISH_REGISTRY_SERVER" --repo $ORG/$
 
 ```sh
 gh secret set BOT_APP_ID -b"$BOT_APP_ID" --repo $ORG/$REPO
+gh secret set BOT_APP_PRIVATE_KEY -b"$BOT_APP_PRIVATE_KEY" --repo $ORG/$REPO
 ```
 
 ### Summary
