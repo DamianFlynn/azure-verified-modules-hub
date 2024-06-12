@@ -63,7 +63,6 @@ var defaultTag = {
 }
 var tagResources = !empty(tags) ? union(defaultTag, tags) : defaultTag
 
-
 // This pattern has opinionated defaults for the traffic flow from the spoke to the hub
 // providing a routes paramater will replace this default configuration
 var defaultRoutes = [
@@ -198,6 +197,7 @@ resource avmTelemetry 'Microsoft.Resources/deployments@2023-07-01' = if (enableT
   }
 }
 
+// Partner Attribution
 resource iacTelemetry 'Microsoft.Resources/deployments@2024-03-01' = {
   name: ((partnerCountry == 'Denmark')
     ? 'pid-5d59d69c-bc64-4dfd-b56f-d5b6d008d08d'

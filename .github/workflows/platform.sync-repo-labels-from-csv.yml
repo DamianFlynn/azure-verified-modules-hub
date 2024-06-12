@@ -23,9 +23,14 @@ jobs:
   sync-labels:
     runs-on: ubuntu-latest
     steps:
+      - uses: tibdex/github-app-token@v2
+        id: generate-token
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
       - name: Sync AVM Labels To Repos GitHub Labels
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Azure/Azure-Verified-Modules/main/docs/static/scripts/Set-AvmGitHubLabels.ps1" -OutFile "./Set-AvmGitHubLabels.ps1"
           ./Set-AvmGitHubLabels.ps1 -RepositoryName "${{ github.repository }}" -CreateCsvLabelExports $false -RemoveExistingLabels $false -NoUserPrompts $true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
