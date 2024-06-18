@@ -1,223 +1,121 @@
+// workspace extends https://docs.structurizr.com/dsl/cookbook/workspace-extension/system-landscape.dsl {
+// workspace extends ./system-landscape.dsl {
+workspace  {
+  name "Azure Verified Solutions"
+  description "Automation Framework for Azure Module Validation and Publishing"
 
+  !docs docs/system/
+  !adrs docs/adrs
 
-workspace "Azure Verified Modules and Patterns" "Offical Repository of Verified Azure deployment architecture." {
+  model {
 
-    !docs docs/system/
-    !adrs docs/adrs
+    contributor = person "Contributor" "Solution Engineer"
+    engineer = person "User" "Platform Engineer"
 
+    azureContainerRegistry = softwareSystem "Azure Container Registry" "Azure Container Registry" "External" {
+      description "Azure Container Registry is a managed, private Docker registry service based on the open-source Docker Registry 2.0. Create and maintain Azure container registries to store and manage your private Docker container images and related artifacts."
 
-	model {
-      !include avm/ptn/management/cortex/docs/c4/model.dsl
-
-	  group enterprise {
-		customerPerson = person "Customer"
-		warehousePerson = person "Warehouse Staff"
-
-		ecommerceSystem = softwareSystem "Example E-Commerce Store" {
-		  storeContainer = container "Web App SPA" "E-Commerce Store" "Angular" "Browser,Microsoft Azure - Static Apps,Azure"
-		  stockContainer = container "Stock Management Portal SPA" "Order fulfillment, stock management, order dispatch" "Angular" "Browser,Microsoft Azure - Static Apps,Azure"
-		  dbContainer = container "Database" "Customers, Orders, Payments" "SQL Server" "Database,Microsoft Azure - Azure SQL,Azure"
-		  apiContainer = container "API" "Backend" "ASP.NET Core" "Microsoft Azure - App Services,Azure" {
-			group "Web Layer" {
-			  policyComp = component "Authorization Policy" "Authentication and authorization" "ASP.NET Core"
-			  controllerComp = component "API Controller" "Requests, responses, routing and serialization" "ASP.NET Core"
-			  mediatrComp = component "MediatR" "Provides decoupling of requests and handlers" "MediatR"
-			}
-			group "Application Layer" {
-			  commandHandlerComp = component "Command Handler" "Business logic for changing state and triggering events" "MediatR request handler"
-			  queryHandlerComp = component "Query Handler" "Business logic for retrieving data" "MediatR request handler"
-			  commandValidatorComp = component "Command Validator" "Business validation prior to changing state" "Fluent Validation"
-			}
-			group "Infrastructure Layer" {
-			  dbContextComp = component "DB Context" "ORM - Maps LINQ queries to the data store" "Entity Framework Core"
-			}
-			group "Domain Layer" {
-			  domainModelComp = component "Model" "Domain models" "DTO/POCO classes"
-			}
-		  }
-		}
-
-
-        live = deploymentEnvironment "Live" {
-
-            deploymentNode "Azure Workloads" {
-                tags "Microsoft Azure - Management Groups"
-
-                dnsSub = deploymentNode "Public DNS Subscription" {
-                    tags "Microsoft Azure - Subscriptions"
-
-                    dnsRg = deploymentNode "DNS Resource Group" {
-                        tags "Microsoft Azure - Resource Groups"
-
-                        publicDns = infrastructureNode "DNS Zones" {
-                            description "Highly available and scalable cloud DNS service."
-                            tags "Microsoft Azure - DNS Zones"
-                        }
-                    }
-
-                }
-
-                webAppFirewallSub = deploymentNode "Web App Firewall Subscription" {
-                    tags "Microsoft Azure - Subscriptions"
-
-                    wafRg = deploymentNode "WAF Resource Group" {
-                        tags "Microsoft Azure - Resource Groups"
-
-                        waf = infrastructureNode "Application Gateway" {
-                            description "Automatically distributes incoming application traffic."
-                            tags "Microsoft Azure - Application Gateways"
-                        }
-                    }
-
-                    wafNetRg = deploymentNode "WAF Network Resource Group" {
-                        tags "Microsoft Azure - Resource Groups"
-
-                        wafNet = infrastructureNode "Application Gateway vNET" {
-                            description "Virtual Network for Web App Gateway."
-                            tags "Microsoft Azure - Virtual Networks"
-                        }
-                    }
-
-                    waf -> wafNet "Connected to" "FrontendSubnet"
-
-                }
-
-
-                workloadSub = deploymentNode "Production Store Subscription" {
-                    tags "Microsoft Azure - Subscriptions"
-
-                    workloadRg = deploymentNode "Workload Resource Group" {
-                        tags "Microsoft Azure - Resource Groups"
-
-                        workloadAppPlan = deploymentNode "AppService Plan" {
-                            tags "Microsoft Azure - App Service Plans"
-
-                            deploymentNode "Web App" {
-                                tags "Microsoft Azure - App Services"
-
-                                webApplicationInstance = containerInstance stockContainer
-                            }
-                        }
-
-                        workloadDb = deploymentNode "Azure SQL Database" {
-                            tags "Amazon Web Services - RDS"
-
-                            deploymentNode "MySQL" {
-                                tags "Microsoft Azure - Azure Database MySQL Server"
-
-                                databaseInstance = containerInstance dbContainer
-                            }
-                        }
-
-                    }
-
-                    workloadNetRg = deploymentNode "Workload Network Resource Group" {
-                        tags "Microsoft Azure - Resource Groups"
-
-                        workloadNet = infrastructureNode "Workload vNET" {
-                            description "Virtual Network for Web App Workload."
-                            tags "Microsoft Azure - Virtual Networks"
-                        }
-                    }
-
-                    workloadAppPlan -> workloadNet "Connected to" "FrontendSubnet" {
-                        //url, properties, perspectives
-                        properties {
-                            "URL" "https://www.example.com"
-                        }
-                        tags "Microsoft Azure - Connections"
-                    }
-
-                    workloadDb -> workloadNet "Connected to" "BackendSubnet"  "Microsoft Azure - Connections"
-
-                }
-            }
-
-            publicDns -> waf "Forwards requests to" "HTTPS"
-            waf -> webApplicationInstance "Forwards requests to" "HTTPS"
-        }
-
-		emailSystem = softwareSystem "Email System" "Sendgrid" "External"
-
-		customerPerson -> storeContainer "Places Orders" "https"
-		warehousePerson -> stockContainer "Dispatches Orders" "https"
-		apiContainer -> emailSystem "Trigger emails" "https"
-		emailSystem -> customerPerson "Delivers emails" "https"
-
-		stockContainer -> apiContainer "uses" "https"
-		storeContainer -> apiContainer "uses" "https"
-		apiContainer -> dbContainer "persists data" "https"
-
-		dbContextComp -> dbContainer "stores and retrieves data"
-		storeContainer -> controllerComp "calls"
-		stockContainer -> controllerComp "calls"
-		controllerComp -> policyComp "authenticated and authorized by"
-		controllerComp -> mediatrComp "sends queries & commands to"
-		mediatrComp -> queryHandlerComp "sends query to"
-		mediatrComp -> commandValidatorComp "sends command to"
-		commandValidatorComp -> commandHandlerComp "passes command to"
-		queryHandlerComp -> dbContextComp "Gets data from"
-		commandHandlerComp -> dbContextComp "Update data in"
-		dbContextComp -> domainModelComp "contains collections of"
-	  }
-	}
-
-
-    views {
-        !include avm/ptn/management/cortex/docs/c4/views.dsl
-        systemlandscape "SystemLandscape" {
-                include ecommerceSystem emailSystem
-                autoLayout
-            }
-
-        systemContext ecommerceSystem "Context" {
-            include * emailSystem
-            autoLayout
-        }
-
-        container ecommerceSystem "Container" {
-            include *
-            autoLayout
-        }
-
-        component apiContainer "Component" {
-            include * customerPerson warehousePerson
-            autoLayout
-        }
-
-        deployment ecommerceSystem "Live" "AmazonWebServicesDeployment" {
-            include *
-            autolayout
-            animation {
-                publicDns
-                waf
-                webApplicationInstance
-                databaseInstance
-            }
-        }
-
-        themes default "https://static.structurizr.com/themes/microsoft-azure-2023.01.24/theme.json"
-
-        styles {
-            element "Azure" {
-                color #ffffff
-            }
-            element "External" {
-                background #783aba
-                color #ffffff
-            }
-            element "Database" {
-                shape Cylinder
-            }
-            element "Browser" {
-                shape WebBrowser
-            }
-        }
+      acrRepo = container "ACR Repository" "ACR Repository" "Bicep" "Browser,Microsoft Azure - Static Apps,Github"
     }
 
-    configuration {
-        scope softwaresystem
+    privateTemplateSpecs = softwareSystem "Private Template Specs" "Private Template Specs" "Azure Artifacts" {
+      privateTemplateSpecsRepo = container "Private Template Specs Repo" "Private Template Specs Repo" "Bicep" "Browser,Microsoft Azure - Static Apps,Github"
     }
 
+
+    avsSystem = softwareSystem "Azure Verified Solutions" "Bicep Module Registry and Specs Hosted on  Github" "Github"{
+      avsRepo = container "Azure-Verified-Solutions Repository" "IaC and Tooling" "Bicep" "Browser,Microsoft Azure - Static Apps,Github"
+
+      workflowCheckLabelsWorkflow = container ".Platform - Check Labels" "Configure System Labels refelect coded standards" "GH Action" "Browser,Github - Action,Github" {
+        properties {
+          labels "Awaiting Module Path Assignment, Awaiting MCR Manifest Onboarding"
+          file "platform.on-pull-request-check-labels.yml"
+        }
+      }
+
+
+      workflowModulePublisher = container "Resource and Pattern Validation" "Lifecyle Per Module Trigger" "Browser,Github - Action,Github" {
+        properties {
+          file "avm.res|ptn.scope.name.yml"
+        }
+        getModuleTests = component "get-module-tests" "Get all e2e module test" "Action"
+        initiateTestsValidatePublish = component "initiate-tests-validate-publish" "Prepare lifecycle check" "Action"
+        getModuleTests -> initiateTestsValidatePublish "Calls"
+      }
+
+
+      workflowAVMTemplateModule = container "AVM Module Lifecycle" "Module Lifecycle Flow (Test, Validate and Publish)" "Browser,Github - Action,Github" {
+        properties {
+          file "./.github/workflows/avm.template.module.yml"
+        }
+        testModule = component "test-module" "Test Module" "Action"
+        validateModule = component "validate-module" "Validate Module" "Action"
+        publishModule = component "publish-module" "Publish Module" "Action"
+        testModule -> validateModule "Calls"
+        validateModule -> publishModule "Calls"
+      }
+
+      initiateTestsValidatePublish -> workflowAVMTemplateModule "calls"
+      publishModule -> azureContainerRegistry "Publishs artifact to" "HTTPS"
+      publishModule -> privateTemplateSpecs "Publishs to" "HTTPS"
+
+      avsRepo -> workflowCheckLabelsWorkflow "On PR opened, labeled, synchronize"
+      avsRepo -> workflowModulePublisher "On Schedule, PR Merge, Dispatch Event"
+    }
+
+    contributor -> avsSystem "to"
+    engineer -> azureContainerRegistry "Uses"
+    engineer -> privateTemplateSpecs "Uses"
+
+    // !extend a {
+    //   webapp = container "Web Application"
+    //   database = container "Database"
+    //   webapp -> b "Gets data X from"
+    //   webapp -> database "Reads from and writes to"
+    // }
+  }
+
+
+  views {
+    systemContext avsSystem "SystemContext" {
+      include *
+      autoLayout
+    }
+
+    container avsSystem "Container" {
+      include *
+      autoLayout
+    }
+
+    component workflowModulePublisher "PublishModule" {
+      include *
+      autoLayout
+    }
+
+    component workflowAVMTemplateModule "TestValidatePublish" {
+      include *
+      autoLayout
+    }
+
+    // systemContext a "A-SystemContext" {
+    //   include *
+    //   autolayout lr
+    // }
+    // container a "A-Containers" {
+    //   include *
+    //   autolayout
+    // }
+
+    styles {
+      element "Software System" {
+        background #1168bd
+        color #ffffff
+      }
+      element "Person" {
+        shape person
+        background #08427b
+        color #ffffff
+      }
+    }
+  }
 }
-

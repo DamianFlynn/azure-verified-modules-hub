@@ -1,0 +1,98 @@
+name: AVM - New Module Proposal 📝
+description: Want a new AVM Module to exist? Let us know!
+title: "[Module Proposal]: `MODULE_NAME_BETWEEN_BACKTICKS`"
+labels: ["Type: New Module Proposal :bulb:", "Needs: Triage :mag:"]
+projects: ["Innofactororg/1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new AVM module!
+
+        Please ensure you have checked the [AVM Module Classification Definitions](https://azure.github.io/Azure-Verified-Modules/specs/shared/module-classifications/) & the [AVM Shared Specifications](https://azure.github.io/Azure-Verified-Modules/specs/shared/).
+  - type: checkboxes
+    id: existing-checks
+    attributes:
+      label: Check for previous/existing GitHub issues/module proposals
+      description: By submitting this issue, you confirm that you have [searched for previous/existing GitHub issues/module proposals](https://github.com/Azure/Azure-Verified-Modules/issues?q=is%3Aissue+sort%3Aupdated-desc+) to avoid creating a duplicate.
+      options:
+        - label: I have checked for previous/existing GitHub issues/module proposals.
+          required: true
+  - type: checkboxes
+    id: existing-module-from-elsewhere
+    attributes:
+      label: Check this module doesn't already exist in the module indexes
+      description: By submitting this issue, you confirm that you have checked the [Bicep](https://azure.github.io/Azure-Verified-Modules/indexes/bicep/) or [Terraform](https://azure.github.io/Azure-Verified-Modules/indexes/terraform/) module indexes for the module you are proposing to ensure it is not already available/being worked on.
+      options:
+        - label: I have checked for that this module doesn't already exist in the module indexes.
+          required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Bicep?
+      description: What language are you proposing the module for? (Please create a separate proposal for each language!)
+      options:
+        - Bicep
+        # - Terraform
+    validations:
+      required: true
+  - type: dropdown
+    id: res-or-ptn
+    attributes:
+      label: Module Classification?
+      description: Will this be a Resource or Pattern Module, as per [AVM Module Classification Definitions](https://azure.github.io/Azure-Verified-Modules/specs/shared/module-classifications/)?
+      options:
+        - Resource Module
+        - Pattern Module
+        - I'm not sure, please advise
+    validations:
+      required: true
+  - type: input
+    id: module-name
+    attributes:
+      label: Module Name
+      description: |
+        What would be the name of the module following the [naming pattern](https://azure.github.io/Azure-Verified-Modules/specs/shared/#id-rmnfr1---category-naming)?
+        - Bicep: `avm/res/<rp (hyphenated)>/<resource type (hyphenated, singular form)>`; e.g., `avm/res/virtual-machine-images/image-template`
+        # - Terraform: `avm-res-<rp (single word)>-<resource type (single word, singular form)>`; e.g., `avm-res-virtualmachineimages-imagetemplate`
+      placeholder: '<Module name>'
+    validations:
+      required: true
+  - type: textarea
+    id: module-details
+    attributes:
+      label: Module Details
+      description: Let us know some info about the module you are proposing!
+    validations:
+      required: true
+  - type: dropdown
+    id: owner-check
+    attributes:
+      label: Do you want to be the owner of this module?
+      description: By selecting Yes, you confirm that you want to be the owner of this module  And you/they can commit to the [Module Support statement](https://azure.github.io/Azure-Verified-Modules/help-support/module-support/) for this module.
+      options:
+        - 'Yes'
+        - 'No'
+    validations:
+      required: true
+  - type: input
+    id: owner-gh-un
+    attributes:
+      label: Module Owner's GitHub Username (handle)
+      description: Please provide the proposed module owner's GitHub username, leave blank if unknown!
+    validations:
+      required: false
+  - type: input
+    id: sec-owner-gh-un
+    attributes:
+      label: (Optional) Secondary Module Owner's GitHub Username (handle)
+      description: Please provide the secondary module owner's GitHub username, leave blank if unknown!
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        > **NOTE**:
+        >
+        > - This Module Proposal issue **MUST remain open** until the module is fully developed, tested and published to the relevant registry. **Do NOT close** the issue before the successful publication is confirmed!
+        > - Once the module is fully developed, tested and published to the relevant registry, and the Module Proposal issue was closed, it **MUST remain closed**.

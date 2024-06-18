@@ -7,7 +7,7 @@ labels:
     "Type: Question/Feedback :raising_hand:",
     "Needs: Triage :mag:",
   ]
-projects: ["Azure/538"]
+projects: ["Innofactororg/1"]
 body:
   - type: markdown
     attributes:

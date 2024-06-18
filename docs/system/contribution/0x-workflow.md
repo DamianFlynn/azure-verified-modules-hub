@@ -32,3 +32,25 @@ Structurizr is a collection of tools allowing us to create architecture diagrams
 ### Diagrams as code 2.0
 
 Taking this approach one step further, Structurizr introduces a single, central model representing the architecture of our system. For this model, we can create multiple views in order to visualize different aspects of our software on different abstraction levels. This separation between model and views has a big benefit. For example, let’s say we would use a diagram as code or drawing tool of our choice to create multiple architecture diagrams. Consequently, if an important aspect of our architecture changes, we would need to align all affected diagrams. This can be time-consuming and error-prone. With Structurizr, we only need to change the central model (DRY principle ). All views based on the model will be updated automatically, making sure they are consistent. To emphasize this advantage compared to other diagrams as code tools, the approach is referred to as diagrams as code 2.0 by the creator of Structurizr, Simon Brown .
+
+### Tooling
+
+The Structurizr diagram below shows the high-level architecture of the Azure Verified Module Hub. The following will install the container on your local machine:
+
+```sh
+docker pull ghcr.io/avisi-cloud/structurizr-site-generatr
+docker run -it --rm ghcr.io/avisi-cloud/structurizr-site-generatr --help
+docker run -it --rm ghcr.io/avisi-cloud/structurizr-site-generatr version
+```
+
+With a working installation, we can proceed to generate the diagram:
+
+```sh
+docker run -it --rm -v /Users/damianflynn/Developer/DamianFlynn/Azure-Verified-Module-Hub:/var/model ghcr.io/avisi-cloud/structurizr-site-generatr generate-site -w workspace.dsl
+```
+
+Now, to develop the site locally, we can use the following command:
+
+```sh
+docker run -it --rm -v /Users/damianflynn/Developer/DamianFlynn/Azure-Verified-Module-Hub:/var/model -p 8080:8080 ghcr.io/avisi-cloud/structurizr-site-generatr serve -w workspace.dsl
+```
