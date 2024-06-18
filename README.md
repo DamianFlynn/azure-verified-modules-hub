@@ -39,4 +39,4 @@ Azure-Verified-Solutions modules adhere to AVM specifications and are published 
 
 ## Getting Started
 
-To get started with the Azure Verified Solutions, please read the [Contributing Guidelines](./CONTRIBUTING.md) and then follow the step-by-step guide to contributing to Azure Verified Modules in the [Contributing Steps](docs/system/contribution/00-index.md) Documentation.
+To get started with the Azure Verified Solutions, follow the step-by-step guide to contributing to Azure Verified Modules in the [Contributing Steps](docs/system/00-index.md) Documentation.
